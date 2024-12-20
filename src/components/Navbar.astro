@@ -1,0 +1,50 @@
+---
+---
+<body data-theme="dark">
+    <header class="navbar">
+      <a href="#about">About</a>
+      <a href="#">Skills</a>
+      <a href="#">Projects</a>
+      <a href="#">Contact</a>
+      <a href="#">Resume</a>
+    </header>
+  
+  </body>
+  
+  <style>
+    /* General body styles */
+    body {
+      background-color: var(--background-color);
+      color: var(--text-color);
+      margin: 0; /* Remove default body margin */
+      font-family: Arial, sans-serif;
+    }
+  
+    /* Navbar styles */
+    .navbar {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-evenly;
+      align-items: center;
+      background-color: var(--navbar-bg, #333); /* Optional: Use a different color for the navbar */
+      padding: 10px 20px;
+    }
+  
+    .navbar a {
+      color: var(--text-color, #fff); /* Optional: Customize text color */
+      text-decoration: none;
+      padding: 10px 15px;
+      border-radius: 5px;
+      transition: background-color 0.3s ease-in-out;
+    }
+  
+    .navbar a:hover {
+      background-color: var(--navbar-hover-bg, #555); /* Optional: Hover background color */
+      color: var(--hover-text-color, #fff);
+    }
+  
+    /* Main content styles */
+    main {
+      padding: 20px;
+    }
+  </style>

@@ -1,0 +1,145 @@
+/* Search Line */
+.search-line {
+    display: flex;
+    flex-direction: row;
+    justify-content: left;
+    align-items: center;
+    background-color: var(--background-color); /* Optional: Use a different color for the navbar */
+    padding: 0px 20px;
+}
+
+/* Search Bar Container */
+.search-bar-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    margin: 20px 0;
+    padding: 10px;
+}
+
+/* Input Field */
+.search-bar-container input[type="text"] {
+    width: 80%;
+    max-width: 600px;
+    padding: 10px 15px;
+    border: 2px solid var(--primary-color);
+    border-radius: 25px;
+    outline: none;
+    font-size: 16px;
+    transition: border-color 0.3s ease;
+}
+
+/* Input Field Focus State */
+.search-bar-container input[type="text"]:focus {
+    border-color: var(--primary-color);
+}
+
+/* Tag Container */
+.tag-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: left;
+    padding: 10px;
+}
+
+/* Tag Buttons */
+.tag {
+    display: inline-block;
+    padding: 8px 12px;
+    margin: 5px;
+    border: 2px solid transparent; /* Set initial border width */
+    border-radius: 5px;
+    background-color: var(--secondary-color);
+    color: var(--text-color);
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    user-select: none;
+    box-sizing: border-box; /* Include padding and border in total dimensions */
+    transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+}
+
+/* Hover State */
+.tag:hover {
+    background-color: var(--text-color);
+    color: var(--background-color);
+}
+
+/* Selected State */
+.tag.selected {
+    background-color: var(--text-color);
+    color: var(--background-color);
+    border-color: var(--primary-color); /* Ensure the border width doesn't change */
+}
+
+/* Results List */
+.results-list {
+    list-style-type: none;
+    padding: 0;
+    width: 80%;
+    max-width: 800px;
+    margin: 0 auto; /* Center the list */
+}
+
+/* Individual Result Item */
+.result-item {
+    background-color: #ffffff; /* White background for contrast */
+    margin: 15px 0;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+/* Hover Effect for Result Items */
+.result-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+/* Post Title */
+.post-title {
+    margin: 0 0 10px 0;
+    font-size: 1.5em;
+    color: var(--primary-color);
+}
+
+/* Post Snippet */
+.post-snippet {
+    margin: 0 0 15px 0;
+    color: #555;
+    line-height: 1.6;
+}
+
+/* Post Tags */
+.post-tags {
+    margin-bottom: 10px;
+}
+
+.post-tags .tag {
+    padding: 5px 10px;
+    margin: 0 5px 5px 0;
+    border: 1px solid var(--primary-color);
+    border-radius: 3px;
+    background-color: var(--secondary-color);
+    color: var(--text-color);
+    font-size: 12px;
+    cursor: default; /* Non-clickable */
+}
+
+/* Post Date */
+.post-date {
+    color: #999;
+    font-size: 0.9em;
+}
+
+/* No Results Message */
+.no-results {
+    text-align: center;
+    color: #999;
+    font-size: 1.2em;
+    padding: 20px;
+}

@@ -1,0 +1,15 @@
+/* src/styles/global.css */
+:root {
+    --background-color: #ffffff;
+    --text-color: #ffffff;
+    --primary-color: #0078d4;
+    --secondary-color: #0078d4;
+  }
+  
+  [data-theme="dark"] {
+    --background-color: #000000;
+    --text-color: #ffffff;
+    --primary-color: #1e90ff;
+    --secondary-color: #616161;
+  }
+
