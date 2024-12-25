@@ -1,8 +1,35 @@
 ---
 ---
+
 <a href="/files/example-file.pdf" 
    download="example-file.pdf" 
    rel="noopener noreferrer"
-   id="resume">
-   Download Example File
+   id="resume"
+   class="button">
+   Get my Resume
 </a>
+
+<style>
+.button {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: var(--background-color);
+    color: var(--primary-color);
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+    border: 2px solid var(--primary-color);
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.button:hover {
+    background-color: var(--text-color);
+}
+
+.button:active {
+    background-color: var(--text-color);
+}
+</style>
