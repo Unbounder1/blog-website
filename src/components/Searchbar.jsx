@@ -92,13 +92,12 @@ const SearchBar = () => {
     return (
         <div>
 
-        <div className="search-line">
+        <div className="search-bar-container">
             <input
                 type="text"
                 placeholder="Search here..."
                 onChange={handleChange}
                 value={searchInput}
-                className="search-bar-container"
             />
             <div className="tag-container">
                 {tags.map((tag, index) => (

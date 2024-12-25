@@ -2,6 +2,8 @@
 import Welcome from '../components/Welcome.astro';
 import Layout from '../layouts/Layout.astro';
 import Searchbar from '../components/Searchbar.jsx'
+import Resumebutton from '../components/Resumebutton.astro';
+import Navbar from '../components/Navbar.astro'
 
 const blogArr = [
     { name: "a", body: "b" , tag: ["tag1", "tag2"]},
@@ -13,6 +15,8 @@ const blogArr = [
 ---
 
 <Layout>
+  <Navbar />
 	<Welcome />
+  <Resumebutton />
 	<Searchbar client:load />
 </Layout>
