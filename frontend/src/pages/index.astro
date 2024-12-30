@@ -4,6 +4,7 @@ import Layout from '../layouts/Layout.astro';
 import Searchbar from '../components/Searchbar.jsx'
 import Resumebutton from '../components/Resumebutton.astro';
 import Navbar from '../components/Navbar.astro'
+import Blogdigest from '../components/Blogdigest.astro';
 
 const blogArr = [
     { name: "a", body: "b" , tag: ["tag1", "tag2"]},
@@ -18,5 +19,5 @@ const blogArr = [
   <Navbar />
 	<Welcome />
   <Resumebutton />
-	<Searchbar client:load />
+  <Blogdigest  />
 </Layout>

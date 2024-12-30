@@ -1,0 +1,9 @@
+---
+import SearchBar from "./SearchBar.jsx";
+
+// Fetch data on the server side
+const response = await fetch("http://localhost:8080/testdb");
+const data = await response.json();
+---
+
+<SearchBar client:load blogArr={data} />
