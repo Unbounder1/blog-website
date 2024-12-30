@@ -73,11 +73,21 @@ func main() {
 	// Create a new Gin router
 	router := gin.Default()
 
-	router.GET("/testdb", func(c *gin.Context) {
+	router.GET("/digest", func(c *gin.Context) {
 		blogs, err := iface.GetBlogs(db)
 		if err != nil {
 			log.Printf("Error fetching blogs: %v", err)
 			c.JSON(500, gin.H{"error": "Failed to fetch blogs"})
+			return
+		}
+		c.JSON(200, blogs)
+	})
+
+	router.GET("/tags", func(c *gin.Context) {
+		blogs, err := iface.GetTags(db)
+		if err != nil {
+			log.Printf("Error fetching blogs: %v", err)
+			c.JSON(500, gin.H{"error": "Failed to fetch tags"})
 			return
 		}
 		c.JSON(200, blogs)
