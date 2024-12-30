@@ -19,7 +19,6 @@ id: Unique identifier for the blog post (Primary Key).
 	•	thumbnail_url: URL or path for the thumbnail image.
 	•	created_at: Timestamp for when the blog was created.
 	•	updated_at: Timestamp for the last update.
-	•	author_id: Foreign key referencing the Users table.
 
 */
 
