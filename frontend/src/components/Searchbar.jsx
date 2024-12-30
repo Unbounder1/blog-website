@@ -3,25 +3,9 @@ import Fuse from "fuse.js";
 import "../styles/global.css"; // Import your CSS
 import "../styles/searchbar.css";
 
-const SearchBar = ({ blogArr }) => {
-    
-    // console.log(blogArr);
+const SearchBar = ({ blogArr, tags }) => {
 
-    let tags = [
-        "Minimalism",
-        "Lifestyle",
-        "Technology",
-        "2024",
-        "Trends",
-        "Health",
-        "Wellness",
-        "Travel",
-        "Destinations",
-        "Finance",
-        "Investing",
-        "Growth",
-    ];
-    tags.unshift("reset");
+    console.log(tags);
 
     const [searchInput, setSearchInput] = useState("");
     const [selectedTags, setSelectedTags] = useState([]);
@@ -48,7 +32,7 @@ const SearchBar = ({ blogArr }) => {
         () =>
             new Fuse(blogArr, {
                 keys: [
-                    { name: "title", weight: 0.7 }, // Higher weight for titles
+                    { name: "title", weight: 0.7 }, 
                     { name: "tags", weight: 0.5 }, // Include tags in search
                     { name: "summary", weight: 0.3 },
                 ],
