@@ -14,8 +14,8 @@ import { queryDB } from "./Dbrouter"
 // ]);
 
 const [digestData, tagData] = await Promise.all([
-  queryDB("http://localhost:8080/digest"),
-  queryDB("http://localhost:8080/tags")
+  queryDB("http://localhost:8080/digest", "/digest"),
+  queryDB("http://localhost:8080/tags", "/tags")
  ]);
 ---
 

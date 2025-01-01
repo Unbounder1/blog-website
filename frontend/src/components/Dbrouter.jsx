@@ -6,13 +6,14 @@ dotenv.config();
 function generateHmac(data) {
     //.env HMAC_API_KEY
     console.log(process.env.HMAC_API_KEY.length)
-    return CryptoJS.HmacSHA256(data, process.env.HMAC_API_KEY.toString).toString(CryptoJS.enc.Hex);
+
+    return CryptoJS.HmacSHA256(data, process.env.HMAC_API_KEY).toString(CryptoJS.enc.Hex);
 }
 
-export async function queryDB(link) {
+export async function queryDB(link, path) {
     try {
         // Generate the HMAC for the URL
-        const hmac = generateHmac(link);
+        const hmac = generateHmac(path);
 
         const response = await fetch(link, {
             method: "GET",
