@@ -10,6 +10,7 @@ import (
 	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
 	iface "github.com/unbounder1/blog-website/internal/interface"
+	"github.com/unbounder1/blog-website/internal/middleware"
 )
 
 /*
@@ -82,7 +83,7 @@ func main() {
 		c.JSON(200, blogs)
 	})
 
-	router.GET("/tags", func(c *gin.Context) {
+	router.GET("/tags", middleware.HMACMiddleware(), func(c *gin.Context) {
 		blogs, err := iface.GetTags(db)
 		if err != nil {
 			log.Printf("Error fetching blogs: %v", err)
