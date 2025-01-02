@@ -10,6 +10,7 @@ import (
 	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
 	iface "github.com/unbounder1/blog-website/internal/interface"
+	"github.com/unbounder1/blog-website/internal/middleware"
 )
 
 /*
@@ -19,7 +20,6 @@ id: Unique identifier for the blog post (Primary Key).
 	•	thumbnail_url: URL or path for the thumbnail image.
 	•	created_at: Timestamp for when the blog was created.
 	•	updated_at: Timestamp for the last update.
-	•	author_id: Foreign key referencing the Users table.
 
 */
 
@@ -83,7 +83,7 @@ func main() {
 		c.JSON(200, blogs)
 	})
 
-	router.GET("/tags", func(c *gin.Context) {
+	router.GET("/tags", middleware.HMACMiddleware(), func(c *gin.Context) {
 		blogs, err := iface.GetTags(db)
 		if err != nil {
 			log.Printf("Error fetching blogs: %v", err)
