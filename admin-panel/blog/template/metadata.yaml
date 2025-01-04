@@ -1,0 +1,9 @@
+Title: # blog title
+  Summary: # blog summary
+  Thumbnail_url: # default [none]
+  Created_at: # default [time of compile]
+  Updated_at: # default [time of compile]
+  Tags: 
+    - tag1
+    - tag2
+    
