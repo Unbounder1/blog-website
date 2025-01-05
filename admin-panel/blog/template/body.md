@@ -5,3 +5,4 @@ This should be another paragraph in the blog post.
 To implement an image, use jinja for formatting:
 
 {{ image1 | image_process("alt text", ["large", "med", "small"])}}
+

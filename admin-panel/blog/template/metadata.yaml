@@ -1,14 +1,15 @@
 # Blog metadata
-Title: # blog title
-  Summary: # blog summary
-  Thumbnail_url: # default [none]
-  Created_at: # default [time of compile]
-  Updated_at: # default [time of compile]
-  Tags: 
+metadata:
+  title: # blog title
+  summary: # blog summary
+  thumbnail_url: # default [none]
+  created_at: # default [time of compile]
+  updated_at: # default [time of compile]
+  tags: 
     - tag1
     - tag2
-  Images:
+  images:
     image1: ./assets/image.png
-  Variables:
+  variables:
     var1: #var1
     var2: #var2
