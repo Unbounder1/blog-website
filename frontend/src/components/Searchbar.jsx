@@ -5,7 +5,8 @@ import "../styles/searchbar.css";
 
 const SearchBar = ({ blogArr, tags }) => {
 
-    console.log(tags);
+    //console.log(tags);
+    console.log(blogArr[0].summary)
 
     const [searchInput, setSearchInput] = useState("");
     const [selectedTags, setSelectedTags] = useState([]);
@@ -33,7 +34,7 @@ const SearchBar = ({ blogArr, tags }) => {
             new Fuse(blogArr, {
                 keys: [
                     { name: "title", weight: 0.7 }, 
-                    { name: "tags", weight: 0.5 }, // Include tags in search
+                    { name: "tags", weight: 0.5 }, 
                     { name: "summary", weight: 0.3 },
                 ],
                 threshold: 0.4, // Adjust based on desired fuzziness
@@ -89,7 +90,7 @@ const SearchBar = ({ blogArr, tags }) => {
                             />
                             <h2 className="post-title">{post.title}</h2>
                             <p className="post-snippet">
-                                {post.summary.substring(0, 150)}...
+                                {post.summary}
                             </p>
                             <div className="post-tags">
                                 {post.tags.map((tag, idx) => (
