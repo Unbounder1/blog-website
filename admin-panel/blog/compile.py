@@ -93,17 +93,7 @@ def toc_process(toc):
 
     return output
 
-def main():
-    # code struct:
-    #
-    # INPUT: directory
-    # upload image assets to database using metadata.images[]
-    # process toc, implement metadata into the page formatting
-    # upload new tags to db
-    # retrieve database image links
-    # process body markdown -> html -> jinja (enable html escaping)
-    dir = "template"
-
+def compile_folder(dir):
     #Input YAML processing
     with open("./" + dir + "/metadata.yaml", "r") as file:
         metadata_dict = yaml.safe_load(file)
@@ -126,6 +116,19 @@ def main():
 <body>""" + outputStr
     outputStr += "\n</body>\n</html>"
     print(outputStr)
+
+def main():
+    # code struct:
+    #
+    # INPUT: directory
+    # upload image assets to database using metadata.images[]
+    # process toc, implement metadata into the page formatting
+    # upload new tags to db
+    # retrieve database image links
+    # process body markdown -> html -> jinja (enable html escaping)
+    dir = "template"
+
+    compile_folder(dir)
 
     
 main()
