@@ -18,12 +18,13 @@ func VerifyHMAC(data, providedHMAC string) bool {
 	}
 
 	secretKey, _ := os.LookupEnv("HMAC_API_KEY")
-	fmt.Print(secretKey)
 	h := hmac.New(sha256.New, []byte(secretKey))
 	h.Write([]byte(data))
-	fmt.Print("--------------\n\n")
+
 	expectedHMAC := hex.EncodeToString(h.Sum(nil))
 	fmt.Print(expectedHMAC)
+	fmt.Print("--------------\n\n")
+	fmt.Print(providedHMAC)
 
 	return hmac.Equal([]byte(expectedHMAC), []byte(providedHMAC))
 }

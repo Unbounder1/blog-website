@@ -13,16 +13,6 @@ import (
 	"github.com/unbounder1/blog-website/internal/middleware"
 )
 
-/*
-id: Unique identifier for the blog post (Primary Key).
-	•	title: Title of the blog post.
-	•	summary: Short summary or description of the blog.
-	•	thumbnail_url: URL or path for the thumbnail image.
-	•	created_at: Timestamp for when the blog was created.
-	•	updated_at: Timestamp for the last update.
-
-*/
-
 var db *sql.DB
 
 // InitializeDatabase sets up the database connection.
