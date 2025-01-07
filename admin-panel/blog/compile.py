@@ -4,6 +4,9 @@ from jinja2 import Environment, FileSystemLoader
 import markdown
 import yaml
 from dotmap import DotMap
+import psycopg2
+import dotenv
+import os
 
 toc_dict = [{}]
 
@@ -105,17 +108,44 @@ def compile_folder(dir):
     outputStr = toc_process(toc_dict) + outputStr
 
     #formatting
-    outputStr =  """
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Understanding Python Virtual Environments</title>
-</head>
+    outputStr =  f"""
 <body>""" + outputStr
-    outputStr += "\n</body>\n</html>"
+    outputStr += "\n</body>"
     print(outputStr)
+
+def db_connection():
+    dotenv.load_dotenv()
+    DB_HOST = os.getenv('DB_HOST')
+    DB_PORT = os.getenv('DB_PORT')
+    DB_USER = os.getenv('DB_USER')
+    DB_PASSWORD = os.getenv('DB_PASSWORD')
+    DB_NAME = os.getenv('DB_NAME')
+    DB_SSLMODE = os.getenv('DB_SSLMODE')
+
+    try:
+        # Connect to the PostgreSQL database
+        connection = psycopg2.connect(
+            host=DB_HOST,
+            port=DB_PORT,
+            user=DB_USER,
+            password=DB_PASSWORD,
+            dbname=DB_NAME,
+            sslmode=DB_SSLMODE
+        )
+        print("Database connection successful")
+# INSERT INTO blogdigest (title, summary, thumbnail_url, created_at, updated_at, tags)
+# VALUES
+#     ('The Art of Minimalism', 'A deep dive into living simply.', 'https://example.com/img1.jpg', '2024-01-01T10:00:00Z', '2024-01-01T10:00:00Z', ARRAY['Minimalism', 'Lifestyle']),
+
+
+    except Exception as e:
+        print("Error while connecting to the database:", e)
+
+    finally:
+        if 'connection' in locals() and connection:
+            connection.close()
+            print("Database connection closed")
+
 
 def main():
     # code struct:
@@ -130,5 +160,10 @@ def main():
 
     compile_folder(dir)
 
-    
+    db_connection()
+    #INSERT INTO blogdigest (title, summary, thumbnail_url, created_at, updated_at, tags)
+# VALUES
+#     ('The Art of Minimalism', 'A deep dive into living simply.', 'https://example.com/img1.jpg', '2024-01-01T10:00:00Z', '2024-01-01T10:00:00Z', ARRAY['Minimalism', 'Lifestyle']),
+
+
 main()
