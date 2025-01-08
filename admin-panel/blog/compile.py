@@ -7,6 +7,7 @@ from dotmap import DotMap
 import psycopg2
 import dotenv
 import os
+import datetime
 
 toc_dict = [{}]
 
@@ -143,20 +144,54 @@ def db_connection():
 def body_input(connection, body, metadata):
     with connection.cursor() as cursor:
 
+        #INSERTION INTO TAGS
+        query = """
+        SELECT name FROM tags;
+        """
+
+        cursor.execute(query)
+        existing_tags = set(row[0] for row in cursor.fetchall())
+        new_tags = set(metadata.tags) - existing_tags 
+
+        query = """
+        INSERT INTO tags (name)
+        VALUES (%s)
+        """
+        for tag in new_tags:
+            cursor.execute(query, (tag,))
+
+        query = """
+        SELECT id
+        FROM tags
+        WHERE name = ANY(%s)
+        ORDER BY array_position(%s, name);
+        """
+        cursor.execute(query, (metadata.tags, metadata.tags))
+
+        # Fetch all IDs
+        tag_ids = [row[0] for row in cursor.fetchall()]
+
         #INSERTION INTO BLOGDIGEST
-        query = f"""
-INSERT INTO blogdigest (title, summary, thumbnail_url, created_at, updated_at, tags)
-VALUES (%s, %s, %s, %s, %s, %s)
-"""
+        query = """
+        INSERT INTO blogdigest (title, summary, thumbnail_url, created_at, updated_at)
+        VALUES (%s, %s, %s, %s, %s)
+        RETURNING id
+        """
         data = (
             metadata.title,
             metadata.summary,
             metadata.thumbnail_url,
             metadata.created_at,
             metadata.updated_at,
-            metadata.tags,  
         )
         cursor.execute(query, data)
+
+        blog_id = cursor.fetchone()
+        values = [(blog_id[0], tag) for tag in tag_ids]
+        query = "INSERT INTO blog_tags (blog_id, tag_id) VALUES (%s, %s)"
+        cursor.executemany(query, values)
+
+        connection.commit()
 
 def main():
     # code struct:
@@ -171,6 +206,11 @@ def main():
 
     metadata, body = compile_folder(dir)
 
+    if not hasattr(metadata, 'updated_at') or metadata.updated_at is None:
+        metadata.updated_at = datetime.datetime.now(datetime.timezone.utc)
+    if not hasattr(metadata, 'created_at') or metadata.created_at is None:
+        metadata.created_at = datetime.datetime.now(datetime.timezone.utc)
+
     connection = db_connection()
     if (connection == -1):
         return 1
@@ -179,5 +219,9 @@ def main():
 
     connection.close()
     print("Database connection closed")
+
+    plain_data = metadata.toDict()
+    with open('./' + dir + '/metadata.yaml', 'w') as file:
+        yaml.safe_dump(plain_data, file, default_flow_style=False)
     
 main()
