@@ -1,0 +1,14 @@
+# Blog metadata
+title: This is a template # blog title
+summary: This is the summary of the blog # blog summary
+thumbnail_url: http://example.com # default [none]
+created_at: # default [time of compile]
+updated_at: # default [time of compile]
+tags: 
+  - tag1
+  - tag2
+images:
+  image1: ./assets/image.png
+variables:
+  var1: #var1
+  var2: #var2

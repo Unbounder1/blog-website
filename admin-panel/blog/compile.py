@@ -4,6 +4,10 @@ from jinja2 import Environment, FileSystemLoader
 import markdown
 import yaml
 from dotmap import DotMap
+import psycopg2
+import dotenv
+import os
+import datetime
 
 toc_dict = [{}]
 
@@ -93,17 +97,7 @@ def toc_process(toc):
 
     return output
 
-def main():
-    # code struct:
-    #
-    # INPUT: directory
-    # upload image assets to database using metadata.images[]
-    # process toc, implement metadata into the page formatting
-    # upload new tags to db
-    # retrieve database image links
-    # process body markdown -> html -> jinja (enable html escaping)
-    dir = "template"
-
+def compile_folder(dir):
     #Input YAML processing
     with open("./" + dir + "/metadata.yaml", "r") as file:
         metadata_dict = yaml.safe_load(file)
@@ -115,17 +109,119 @@ def main():
     outputStr = toc_process(toc_dict) + outputStr
 
     #formatting
-    outputStr =  """
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Understanding Python Virtual Environments</title>
-</head>
+    outputStr =  f"""
 <body>""" + outputStr
-    outputStr += "\n</body>\n</html>"
-    print(outputStr)
+    outputStr += "\n</body>"
+    return metadata, outputStr
 
+def db_connection():
+    dotenv.load_dotenv()
+    DB_HOST = os.getenv('DB_HOST')
+    DB_PORT = os.getenv('DB_PORT')
+    DB_USER = os.getenv('DB_USER')
+    DB_PASSWORD = os.getenv('DB_PASSWORD')
+    DB_NAME = os.getenv('DB_NAME')
+    DB_SSLMODE = os.getenv('DB_SSLMODE')
+
+    try:
+        # Connect to the PostgreSQL database
+        connection = psycopg2.connect(
+            host=DB_HOST,
+            port=DB_PORT,
+            user=DB_USER,
+            password=DB_PASSWORD,
+            dbname=DB_NAME,
+            sslmode=DB_SSLMODE
+        )
+        print("Database connection successful")
+
+        return connection
+
+    except Exception as e:
+        print("Error while connecting to the database:", e)
+        return -1
+
+def body_input(connection, body, metadata):
+    with connection.cursor() as cursor:
+
+        #INSERTION INTO TAGS
+        query = """
+        SELECT name FROM tags;
+        """
+
+        cursor.execute(query)
+        existing_tags = set(row[0] for row in cursor.fetchall())
+        new_tags = set(metadata.tags) - existing_tags 
+
+        query = """
+        INSERT INTO tags (name)
+        VALUES (%s)
+        """
+        for tag in new_tags:
+            cursor.execute(query, (tag,))
+
+        query = """
+        SELECT id
+        FROM tags
+        WHERE name = ANY(%s)
+        ORDER BY array_position(%s, name);
+        """
+        cursor.execute(query, (metadata.tags, metadata.tags))
+
+        # Fetch all IDs
+        tag_ids = [row[0] for row in cursor.fetchall()]
+
+        #INSERTION INTO BLOGDIGEST
+        query = """
+        INSERT INTO blogdigest (title, summary, thumbnail_url, created_at, updated_at)
+        VALUES (%s, %s, %s, %s, %s)
+        RETURNING id
+        """
+        data = (
+            metadata.title,
+            metadata.summary,
+            metadata.thumbnail_url,
+            metadata.created_at,
+            metadata.updated_at,
+        )
+        cursor.execute(query, data)
+
+        blog_id = cursor.fetchone()
+        values = [(blog_id[0], tag) for tag in tag_ids]
+        query = "INSERT INTO blog_tags (blog_id, tag_id) VALUES (%s, %s)"
+        cursor.executemany(query, values)
+
+        connection.commit()
+
+def main():
+    # code struct:
+    #
+    # INPUT: directory
+    # upload image assets to database using metadata.images[]
+    # process toc, implement metadata into the page formatting
+    # upload new tags to db
+    # retrieve database image links
+    # process body markdown -> html -> jinja (enable html escaping)
+    dir = "template"
+
+    metadata, body = compile_folder(dir)
+
+    if not hasattr(metadata, 'updated_at') or metadata.updated_at is None:
+        metadata.updated_at = datetime.datetime.now(datetime.timezone.utc)
+    if not hasattr(metadata, 'created_at') or metadata.created_at is None:
+        metadata.created_at = datetime.datetime.now(datetime.timezone.utc)
+
+    connection = db_connection()
+    if (connection == -1):
+        return 1
+    body_input(connection, body, metadata)
+    
+
+    connection.close()
+    print("Database connection closed")
+
+    plain_data = metadata.toDict()
+    with open('./' + dir + '/metadata.yaml', 'w') as file:
+        yaml.safe_dump(plain_data, file, default_flow_style=False)
     
 main()
