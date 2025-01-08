@@ -140,9 +140,32 @@ def db_connection():
     except Exception as e:
         print("Error while connecting to the database:", e)
         return -1
+def delete_db(connection, metadata):
+    with connection.cursor() as cursor:
+        try:
+            cursor.execute("DELETE FROM blogdigest WHERE id = %s;", (metadata.id,))
+
+            cursor.execute("DELETE FROM blog_tags WHERE blog_id = %s;", (metadata.id,))
+
+            cursor.execute("""
+                DELETE FROM tags
+                WHERE id NOT IN (SELECT DISTINCT tag_id FROM blog_tags);
+            """)
+
+            cursor.execute("DELETE FROM blog_body WHERE blog_id = %s;", (metadata.id,))
+
+            connection.commit()
+
+        except Exception as e:
+            connection.rollback()
+            print(f"An error occurred: {e}")
+            raise
 
 def body_input(connection, body, metadata):
     with connection.cursor() as cursor:
+
+        if metadata.id != None:
+            delete_db(connection, metadata)
 
         #INSERTION INTO TAGS
         query = """
@@ -191,9 +214,13 @@ def body_input(connection, body, metadata):
         query = "INSERT INTO blog_tags (blog_id, tag_id) VALUES (%s, %s)"
         cursor.executemany(query, values)
 
-        connection.commit()
+        query = "INSERT INTO blog_body (blog_id, body) VALUES (%s, %s);"
+        cursor.execute(query, (blog_id[0],body))
 
-def main():
+        connection.commit()
+        return blog_id[0]
+
+def compile_dir(dir):
     # code struct:
     #
     # INPUT: directory
@@ -202,7 +229,6 @@ def main():
     # upload new tags to db
     # retrieve database image links
     # process body markdown -> html -> jinja (enable html escaping)
-    dir = "template"
 
     metadata, body = compile_folder(dir)
 
@@ -212,16 +238,16 @@ def main():
         metadata.created_at = datetime.datetime.now(datetime.timezone.utc)
 
     connection = db_connection()
+
     if (connection == -1):
         return 1
-    body_input(connection, body, metadata)
-    
+    blog_id = body_input(connection, body, metadata)
 
     connection.close()
     print("Database connection closed")
 
+    #apply info to metadat.yaml
+    metadata.id = blog_id
     plain_data = metadata.toDict()
     with open('./' + dir + '/metadata.yaml', 'w') as file:
         yaml.safe_dump(plain_data, file, default_flow_style=False)
-    
-main()
