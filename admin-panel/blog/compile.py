@@ -111,7 +111,7 @@ def compile_folder(dir):
     outputStr =  f"""
 <body>""" + outputStr
     outputStr += "\n</body>"
-    print(outputStr)
+    return metadata, outputStr
 
 def db_connection():
     dotenv.load_dotenv()
@@ -133,19 +133,30 @@ def db_connection():
             sslmode=DB_SSLMODE
         )
         print("Database connection successful")
-# INSERT INTO blogdigest (title, summary, thumbnail_url, created_at, updated_at, tags)
-# VALUES
-#     ('The Art of Minimalism', 'A deep dive into living simply.', 'https://example.com/img1.jpg', '2024-01-01T10:00:00Z', '2024-01-01T10:00:00Z', ARRAY['Minimalism', 'Lifestyle']),
 
+        return connection
 
     except Exception as e:
         print("Error while connecting to the database:", e)
+        return -1
 
-    finally:
-        if 'connection' in locals() and connection:
-            connection.close()
-            print("Database connection closed")
+def body_input(connection, body, metadata):
+    with connection.cursor() as cursor:
 
+        #INSERTION INTO BLOGDIGEST
+        query = f"""
+INSERT INTO blogdigest (title, summary, thumbnail_url, created_at, updated_at, tags)
+VALUES (%s, %s, %s, %s, %s, %s)
+"""
+        data = (
+            metadata.title,
+            metadata.summary,
+            metadata.thumbnail_url,
+            metadata.created_at,
+            metadata.updated_at,
+            metadata.tags,  
+        )
+        cursor.execute(query, data)
 
 def main():
     # code struct:
@@ -158,12 +169,15 @@ def main():
     # process body markdown -> html -> jinja (enable html escaping)
     dir = "template"
 
-    compile_folder(dir)
+    metadata, body = compile_folder(dir)
 
-    db_connection()
-    #INSERT INTO blogdigest (title, summary, thumbnail_url, created_at, updated_at, tags)
-# VALUES
-#     ('The Art of Minimalism', 'A deep dive into living simply.', 'https://example.com/img1.jpg', '2024-01-01T10:00:00Z', '2024-01-01T10:00:00Z', ARRAY['Minimalism', 'Lifestyle']),
+    connection = db_connection()
+    if (connection == -1):
+        return 1
+    body_input(connection, body, metadata)
+    
 
-
+    connection.close()
+    print("Database connection closed")
+    
 main()
