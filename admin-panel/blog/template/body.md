@@ -14,5 +14,5 @@ To implement an image, use **jinja** for formatting:
 
 {{ "1.2" | subchapter("subtitle") }}
 
-{{ metadata.images.image1 | image_process("alt text", ["large", "med", "small"])}}
+{{ image1 | image_process("alt text", ["large", "med", "small"])}}
 

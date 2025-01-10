@@ -1,7 +1,7 @@
 created_at: 2025-01-08 15:26:12.025405+00:00
-id: 46
+id: 50
 images:
-  image1: ./assets/image.png
+  image1: image.png
 summary: This is the summary of the blog
 tags:
 - tag1
