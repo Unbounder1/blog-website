@@ -12,16 +12,22 @@ import datetime
 toc_dict = [{}]
 
 def image_process(image_link, alt_text="", image_size="med"):
-    if (image_size == "large"):
-        width = ""
-        height = ""
-    elif (image_size == "med"):
-        width = ""
-        height = ""
-    else:
-        width = ""
-        height = ""
-    outStr = '<img\nsrc="' + image_link + '"\nalt="' + alt_text + '"\nwidth="' + width + '"\nheight="' + height + '"\n/>'
+    # Define width based on size
+    if image_size == "large":
+        width = "500"  
+    elif image_size == "med":
+        width = "300"
+    else:  # "small"
+        width = "150"
+    
+    outStr = f'''<Image
+  src="$${image_link}$$" #MINIO
+  alt="{alt_text}"
+  width="{width}"
+  format="auto"
+  placeholder="blur"
+/>'''
+    
     return outStr
 
 def chapter(id, title):
@@ -140,6 +146,7 @@ def db_connection():
     except Exception as e:
         print("Error while connecting to the database:", e)
         return -1
+    
 def delete_db(connection, metadata):
     with connection.cursor() as cursor:
         try:
