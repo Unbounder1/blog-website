@@ -9,10 +9,7 @@ This is a jinja templated blog paragraph example. Here is an example of a variab
 This should be another paragraph in the blog post. 
 To implement an image, use **jinja** for formatting:
 
-This should be another paragraph in the blog post. 
-To implement an image, use **jinja** for formatting:
-
 {{ "1.2" | subchapter("subtitle") }}
 
-{{ image1 | image_process("alt text", ["large", "med", "small"])}}
+{{ metadata.images.image1 | image_process("alt text", ["large", "med", "small"])}}
 

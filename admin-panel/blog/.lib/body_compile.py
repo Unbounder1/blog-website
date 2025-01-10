@@ -27,6 +27,8 @@ def image_process(image_link, alt_text="", image_size="med"):
         width = "300"
     else:  # "small"
         width = "150"
+
+    blog_id = "{{ blog_id }}"
     
     outStr = f'''<Image
   src="http://localhost:8080/blog/blog_{blog_id}/{image_link}"
@@ -53,7 +55,7 @@ def subchapter(id, title):
     toc_dict[-1]["subchapters"].append(temp_dict)
     return f'        <section id="{id}"></section>\n            <h3>{id}. {title}</h3>'
 
-def html_convert(dir, metadata):
+def html_convert(dir, metadata, blog_id):
     f = open("./" + dir + "/body.md")
     html_content = markdown.markdown(f.read())
     f.close()
@@ -65,8 +67,9 @@ def html_convert(dir, metadata):
 
 
     template = env.from_string(html_content)
-
-    return template.render(metadata=metadata)
+    process_one = template.render(metadata=metadata)
+    template = env.from_string(process_one)
+    return template.render(blog_id=blog_id)
 
 def toc_process(toc):
     """
@@ -111,13 +114,13 @@ def toc_process(toc):
 
     return output
 
-def compile_folder(dir, metadata):
+def compile_folder(dir, metadata, blog_id):
     #Input YAML processing
     
 
     outputStr = ""
     
-    outputStr += html_convert(dir, metadata)
+    outputStr += html_convert(dir, metadata, blog_id)
     outputStr = toc_process(toc_dict) + outputStr
 
     #formatting
@@ -168,6 +171,7 @@ def delete_db(connection, metadata):
             cursor.execute("DELETE FROM blog_body WHERE blog_id = %s;", (metadata.id,))
 
             connection.commit()
+            print("Deleted duplicate db")
 
         except Exception as e:
             connection.rollback()
@@ -251,6 +255,9 @@ def compile_dir(dir):
 
     if not hasattr(metadata, 'updated_at') or metadata.updated_at is None:
         metadata.updated_at = datetime.datetime.now(datetime.timezone.utc)
+    else:
+        print(f"Did not update '{dir}'")
+        return -1
     if not hasattr(metadata, 'created_at') or metadata.created_at is None:
         metadata.created_at = datetime.datetime.now(datetime.timezone.utc)
 
@@ -262,12 +269,13 @@ def compile_dir(dir):
     blog_id = get_id(connection)
     if metadata.id != None:
         delete_db(connection, metadata)
+        blog_id = metadata.id
     elif not blog_id:
         blog_id = 1
     else:
         blog_id += 1
     
-    body = compile_folder(dir, blog_id)
+    body = compile_folder(dir, metadata, blog_id)
     blog_id = body_input(connection, body, metadata, blog_id)
 
     connection.close()
@@ -278,3 +286,4 @@ def compile_dir(dir):
     plain_data = metadata.toDict()
     with open('./' + dir + '/metadata.yaml', 'w') as file:
         yaml.safe_dump(plain_data, file, default_flow_style=False)
+    return blog_id
