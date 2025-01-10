@@ -10,7 +10,15 @@ import os
 import datetime
 
 toc_dict = [{}]
+# FIGURE OUT HOW TO PROCESS THE BLOG ID AT RUNTIME
 
+#------------------------------------------
+#------------------------------------------
+#------------------------------------------
+#------------------------------------------
+#------------------------------------------
+#------------------------------------------
+#------------------------------------------
 def image_process(image_link, alt_text="", image_size="med"):
     # Define width based on size
     if image_size == "large":
@@ -21,7 +29,7 @@ def image_process(image_link, alt_text="", image_size="med"):
         width = "150"
     
     outStr = f'''<Image
-  src="$${image_link}$$" #MINIO
+  src="http://localhost:8080/blog/blog_{blog_id}/{image_link}"
   alt="{alt_text}"
   width="{width}"
   format="auto"
@@ -103,11 +111,9 @@ def toc_process(toc):
 
     return output
 
-def compile_folder(dir):
+def compile_folder(dir, metadata):
     #Input YAML processing
-    with open("./" + dir + "/metadata.yaml", "r") as file:
-        metadata_dict = yaml.safe_load(file)
-    metadata = DotMap(metadata_dict)
+    
 
     outputStr = ""
     
@@ -118,7 +124,7 @@ def compile_folder(dir):
     outputStr =  f"""
 <body>""" + outputStr
     outputStr += "\n</body>"
-    return metadata, outputStr
+    return outputStr
 
 def db_connection():
     dotenv.load_dotenv()
@@ -168,11 +174,8 @@ def delete_db(connection, metadata):
             print(f"An error occurred: {e}")
             raise
 
-def body_input(connection, body, metadata):
+def body_input(connection, body, metadata, blog_id):
     with connection.cursor() as cursor:
-
-        if metadata.id != None:
-            delete_db(connection, metadata)
 
         #INSERTION INTO TAGS
         query = """
@@ -203,11 +206,11 @@ def body_input(connection, body, metadata):
 
         #INSERTION INTO BLOGDIGEST
         query = """
-        INSERT INTO blogdigest (title, summary, thumbnail_url, created_at, updated_at)
-        VALUES (%s, %s, %s, %s, %s)
-        RETURNING id
+        INSERT INTO blogdigest (id, title, summary, thumbnail_url, created_at, updated_at)
+        VALUES (%s, %s, %s, %s, %s, %s)
         """
         data = (
+            blog_id,
             metadata.title,
             metadata.summary,
             metadata.thumbnail_url,
@@ -216,16 +219,21 @@ def body_input(connection, body, metadata):
         )
         cursor.execute(query, data)
 
-        blog_id = cursor.fetchone()
-        values = [(blog_id[0], tag) for tag in tag_ids]
+        values = [(blog_id, tag) for tag in tag_ids]
         query = "INSERT INTO blog_tags (blog_id, tag_id) VALUES (%s, %s)"
         cursor.executemany(query, values)
 
         query = "INSERT INTO blog_body (blog_id, body) VALUES (%s, %s);"
-        cursor.execute(query, (blog_id[0],body))
+        cursor.execute(query, (blog_id,body))
 
         connection.commit()
-        return blog_id[0]
+        return blog_id
+    
+def get_id(connection):
+    with connection.cursor() as cursor:
+        cursor.execute("SELECT MAX(id) AS blog_id FROM blogdigest")
+        output = cursor.fetchone()
+        return output[0]
 
 def compile_dir(dir):
     # code struct:
@@ -237,7 +245,9 @@ def compile_dir(dir):
     # retrieve database image links
     # process body markdown -> html -> jinja (enable html escaping)
 
-    metadata, body = compile_folder(dir)
+    with open("./" + dir + "/metadata.yaml", "r") as file:
+        metadata_dict = yaml.safe_load(file)
+    metadata = DotMap(metadata_dict)
 
     if not hasattr(metadata, 'updated_at') or metadata.updated_at is None:
         metadata.updated_at = datetime.datetime.now(datetime.timezone.utc)
@@ -248,7 +258,17 @@ def compile_dir(dir):
 
     if (connection == -1):
         return 1
-    blog_id = body_input(connection, body, metadata)
+    
+    blog_id = get_id(connection)
+    if metadata.id != None:
+        delete_db(connection, metadata)
+    elif not blog_id:
+        blog_id = 1
+    else:
+        blog_id += 1
+    
+    body = compile_folder(dir, blog_id)
+    blog_id = body_input(connection, body, metadata, blog_id)
 
     connection.close()
     print("Database connection closed")
