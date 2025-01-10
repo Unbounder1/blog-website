@@ -69,7 +69,7 @@ def html_convert(dir, metadata, blog_id):
     Returns:
         str: Rendered HTML string after Jinja processing.
     """
-    # ADDED SECURITY CHECK
+    
     md_path = os.path.join("./", dir, "body.md")
     if not os.path.isfile(md_path):
         raise FileNotFoundError(f"Markdown file not found at path: {md_path}")
@@ -104,7 +104,7 @@ def toc_process(toc):
         chapter_title = chapter_item.get('title')
         subchapters = chapter_item.get('subchapters', [])
 
-        # ADDED SECURITY CHECK
+        
         # If there is an empty dict in toc_dict (like the initial [{}]),
         # skip it to avoid KeyError or None output.
         if not chapter_number or not chapter_title:
@@ -171,7 +171,7 @@ def db_connection():
     DB_NAME = os.getenv('DB_NAME')
     DB_SSLMODE = os.getenv('DB_SSLMODE')
 
-    # ADDED SECURITY CHECKS
+    S
     if not DB_HOST or not DB_PORT or not DB_USER or not DB_PASSWORD or not DB_NAME:
         raise ValueError("One or more required DB environment variables are not set.")
 
@@ -230,7 +230,7 @@ def body_input(connection, body, metadata, blog_id):
     Returns:
         int: The blog_id used for insertion.
     """
-    # ADDED SECURITY CHECK
+    
     if not isinstance(blog_id, int):
         raise TypeError("blog_id must be an integer.")
     if not hasattr(metadata, "tags"):
@@ -282,7 +282,7 @@ def body_input(connection, body, metadata, blog_id):
             metadata.updated_at,
         )
 
-        # ADDED SECURITY CHECK
+        
         # Make sure required metadata fields exist
         if not hasattr(metadata, "title") or not hasattr(metadata, "summary"):
             raise ValueError("Metadata must have 'title' and 'summary' fields.")
@@ -332,7 +332,7 @@ def compile_dir(dir):
     Returns:
         int: The final blog_id
     """
-    # ADDED SECURITY CHECK
+    
     dir_path = os.path.join("./", dir)
     if not os.path.isdir(dir_path):
         raise NotADirectoryError(f"The provided path '{dir_path}' is not a valid directory.")
