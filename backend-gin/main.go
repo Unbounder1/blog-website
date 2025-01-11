@@ -128,7 +128,7 @@ func main() {
 		}
 		defer object.Close()
 
-		c.Header("Content-Type", "image/png") // Adjust to the appropriate MIME type if it's not PNG
+		c.Header("Content-Type", "image/png")
 		c.Header("Content-Disposition", "inline; filename="+imageName)
 
 		// Stream the object directly to the response
@@ -136,6 +136,17 @@ func main() {
 			_, copyErr := io.Copy(w, object)
 			return copyErr == nil
 		})
+	})
+
+	router.GET("/blog/:blogTitle", func(c *gin.Context) {
+		title := c.Param("blogTitle")
+		blogs, err := iface.GetBlogPage(db, title)
+		if err != nil {
+			log.Printf("Error fetching blogs: %v", err)
+			c.JSON(500, gin.H{"error": "Failed to fetch blog"})
+			return
+		}
+		c.JSON(200, blogs)
 	})
 
 	// Start the server on the specified port

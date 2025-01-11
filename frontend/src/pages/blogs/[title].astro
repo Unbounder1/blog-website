@@ -1,0 +1,10 @@
+---
+import { onPageLoad } from 'astro/runtime';
+import { useState, useEffect } from 'react';
+
+// Use Astro's server-side code block to query the backend
+const { title } = Astro.params;
+const blogResponse = await fetch(`https://your-backend-url.com/blog/${title}`);
+const blog = await blogResponse.json();
+
+---
