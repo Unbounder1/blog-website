@@ -2,17 +2,6 @@
 import SearchBar from "./Searchbar";
 import { queryDB } from "./Dbrouter"
 
-//DELETE LATER
-// Fetch data on the server side
-// const [digest, tag] = await Promise.all([
-//   fetch("http://localhost:8080/digest"),
-//   fetch("http://localhost:8080/tags")
-// ]);
-// const [digestData, tagData] = await Promise.all([
-//     await digest.json(),
-//     await tag.json()
-// ]);
-
 const [digestData, tagData] = await Promise.all([
   queryDB("http://localhost:8080/digest", "/digest"),
   queryDB("http://localhost:8080/tags", "/tags")

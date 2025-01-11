@@ -3,6 +3,17 @@ import Fuse from "fuse.js";
 import "../styles/global.css"; // Import your CSS
 import "../styles/searchbar.css";
 
+function slugify(text) {
+    return text
+      .toString()
+      .normalize('NFD')                   // Normalize diacritics
+      .replace(/[\u0300-\u036f]/g, '')    // Remove diacritics
+      .toLowerCase()
+      .trim()
+      .replace(/[^a-z0-9]+/g, '-')        // Replace non-alphanumeric with hyphens
+      .replace(/^-+|-+$/g, '');           // Remove leading/trailing hyphens
+  }
+
 const SearchBar = ({ blogArr, tags }) => {
 
     //console.log(tags);
@@ -82,11 +93,19 @@ const SearchBar = ({ blogArr, tags }) => {
             <ul className="results-list">
                 {searchResult.length > 0 ? (
                     searchResult.map((post) => (
-                        <li key={post.id} className="result-item">
+                        <li 
+                        key={post.id} 
+                        className="result-item"
+                        onClick={() => {
+                            const encodedTitle = slugify(post.title);
+                            window.location.href = `/blogs/${encodedTitle}`;
+                        }}
+                        >
                             <img
                                 src={post.thumbnail_url}
                                 alt={post.title}
                                 className="post-thumbnail"
+                                style={{ cursor: "pointer" }}
                             />
                             <h2 className="post-title">{post.title}</h2>
                             <p className="post-snippet">

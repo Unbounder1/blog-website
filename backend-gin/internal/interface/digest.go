@@ -73,3 +73,35 @@ func GetTags(db *sql.DB) ([]string, error) {
 	tagList = append([]string{"reset"}, tagList...)
 	return tagList, err
 }
+
+func GetTitles(db *sql.DB) ([]string, error) {
+	var titles []string
+
+	// Query only the titles from the database
+	rows, err := db.Query(`
+	SELECT
+		slug
+	FROM
+		blogdigest
+	`)
+	if err != nil {
+		return nil, fmt.Errorf("invalid query: %v", err)
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var title string
+		err := rows.Scan(&title)
+		if err != nil {
+			log.Fatalf("Error scanning row: %v", err)
+		}
+		titles = append(titles, title)
+	}
+
+	// Check for errors encountered during iteration
+	if err = rows.Err(); err != nil {
+		return nil, fmt.Errorf("error during row iteration: %v", err)
+	}
+
+	return titles, nil
+}

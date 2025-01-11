@@ -8,6 +8,8 @@ import psycopg2
 import dotenv
 import os
 import datetime
+import re
+import unicodedata
 
 toc_dict = [{}]
 
@@ -223,6 +225,15 @@ def process_thumbnail(metadata):
         return f"http://{minio_host}:{minio_port}/image/blog/blog_{metadata.id}/{metadata.thumbnail_image}"
     else:
         return metadata.thumbnail_image
+    
+def slugify(value):
+    value = unicodedata.normalize('NFKD', value)
+    value = value.encode('ascii', 'ignore').decode('ascii')
+    value = value.lower()
+    value = re.sub(r'[^a-z0-9]+', '-', value)
+    value = re.sub(r'^-+|-+$', '', value)
+    return value
+    
 def body_input(connection, body, metadata, blog_id):
     """
     Inserts the compiled HTML body and metadata into the DB.
@@ -275,18 +286,18 @@ def body_input(connection, body, metadata, blog_id):
 
         # Insert into blogdigest
         query = """
-        INSERT INTO blogdigest (id, title, summary, thumbnail_url, created_at, updated_at)
-        VALUES (%s, %s, %s, %s, %s, %s)
+        INSERT INTO blogdigest (id, title, slug, summary, thumbnail_url, created_at, updated_at)
+        VALUES (%s, %s, %s, %s, %s, %s, %s)
         """
         data = (
             blog_id,
             metadata.title,
+            slugify(metadata.title),
             metadata.summary,
             process_thumbnail(metadata),
             metadata.created_at,
-            metadata.updated_at,
+            metadata.updated_at
         )
-
         
         # Make sure required metadata fields exist
         if not hasattr(metadata, "title") or not hasattr(metadata, "summary"):

@@ -138,7 +138,7 @@ func main() {
 		})
 	})
 
-	router.GET("/blog/:blogTitle", func(c *gin.Context) {
+	router.GET("/blog/:blogTitle", middleware.HMACMiddleware(), func(c *gin.Context) {
 		title := c.Param("blogTitle")
 		blogs, err := iface.GetBlogPage(db, title)
 		if err != nil {
@@ -147,6 +147,16 @@ func main() {
 			return
 		}
 		c.JSON(200, blogs)
+	})
+
+	router.GET("/blog-titles", middleware.HMACMiddleware(), func(c *gin.Context) {
+		titles, err := iface.GetTitles(db)
+		if err != nil {
+			log.Printf("Error fetching blogs: %v", err)
+			c.JSON(500, gin.H{"error": "Failed to fetch blog"})
+			return
+		}
+		c.JSON(200, titles)
 	})
 
 	// Start the server on the specified port

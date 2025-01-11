@@ -16,7 +16,7 @@ type blogFull struct {
 	Body       string   `json:"body"`
 }
 
-func GetBlogPage(db *sql.DB, title string) (*blogFull, error) {
+func GetBlogPage(db *sql.DB, slug string) (*blogFull, error) {
 	query := `
 	SELECT
 		b.id AS id,
@@ -34,12 +34,12 @@ func GetBlogPage(db *sql.DB, title string) (*blogFull, error) {
 	LEFT JOIN
 		blog_body bb ON b.id = bb.blog_id
 	WHERE
-		b.title = $1
+		b.slug = $1
 	GROUP BY
 		b.id, bb.body;
 	`
 
-	row := db.QueryRow(query, title)
+	row := db.QueryRow(query, slug)
 
 	var blog blogFull
 	var tags pq.StringArray
