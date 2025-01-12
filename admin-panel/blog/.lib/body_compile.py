@@ -13,6 +13,15 @@ import unicodedata
 
 toc_dict = [{}]
 
+#FIX IMAGE_NONE PRoBLEM WITH BLANK ID
+#FIX ASTRO NOT UPDATINg STATIC LINKS (maybe)
+#--------------------------------------
+#--------------------------------------
+#--------------------------------------
+#--------------------------------------
+#--------------------------------------
+#--------------------------------------
+#--------------------------------------
 def image_process(image_link, alt_text="", image_size="med"):
     # Define width based on size
     if image_size == "large":
