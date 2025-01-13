@@ -13,7 +13,6 @@ import unicodedata
 
 toc_dict = [{}]
 
-#FIX IMAGE_NONE PRoBLEM WITH BLANK ID
 #FIX ASTRO NOT UPDATINg STATIC LINKS (maybe)
 #--------------------------------------
 #--------------------------------------

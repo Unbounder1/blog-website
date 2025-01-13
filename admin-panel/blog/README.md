@@ -7,3 +7,4 @@ CREATE TABLE blog_body (
 );
 ```
 
+FIX PQ RELATIONS TAGS 

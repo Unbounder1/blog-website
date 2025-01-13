@@ -23,6 +23,8 @@ func GetBlogs(db *sql.DB) ([]blogDigest, error) {
 	var digests []blogDigest
 
 	rows, err := db.Query(`
+	SET search_path TO public;
+	
 	SELECT
 		b.id AS id,
 		b.title AS title,

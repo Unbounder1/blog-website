@@ -18,6 +18,7 @@ type blogFull struct {
 
 func GetBlogPage(db *sql.DB, slug string) (*blogFull, error) {
 	query := `
+
 	SELECT
 		b.id AS id,
 		b.title AS title,
