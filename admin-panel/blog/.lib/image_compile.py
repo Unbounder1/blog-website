@@ -5,11 +5,23 @@ import os
 import yaml
 
 def connect_minio():
+
     dotenv.load_dotenv()
-    client = Minio("localhost:9000",
-               access_key=os.getenv('MINIO_USER'),
-               secret_key=os.getenv('MINIO_PASS'),
-                secure=False)
+    minio_host = os.getenv('MINIO_HOST', 'localhost')
+    minio_port = os.getenv('MINIO_PORT', '9000')
+    minio_user = os.getenv('MINIO_USER', 'minioadmin')
+    minio_pass = os.getenv('MINIO_PASS', 'minioadmin')
+    minio_secure = os.getenv('MINIO_SECURE', 'false').lower() == 'true'
+
+    endpoint = f"{minio_host}:{minio_port}"
+
+    client = Minio(
+        endpoint,
+        access_key=minio_user,
+        secret_key=minio_pass,
+        secure=minio_secure
+    )
+
     return client
 
 def upload_minio(client, bucket_name, destination_file, source_file, tag):
@@ -28,9 +40,15 @@ def get_assets(dir):
         metadata_dict = yaml.safe_load(file)
 
     for image_name, image_file in metadata_dict["images"].items():
+        if image_file.lower().startswith('http'):
+            continue
         temp = (image_name, image_file)
         asset_list.append(temp)
     
+    thumbnail_image = metadata_dict["thumbnail_image"]
+    if not thumbnail_image.lower().startswith('http'):
+        temp = ("thumbnail_image", thumbnail_image)
+        asset_list.append(temp)
     return asset_list
 
 def process_assets(dir, blog_id):

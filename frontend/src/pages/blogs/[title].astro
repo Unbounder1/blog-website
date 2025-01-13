@@ -1,0 +1,26 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { queryDB } from '../../components/Dbrouter'
+
+export async function getStaticPaths() {
+  // Use queryDB to fetch all blog titles
+  const titles = await queryDB('http://localhost:8080/blog-titles', '/blog-titles');
+
+  // Map titles to slugified paths for static generation
+  return titles.map((title) => ({
+    params: { title }
+
+  }));
+}
+
+const { title } = Astro.params;
+
+
+const blog = await queryDB(`http://localhost:8080/blog/${title}`, `/blog/${title}`);
+---
+
+<Layout>
+  <h1>{blog.title}</h1>
+  <p><strong>Tags:</strong> {blog.tags.join(', ')}</p>
+  <div class="blog-content" set:html={blog.body}></div>
+</Layout>

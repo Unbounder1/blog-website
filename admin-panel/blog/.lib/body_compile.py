@@ -8,17 +8,11 @@ import psycopg2
 import dotenv
 import os
 import datetime
+import re
+import unicodedata
 
 toc_dict = [{}]
-# FIGURE OUT HOW TO PROCESS THE BLOG ID AT RUNTIME
 
-#------------------------------------------
-#------------------------------------------
-#------------------------------------------
-#------------------------------------------
-#------------------------------------------
-#------------------------------------------
-#------------------------------------------
 def image_process(image_link, alt_text="", image_size="med"):
     # Define width based on size
     if image_size == "large":
@@ -29,9 +23,11 @@ def image_process(image_link, alt_text="", image_size="med"):
         width = "150"
 
     blog_id = "{{ blog_id }}"
+    backend_host = "{{ backend_host }}"
+    backend_port = "{{ backend_port }}" 
     
     outStr = f'''<Image
-  src="http://localhost:8080/blog/blog_{blog_id}/{image_link}"
+  src="http://{backend_host}:{backend_port}/image/blog/blog_{blog_id}/{image_link}"
   alt="{alt_text}"
   width="{width}"
   format="auto"
@@ -85,7 +81,11 @@ def html_convert(dir, metadata, blog_id):
     template = env.from_string(html_content)
     process_one = template.render(metadata=metadata)
     template = env.from_string(process_one)
-    return template.render(blog_id=blog_id)
+
+    dotenv.load_dotenv()
+    backend_host = os.getenv('BACKEND_HOST', 'localhost')
+    backend_port = os.getenv('BACKEND_PORT', '9000')
+    return template.render(blog_id=blog_id, backend_host=backend_host, backend_port=backend_port)
 
 def toc_process(toc):
     """
@@ -171,7 +171,6 @@ def db_connection():
     DB_NAME = os.getenv('DB_NAME')
     DB_SSLMODE = os.getenv('DB_SSLMODE')
 
-    S
     if not DB_HOST or not DB_PORT or not DB_USER or not DB_PASSWORD or not DB_NAME:
         raise ValueError("One or more required DB environment variables are not set.")
 
@@ -218,6 +217,23 @@ def delete_db(connection, metadata):
             print(f"An error occurred: {e}")
             raise
 
+def process_thumbnail(metadata):
+    if not metadata.thumbnail_image.lower().startswith('http'):
+        dotenv.load_dotenv()
+        minio_host = os.getenv('BACKEND_HOST', 'localhost')
+        minio_port = os.getenv('BACKEND_PORT', '8080')
+        return f"http://{minio_host}:{minio_port}/image/blog/blog_{metadata.id}/{metadata.thumbnail_image}"
+    else:
+        return metadata.thumbnail_image
+    
+def slugify(value):
+    value = unicodedata.normalize('NFKD', value)
+    value = value.encode('ascii', 'ignore').decode('ascii')
+    value = value.lower()
+    value = re.sub(r'[^a-z0-9]+', '-', value)
+    value = re.sub(r'^-+|-+$', '', value)
+    return value
+    
 def body_input(connection, body, metadata, blog_id):
     """
     Inserts the compiled HTML body and metadata into the DB.
@@ -270,18 +286,18 @@ def body_input(connection, body, metadata, blog_id):
 
         # Insert into blogdigest
         query = """
-        INSERT INTO blogdigest (id, title, summary, thumbnail_url, created_at, updated_at)
-        VALUES (%s, %s, %s, %s, %s, %s)
+        INSERT INTO blogdigest (id, title, slug, summary, thumbnail_url, created_at, updated_at)
+        VALUES (%s, %s, %s, %s, %s, %s, %s)
         """
         data = (
             blog_id,
             metadata.title,
+            slugify(metadata.title),
             metadata.summary,
-            metadata.thumbnail_url,
+            process_thumbnail(metadata),
             metadata.created_at,
-            metadata.updated_at,
+            metadata.updated_at
         )
-
         
         # Make sure required metadata fields exist
         if not hasattr(metadata, "title") or not hasattr(metadata, "summary"):
