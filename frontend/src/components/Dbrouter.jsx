@@ -1,12 +1,8 @@
 import CryptoJS from "crypto-js";
-import dotenv from "dotenv";
-
-dotenv.config();
 
 function generateHmac(data) {
     //.env HMAC_API_KEY
     console.log(process.env.HMAC_API_KEY.length)
-
     return CryptoJS.HmacSHA256(data, process.env.HMAC_API_KEY).toString(CryptoJS.enc.Hex);
 }
 

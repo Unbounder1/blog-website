@@ -28,12 +28,12 @@ func InitializeDatabase() {
 		log.Println("No .env file found. Using environment variables.")
 	}
 
-	dbHost := getEnv("DB_HOST", "localhost")
-	dbPort := getEnv("DB_PORT", "5432")
-	dbUser := getEnv("DB_USER", "postgres")
-	dbPassword := getEnv("DB_PASSWORD", "")
-	dbName := getEnv("DB_NAME", "postgres")
-	dbSSLMode := getEnv("DB_SSLMODE", "disable")
+	dbHost := getEnv("POSTGRES_HOST", "localhost")
+	dbPort := getEnv("POSTGRES_PORT", "5432")
+	dbUser := getEnv("POSTGRES_USER", "postgres")
+	dbPassword := getEnv("POSTGRES_PASSWORD", "")
+	dbName := getEnv("POSTGRES_NAME", "postgres")
+	dbSSLMode := getEnv("POSTGRES_SSLMODE", "disable")
 
 	psqlInfo := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=%s",
 		dbHost, dbPort, dbUser, dbPassword, dbName, dbSSLMode)
