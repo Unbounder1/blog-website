@@ -7,10 +7,11 @@ RUN npm install --production
 
 COPY . .
 
-ARG HMAC_API_KEY
-ENV HMAC_API_KEY=${HMAC_API_KEY}
+ENV HMAC_API_KEY=
 
 RUN npm run build
 
+ENV HOST=0.0.0.0
+ENV PORT=4321
 EXPOSE 4321
 CMD ["node", "dist/server/entry.mjs"]

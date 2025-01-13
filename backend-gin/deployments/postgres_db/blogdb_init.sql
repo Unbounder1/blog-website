@@ -1,3 +1,6 @@
+-- Create blogdigestdb DATABASE
+CREATE DATABASE blogdigestdb;
+
 -- Create the blog_body table
 CREATE TABLE public.blog_body (
     id SERIAL PRIMARY KEY,

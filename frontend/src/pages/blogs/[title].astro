@@ -4,7 +4,7 @@ import { queryDB } from '../../components/Dbrouter'
 
 export async function getStaticPaths() {
   // Use queryDB to fetch all blog titles
-  const titles = await queryDB('http://localhost:8080/blog-titles', '/blog-titles');
+  const titles = await queryDB("http://" + process.env.BACKEND_HOST + ":" + process.env.BACKEND_PORT + "/blog-titles", '/blog-titles');
 
   // Map titles to slugified paths for static generation
   return titles.map((title) => ({
@@ -15,8 +15,8 @@ export async function getStaticPaths() {
 
 const { title } = Astro.params;
 
-
-const blog = await queryDB(`http://localhost:8080/blog/${title}`, `/blog/${title}`);
+"http://" + process.env.BACKEND_HOST + ":" + process.env.BACKEND_PORT + "/blog/" + title
+const blog = await queryDB("http://" + process.env.BACKEND_HOST + ":" + process.env.BACKEND_PORT + "/blog/" + title, `/blog/${title}`);
 ---
 
 <Layout>
