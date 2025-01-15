@@ -4,7 +4,7 @@ import { queryDB } from '../../components/Dbrouter'
 
 export async function getStaticPaths() {
   // Use queryDB to fetch all blog titles
-  const titles = await queryDB('http://localhost:8080/blog-titles', '/blog-titles');
+  const titles = await queryDB("http://" + process.env.BACKEND_HOST + ":" + process.env.BACKEND_PORT + "/blog-titles", '/blog-titles');
 
   // Map titles to slugified paths for static generation
   return titles.map((title) => ({
@@ -15,12 +15,102 @@ export async function getStaticPaths() {
 
 const { title } = Astro.params;
 
-
-const blog = await queryDB(`http://localhost:8080/blog/${title}`, `/blog/${title}`);
+"http://" + process.env.BACKEND_HOST + ":" + process.env.BACKEND_PORT + "/blog/" + title
+const blog = await queryDB("http://" + process.env.BACKEND_HOST + ":" + process.env.BACKEND_PORT + "/blog/" + title, `/blog/${title}`);
 ---
 
 <Layout>
-  <h1>{blog.title}</h1>
-  <p><strong>Tags:</strong> {blog.tags.join(', ')}</p>
-  <div class="blog-content" set:html={blog.body}></div>
+  <div class="container">
+    <h1>{blog.title}</h1>
+    <p><strong>Tags:</strong> {blog.tags.join(', ')}</p>
+    <div class="blog-content" set:html={blog.body}></div>
+  </div>
 </Layout>
+
+<style>
+  /* Reset some default styles */
+  body, h1, h2, h3, p, ul, li, a {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+  }
+
+  body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      line-height: 1.6;
+      background-color: #f9f9f9;
+      color: #333;
+      padding: 20px;
+  }
+
+  .container {
+      max-width: 800px;
+      margin: auto;
+      background: #fff;
+      padding: 30px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  }
+
+  h1 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #2c3e50;
+  }
+
+  .toc {
+      background: #ecf0f1;
+      padding: 20px;
+      border-radius: 5px;
+      margin-bottom: 40px;
+  }
+
+  .toc h2 {
+      margin-bottom: 10px;
+      color: #34495e;
+  }
+
+  .toc ul {
+      list-style: none;
+  }
+
+  .toc ul li {
+      margin-bottom: 8px;
+  }
+
+  .toc ul li a {
+      text-decoration: none;
+      color: #2980b9;
+      transition: color 0.3s;
+  }
+
+  .toc ul li a:hover {
+      color: #1abc9c;
+  }
+
+  section {
+      margin-bottom: 40px;
+  }
+
+  section h2 {
+      color: #2980b9;
+      margin-bottom: 15px;
+      border-bottom: 2px solid #ecf0f1;
+      padding-bottom: 5px;
+  }
+
+  /* Smooth scrolling */
+  html {
+      scroll-behavior: smooth;
+  }
+
+  /* Responsive adjustments */
+  @media (max-width: 600px) {
+      .toc {
+          padding: 15px;
+      }
+
+      .container {
+          padding: 20px;
+      }
+  }
+</style>

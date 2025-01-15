@@ -1,0 +1,14 @@
+FROM postgres:latest
+
+WORKDIR /db 
+
+ENV POSTGRES_HOST=
+ENV POSTGRES_PORT=
+ENV POSTGRES_USER=
+ENV POSTGRES_PASSWORD=
+ENV POSTGRES_NAME=
+ENV POSTGRES_SSLMODE=
+
+COPY ./blogdb_init.sql /docker-entrypoint-initdb.d/
+
+USER postgres

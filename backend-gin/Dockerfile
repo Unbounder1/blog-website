@@ -1,0 +1,32 @@
+FROM golang:latest
+
+ENV POSTGRES_HOST=
+ENV POSTGRES_PORT=
+ENV POSTGRES_USER=
+ENV POSTGRES_PASSWORD=
+ENV POSTGRES_NAME=
+ENV POSTGRES_SSLMODE=
+ENV PORT=
+ENV HMAC_API_KEY=
+ENV MINIO_USER=
+ENV MINIO_PASS=
+ENV MINIO_PORT=
+ENV MINIO_HOST==
+ENV MINIO_USE_SSL=
+
+WORKDIR /app
+
+COPY go.mod go.sum ./
+
+RUN go mod download
+
+COPY *.go ./
+
+COPY ./internal/ ./internal/
+
+RUN CGO_ENABLED=0 GOOS=linux go build -o /blog-backend
+
+EXPOSE 8080 
+
+CMD ["/blog-backend"]
+
