@@ -160,7 +160,7 @@ func main() {
 	})
 
 	// Start the server on the specified port
-	port := getEnv("PORT", "8080")
+	port := getEnv("BACKEND_PORT", "8080")
 	if err := router.Run(":" + port); err != nil {
 		log.Fatalf("Failed to run server: %v", err)
 	}

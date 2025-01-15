@@ -27,11 +27,16 @@ spec:
             limits:
               memory: "128Mi"
               cpu: "500m"
+          envFrom:
+          - configMapRef:
+              name: astro-blog-env
+          - secretRef:
+              name: astro-blog-secret
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: frontend-dev
+  name: frontend-dev-svc
 spec:
   selector:
     app: frontend-dev
@@ -47,25 +52,99 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: postgres_blog
+  name: postgres-blog
+  labels:
+    app: postgres-blog
 spec:
+  replicas: 1
   selector:
     matchLabels:
-      app: postgres_blog
+      app: postgres-blog
   template:
     metadata:
       labels:
-        app: postgres_blog
+        app: postgres-blog
     spec:
       containers:
-      - name: postgres-blog
-        image: postgres-blog
+        - name: postgres
+          image: postgres:latest
+          workingDir: /db
+          envFrom:
+            - configMapRef:
+                name: astro-blog-env
+            - secretRef:
+                name: astro-blog-secret
+          volumeMounts:
+            - name: init-sql-script
+              mountPath: /docker-entrypoint-initdb.d/
+              readOnly: true
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "250m"
+            limits:
+              memory: "256Mi"
+              cpu: "500m"
+      volumes:
+        - name: init-sql-script
+          configMap:
+            name: blogdb-init-sql
+--- 
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres-blog-svc
+spec:
+  selector:
+    app: postgres-blog
+  ports:
+  - port: 5432
+    targetPort: 5432
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-dev
+spec:
+  selector:
+    matchLabels:
+      app: gin-backend
+  template:
+    metadata:
+      labels:
+        app: gin-backend
+    spec:
+      containers:
+      - name: gin-backend
+        image: gin-backend
+        imagePullPolicy: Never
         resources:
           limits:
             memory: "128Mi"
             cpu: "500m"
         ports:
-        - containerPort: 5432
+        - containerPort: 8080
+        envFrom:
+            - configMapRef:
+                name: astro-blog-env
+            - secretRef:
+                name: astro-blog-secret
+              
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: gin-backend
+spec:
+  selector:
+    app: gin-backend
+  ports:
+  - port: 8080
+    targetPort: 8080
+
+
+
+
 
 # ENV POSTGRES_HOST=
 # ENV POSTGRES_PORT=
