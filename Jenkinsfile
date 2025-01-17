@@ -30,18 +30,20 @@ pipeline {
     stages {
         stage('Deploy to Kubernetes') {
             steps {
-                script {
+                container('kubectl') {
                     withCredentials([string(credentialsId: 'k8s-token', variable: 'K8S_TOKEN')]) {
-                        // Set up kubectl with the token
-                        sh '''
-                        kubectl config set-cluster my-cluster --server=https://kubernetes.default.svc --insecure-skip-tls-verify=true
-                        kubectl config set-credentials jenkins-user --token=$K8S_TOKEN
-                        kubectl config set-context my-context --cluster=my-cluster --user=jenkins-user
-                        kubectl config use-context my-context
-                        '''
-                        
-                        // Run kubectl commands
-                        sh 'kubectl get pods -n default'
+                        script {
+                            // Set up kubectl with the token
+                            sh '''
+                            kubectl config set-cluster my-cluster --server=https://kubernetes.default.svc --insecure-skip-tls-verify=true
+                            kubectl config set-credentials jenkins-user --token=$K8S_TOKEN
+                            kubectl config set-context my-context --cluster=my-cluster --user=jenkins-user
+                            kubectl config use-context my-context
+                            '''
+                            
+                            // Run kubectl commands
+                            sh 'kubectl get pods -n default'
+                        }
                     }
                 }
             }
