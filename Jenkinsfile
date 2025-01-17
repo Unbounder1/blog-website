@@ -1,8 +1,27 @@
 pipeline {
     agent {
-        docker {
-            image 'bitnami/kubectl:latest'
-            args '-v /root/.kube:/root/.kube' // Mount kubeconfig if needed
+        kubernetes {
+            yaml """
+            apiVersion: v1
+            kind: Pod
+            metadata:
+              labels:
+                jenkins: kubectl
+            spec:
+              containers:
+              - name: kubectl
+                image: bitnami/kubectl:latest
+                command:
+                - cat
+                tty: true
+                volumeMounts:
+                - name: kube-config
+                  mountPath: /root/.kube
+              volumes:
+              - name: kube-config
+                hostPath:
+                  path: /root/.kube
+            """
         }
     }
     environment {
@@ -21,6 +40,7 @@ pipeline {
                         kubectl config use-context my-context
                         '''
                         
+                        // Run kubectl commands
                         sh 'kubectl get pods -n default'
                     }
                 }
