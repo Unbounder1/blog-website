@@ -1,6 +1,8 @@
 ---
 import SearchBar from "./Searchbar";
 import { queryDB } from "./Dbrouter"
+import dotenv from "dotenv";
+dotenv.config() 
 
 const [digestData, tagData] = await Promise.all([
   queryDB("http://" + process.env.BACKEND_HOST + ":" + process.env.BACKEND_PORT + "/digest", "/digest"),

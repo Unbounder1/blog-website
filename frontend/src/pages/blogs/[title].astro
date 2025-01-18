@@ -1,9 +1,13 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import { queryDB } from '../../components/Dbrouter'
+import dotenv from "dotenv";
 
 export async function getStaticPaths() {
   // Use queryDB to fetch all blog titles
+
+  dotenv.config()
+  
   const titles = await queryDB("http://" + process.env.BACKEND_HOST + ":" + process.env.BACKEND_PORT + "/blog-titles", '/blog-titles');
 
   // Map titles to slugified paths for static generation
