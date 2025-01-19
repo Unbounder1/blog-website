@@ -6,6 +6,7 @@ pipeline {
 apiVersion: v1
 kind: Pod
 metadata:
+  name: kubectl-agent
   labels:
     app: kubectl-agent
 spec:
