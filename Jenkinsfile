@@ -11,18 +11,11 @@ metadata:
 spec:
   containers:
   - name: kubectl
-    image: d3fk/kubectl
+    image: bitnami/kubectl:latest
     command:
-    - cat
-    tty: true
-    volumeMounts:
-    - name: kubeconfig
-      mountPath: /root/.kube
-  volumes:
-  - name: kubeconfig
-    hostPath:
-      path: /home/jenkins/.kube
-      type: Directory
+    - sleep
+    args:
+    - infinity
 """
         }
     }
