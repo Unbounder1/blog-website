@@ -48,7 +48,7 @@ const SearchBar = ({ blogArr, tags }) => {
                     { name: "tags", weight: 0.5 }, 
                     { name: "summary", weight: 0.3 },
                 ],
-                threshold: 0.4, // Adjust based on desired fuzziness
+                threshold: 0.4, 
                 includeScore: true,
                 ignoreLocation: true,
             }),
