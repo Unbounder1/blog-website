@@ -12,6 +12,8 @@ spec:
   - name: kubectl
     image: bitnami/kubectl:latest
     tty: true
+    securityContext:
+        runAsUser: 0
     stdin: true
     command:
     - sleep
