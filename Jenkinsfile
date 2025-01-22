@@ -10,7 +10,7 @@ metadata:
 spec:
   containers:
   - name: kubectl
-    image: bitnami/kubectl:latest
+    image: docker.io/bitnami/kubectl:latest
     tty: true
     securityContext:
         runAsUser: 0
@@ -20,7 +20,7 @@ spec:
     args:
     - infinity
   - name: network-test
-    image: nicolaka/netshoot:latest
+    image: docker.io/nicolaka/netshoot:latest
     tty: true
     securityContext:
         runAsUser: 0
