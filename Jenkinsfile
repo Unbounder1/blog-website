@@ -20,7 +20,7 @@ spec:
     args:
     - infinity
   - name: network-test
-    image: nicolaka/netshoot
+    image: nicolaka/netshoot:latest
     tty: true
     securityContext:
         runAsUser: 0
@@ -88,4 +88,10 @@ spec:
             }
         }
     }
+}
+
+def cleanup() {
+    sh '''
+    echo "Cleaning up"
+    '''
 }
