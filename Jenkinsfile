@@ -56,9 +56,6 @@ spec:
     environment {
         GITHUB_REPO = "https://github.com/Unbounder1/blog-website.git"
         CLONE_DIR = "/workspace/github-repo"
-        IMAGES = "backend-gin,frontend,test-blog-psql-db"
-        IMAGE_PATHS = ""
-        DOCKER_TAG = "latest"
         REGISTRY_URL = "localhost:5000" 
     stages {
         stage('Clone GitHub Repository') {
@@ -80,21 +77,9 @@ spec:
             steps {
                 container('docker') {
                     script {
-                        def imageList = ${IMAGES}.split(',').toList()
-                        def pathList = ${IMAGE_PATHS}.split(',').toList()
-
-                        for (int i = 0; i < imageList.size(); i++){
-                            sh '''
-                            echo "Building Docker image..."
-                            docker build -t ${imageList[i]}:${DOCKER_TAG} /workspace/github-repo${pathList[i]}
-
-                            echo "Tagging Docker image for registry..."
-                            docker tag ${imageList[i]}:${DOCKER_TAG} ${REGISTRY_URL}/${imageList[i]}:${DOCKER_TAG}
-
-                            echo "Pushing Docker image to registry..."
-                            docker push ${REGISTRY_URL}/${imageList[i]}:${DOCKER_TAG}
-                            '''
-                        }
+                        sh '''
+                        ${CLONE_DIR}/dev-deployment/docker-build.sh docker all
+                        '''
                         
                     }
                 }
