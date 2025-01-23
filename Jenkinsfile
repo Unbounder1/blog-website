@@ -29,6 +29,8 @@ spec:
     - sleep
     args:
     - infinity
+  imagePullSecrets:
+  - name: docker-credentials
 """
         }
     }
