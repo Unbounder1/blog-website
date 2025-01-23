@@ -16,7 +16,12 @@ DOCKER_TAG="latest"
 if [ "$ENV" == "minikube" ]; then
     echo "Configuring environment for Minikube..."
     eval $(minikube docker-env)
-    PUSH_TO="localhost:5000"
+    
+    # Extract the DOCKER_HOST address (without the tcp:// prefix)
+    PUSH_TO=$(echo $DOCKER_HOST | sed 's|tcp://||')
+    
+    echo "Docker Host Address: $DOCKER_HOST"
+    echo "Pushing to: $PUSH_TO"
 else
     echo "Using remote Docker registry: $ENV"
     PUSH_TO="$ENV"
