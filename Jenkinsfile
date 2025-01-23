@@ -9,6 +9,19 @@ metadata:
   name: astro-blog-dep
 spec:
   containers:
+  - name: docker
+    image: docker.io/docker:latest
+    tty: true
+    securityContext:
+        runAsUser: 0
+    stdin: true
+    command:
+    - sleep
+    args:
+    - infinity
+    volumeMounts:
+    - name: github-repo-volume
+      mountPath: /workspace/github-repo
   - name: kubectl
     image: docker.io/bitnami/kubectl:latest
     tty: true
@@ -19,6 +32,9 @@ spec:
     - sleep
     args:
     - infinity
+    volumeMounts:
+    - name: github-repo-volume
+      mountPath: /workspace/github-repo
   - name: network-test
     image: docker.io/nicolaka/netshoot:latest
     tty: true
@@ -29,12 +45,61 @@ spec:
     - sleep
     args:
     - infinity
+  volumes:
+  - name: github-repo-volume
+    emptyDir: {}
   imagePullSecrets:
   - name: docker-credentials
 """
         }
     }
+    environment {
+        GITHUB_REPO = "https://github.com/Unbounder1/blog-website.git"
+        CLONE_DIR = "/workspace/github-repo"
+        IMAGES = "backend-gin,frontend,test-blog-psql-db"
+        IMAGE_PATHS = ""
+        DOCKER_TAG = "latest"
+        REGISTRY_URL = "localhost:5000" 
     stages {
+        stage('Clone GitHub Repository') {
+            steps {
+                container('kubectl') {
+                    script {
+                        sh '''
+                            echo "Cloning GitHub repository..."
+                            if [ ! -d "${CLONE_DIR}" ]; then
+                                mkdir -p ${CLONE_DIR}
+                            fi
+                            git clone ${GITHUB_REPO} ${CLONE_DIR}
+                        '''
+                    }
+                }
+            }
+        }
+        stage('Build and Deploy Docker Image') {
+            steps {
+                container('docker') {
+                    script {
+                        def imageList = ${IMAGES}.split(',').toList()
+                        def pathList = ${IMAGE_PATHS}.split(',').toList()
+
+                        for (int i = 0; i < imageList.size(); i++){
+                            sh '''
+                            echo "Building Docker image..."
+                            docker build -t ${imageList[i]}:${DOCKER_TAG} /workspace/github-repo${pathList[i]}
+
+                            echo "Tagging Docker image for registry..."
+                            docker tag ${imageList[i]}:${DOCKER_TAG} ${REGISTRY_URL}/${imageList[i]}:${DOCKER_TAG}
+
+                            echo "Pushing Docker image to registry..."
+                            docker push ${REGISTRY_URL}/${imageList[i]}:${DOCKER_TAG}
+                            '''
+                        }
+                        
+                    }
+                }
+            }
+        }
         stage('Deploy to Kubernetes') {
             steps {
                 container('kubectl') { 
@@ -48,18 +113,8 @@ spec:
                                     echo "Getting all resources in blog-dev namespace:"
                                     kubectl get all -n blog-dev
                                     
-                                    # Clone or pull the latest code
-                                    if [ ! -d "./blog-website" ]; then
-                                        echo "Cloning repository..."
-                                        git clone https://github.com/Unbounder1/blog-website
-                                    else
-                                        echo "Pulling latest changes..."
-                                        cd blog-website
-                                        git pull
-                                    fi
-                                    
-                                    # Apply the Kubernetes deployment
-                                    kubectl apply -f ./blog-website/script/dev-deployment -n blog-dev
+                                    echo "Applying Kubernetes deployment..."
+                                    kubectl apply -f ${CLONE_DIR}/script/dev-deployment -n blog-dev
                                 '''
                             }
                         } catch (Exception e) {
@@ -78,7 +133,7 @@ spec:
                             withKubeConfig([credentialsId: 'k8s-token', serverUrl: 'https://kubernetes.default.svc']) {
                                 sh '''
                                     echo "Testing connectivity to frontend service:"
-                                    curl -v http://frontend-dev-svc.blog-dev.svc.cluster.local
+                                    curl -v http://frontend-dev-svc.blog-dev.svc.cluster.local:4321
                                 '''
                             }
                         } catch (Exception e) {
@@ -90,10 +145,4 @@ spec:
             }
         }
     }
-}
-
-def cleanup() {
-    sh '''
-    echo "Cleaning up"
-    '''
 }
