@@ -107,7 +107,7 @@ spec:
                         sh """
                             echo "Building Docker image(s)..."
                             # Use the environment variable REGISTRY_URL
-                            ${CLONE_DIR}/dev-deployment/docker-build.sh ${REGISTRY_URL} all
+                            ${CLONE_DIR}/script/resources/docker-build.sh ${REGISTRY_URL} all
                         """
                     }
                 }
