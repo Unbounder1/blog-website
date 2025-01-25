@@ -10,43 +10,47 @@ metadata:
 spec:
   containers:
   - name: registry
-    image: registry
+    image: registry:2
     ports:
-        - containerPort: 5000
+      - containerPort: 5000
     tty: true
     securityContext:
-        runAsUser: 0
+      runAsUser: 0
     stdin: true
     command:
     - sleep
     args:
     - infinity
+
   - name: kubectl
     image: docker.io/bitnami/kubectl:latest
     tty: true
     securityContext:
-        runAsUser: 0
+      runAsUser: 0
     stdin: true
     command:
     - sleep
     args:
     - infinity
     volumeMounts:
-    - name: github-repo-volume
-      mountPath: /workspace/github-repo
+      - name: github-repo-volume
+        mountPath: /workspace/github-repo
+
   - name: network-test
     image: docker.io/nicolaka/netshoot:latest
     tty: true
     securityContext:
-        runAsUser: 0
+      runAsUser: 0
     stdin: true
     command:
     - sleep
     args:
     - infinity
+
   volumes:
   - name: github-repo-volume
     emptyDir: {}
+
   imagePullSecrets:
   - name: docker-credentials
 """
@@ -57,51 +61,76 @@ spec:
         GITHUB_REPO = "https://github.com/Unbounder1/blog-website.git"
         CLONE_DIR = "/workspace/github-repo"
         REGISTRY_URL = "localhost:5000"
+    }
 
     stages {
+
+        stage('Install Git (if needed)') {
+            steps {
+                container('kubectl') {
+                    script {
+                        sh """
+                          echo 'Checking if git is installed...'
+                          if ! command -v git &> /dev/null
+                          then
+                            echo 'Installing git...'
+                            apt-get update && apt-get install -y git
+                          else
+                            echo 'Git is already installed.'
+                          fi
+                        """
+                    }
+                }
+            }
+        }
+
         stage('Clone GitHub Repository') {
             steps {
                 container('kubectl') {
                     script {
-                        sh '''
+                        sh """
                             echo "Cloning GitHub repository..."
                             if [ ! -d "${CLONE_DIR}" ]; then
                                 mkdir -p ${CLONE_DIR}
                             fi
                             git clone ${GITHUB_REPO} ${CLONE_DIR}
-                        '''
+                        """
                     }
                 }
             }
         }
-        stage('Build and Deploy Docker Image') {
+
+        stage('Build Docker Image') {
             steps {
                 container('registry') {
                     script {
-                        sh '''
-                        ${CLONE_DIR}/dev-deployment/docker-build.sh localhost:5000 all
-                        '''
-                        
+                        sh """
+                            echo "Building Docker image(s)..."
+                            # Use the environment variable REGISTRY_URL
+                            ${CLONE_DIR}/dev-deployment/docker-build.sh ${REGISTRY_URL} all
+                        """
                     }
                 }
             }
         }
+
         stage('Deploy to Kubernetes') {
             steps {
-                container('kubectl') { 
+                container('kubectl') {
                     script {
                         try {
                             withKubeConfig([credentialsId: 'k8s-token', serverUrl: 'https://kubernetes.default.svc']) {
-                                sh '''
+                                sh """
                                     echo "Current Kubernetes Context:"
                                     kubectl config current-context
-                                    
+
                                     echo "Getting all resources in blog-dev namespace:"
                                     kubectl get all -n blog-dev
-                                    
-                                    echo "Applying Kubernetes deployment..."
-                                    kubectl apply -f ${CLONE_DIR}/script/dev-deployment -n blog-dev
-                                '''
+
+                                    echo "Applying Kubernetes manifests..."
+                                    # Assuming your deployment YAMLs are in dev-deployment folder
+                                    kubectl apply -f ${CLONE_DIR}/dev-deployment -n blog-dev
+                                """
                             }
                         } catch (Exception e) {
                             echo "Error during deployment: ${e.message}"
@@ -111,16 +140,17 @@ spec:
                 }
             }
         }
+
         stage('Testing Connectivity') {
             steps {
                 container('network-test') {
                     script {
                         try {
                             withKubeConfig([credentialsId: 'k8s-token', serverUrl: 'https://kubernetes.default.svc']) {
-                                sh '''
-                                    echo "Testing connectivity to frontend service:"
+                                sh """
+                                    echo "Testing connectivity to frontend service..."
                                     curl -v http://frontend-dev-svc.blog-dev.svc.cluster.local:4321
-                                '''
+                                """
                             }
                         } catch (Exception e) {
                             echo "Connectivity test failed: ${e.message}"
@@ -130,6 +160,5 @@ spec:
                 }
             }
         }
-    }  
     }
 }
