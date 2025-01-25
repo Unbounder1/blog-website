@@ -9,8 +9,10 @@ metadata:
   name: astro-blog-dep
 spec:
   containers:
-  - name: docker
-    image: docker.io/docker:latest
+  - name: registry
+    image: registry
+    ports:
+        - containerPort: 5000
     tty: true
     securityContext:
         runAsUser: 0
@@ -19,9 +21,6 @@ spec:
     - sleep
     args:
     - infinity
-    volumeMounts:
-    - name: github-repo-volume
-      mountPath: /workspace/github-repo
   - name: kubectl
     image: docker.io/bitnami/kubectl:latest
     tty: true
@@ -75,10 +74,10 @@ spec:
         }
         stage('Build and Deploy Docker Image') {
             steps {
-                container('docker') {
+                container('registry') {
                     script {
                         sh '''
-                        ${CLONE_DIR}/dev-deployment/docker-build.sh docker all
+                        ${CLONE_DIR}/dev-deployment/docker-build.sh localhost:5000 all
                         '''
                         
                     }
