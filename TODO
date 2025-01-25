@@ -3,4 +3,6 @@
 - Create temporary registry for jenkins
 - Create permanent registry somehow
 - Add rest of jenkins deployment stuff
+- Multistage docker pipeline
+- Parallelize dev-deploy.sh script
 
