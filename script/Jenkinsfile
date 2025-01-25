@@ -21,6 +21,9 @@ spec:
     - sleep
     args:
     - infinity
+    volumeMounts:
+      - name: github-repo-volume
+        mountPath: /workspace/github-repo
 
   - name: kubectl
     image: docker.io/bitnami/kubectl:latest
