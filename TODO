@@ -1,0 +1,6 @@
+- Add README Documentation to everything
+- Test deployment yaml files (ordering)
+- Create temporary registry for jenkins
+- Create permanent registry somehow
+- Add rest of jenkins deployment stuff
+
