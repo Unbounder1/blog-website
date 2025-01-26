@@ -97,7 +97,7 @@ spec:
                                 mkdir -p ${CLONE_DIR}
                             fi
                             git clone ${GITHUB_REPO} ${CLONE_DIR}
-                            tree ${CLONE_DIR} -L 2
+                            ls ${CLONE_DIR}
                         """
                     }
                 }
@@ -111,8 +111,8 @@ spec:
                         sh """
                             echo "Building Docker image(s)..."
                             # Use the environment variable REGISTRY_URL
-                            tree ${CLONE_DIR} -L 2
-                            
+                            ls ${CLONE_DIR}
+
                             ${CLONE_DIR}/script/resources/docker-build.sh ${REGISTRY_URL} all
                         """
                     }
