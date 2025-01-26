@@ -9,8 +9,6 @@ metadata:
   labels:
     jenkins: astro-blog-dep
 spec:
-  # Optionally specify a serviceAccount if Jenkins needs cluster permissions:
-  # serviceAccountName: jenkins
 
   containers:
     - name: registry
@@ -48,8 +46,6 @@ spec:
       volumeMounts:
         - name: github-repo-volume
           mountPath: /workspace/github-repo
-        - name: docker-socket
-          mountPath: /var/run/docker.sock
 
     - name: kubectl
       image: docker.io/bitnami/kubectl:latest
@@ -80,8 +76,6 @@ spec:
 
   volumes:
     - name: github-repo-volume
-      emptyDir: {}
-    - name: docker-socket
       emptyDir: {}
 
   imagePullSecrets:
