@@ -139,10 +139,31 @@ spec:
             steps {
                 container('docker') {
                     script {
+                        // install bash if missing
+                        sh """
+                            echo "Installing bash if missing..."
+                            if command -v apk >/dev/null 2>&1; then
+                                apk update && apk add bash
+                            else
+                                apt-get update && apt-get install -y bash
+                            fi
+                        """
+
+                        // wait for docker to be ready
+                        sh """
+                            echo "Waiting for Docker to be ready..."
+                            until docker info >/dev/null 2>&1; do
+                            echo "Docker daemon not yet accessible..."
+                            sleep 1
+                            done
+                            echo "Docker is up!"
+                        """
+
+                        // build docker images
                         sh """
                             echo "Building Docker images..."
                             ls -l ${CLONE_DIR}/script/resources/docker-build.sh
-                            sh ${CLONE_DIR}/script/resources/docker-build.sh ${REGISTRY_URL} all
+                            bash ${CLONE_DIR}/script/resources/docker-build.sh ${REGISTRY_URL} all
                         """
                     }
                 }
