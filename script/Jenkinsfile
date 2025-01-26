@@ -25,7 +25,7 @@ spec:
       - name: github-repo-volume
         mountPath: /workspace/github-repo
 
-    - name: docker
+  - name: docker
     image: docker:latest
     tty: true
     securityContext:
