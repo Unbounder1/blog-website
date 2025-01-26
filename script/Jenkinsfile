@@ -110,9 +110,8 @@ spec:
                     script {
                         sh """
                             echo "Building Docker image(s)..."
-                            # Use the environment variable REGISTRY_URL
-                            ls ${CLONE_DIR}/script/resources/
-
+                            
+                            chmod +x ${CLONE_DIR}/script/resources/docker-build.sh
                             ${CLONE_DIR}/script/resources/docker-build.sh ${REGISTRY_URL} all
                         """
                     }
