@@ -25,6 +25,20 @@ spec:
       - name: github-repo-volume
         mountPath: /workspace/github-repo
 
+    - name: docker
+    image: docker:latest
+    tty: true
+    securityContext:
+        runAsUser: 0
+    stdin: true
+    command:
+    - sleep
+    args:
+    - infinity
+    volumeMounts:
+        - name: github-repo-volume
+        mountPath: /workspace/github-repo
+
   - name: kubectl
     image: docker.io/bitnami/kubectl:latest
     tty: true
@@ -107,7 +121,7 @@ spec:
 
         stage('Build Docker Image') {
             steps {
-                container('registry') {
+                container('docker') {
                     script {
                         sh """
                             echo "Building Docker image(s)..."

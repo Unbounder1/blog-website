@@ -5,4 +5,4 @@
 - Add rest of jenkins deployment stuff
 - Multistage docker pipeline
 - Parallelize dev-deploy.sh script
-
+- Make multi-stage docker and bash file
