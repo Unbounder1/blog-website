@@ -98,7 +98,7 @@ spec:
                             fi
                             git clone ${GITHUB_REPO} ${CLONE_DIR}
                             chmod +x ${CLONE_DIR}/script/resources/docker-build.sh
-                            ls ${CLONE_DIR}/script/resources/
+                            ls -l /workspace/github-repo/script/resources/docker-build.sh
                         """
                     }
                 }
@@ -111,7 +111,7 @@ spec:
                     script {
                         sh """
                             echo "Building Docker image(s)..."
-                            
+                            ls -l /workspace/github-repo/script/resources/docker-build.sh
                             ${CLONE_DIR}/script/resources/docker-build.sh ${REGISTRY_URL} all
                         """
                     }
