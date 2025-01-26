@@ -25,19 +25,26 @@ spec:
       - name: github-repo-volume
         mountPath: /workspace/github-repo
 
-  - name: docker
-    image: docker:latest
-    tty: true
-    securityContext:
-      runAsUser: 0
-    stdin: true
-    command:
-    - sleep
-    args:
-    - infinity
-    volumeMounts:
-      - name: github-repo-volume
-        mountPath: /workspace/github-repo
+- name: docker
+  image: docker:20.10-dind
+  tty: true
+  securityContext:
+    privileged: true  # Required for Docker-in-Docker to run properly
+    runAsUser: 0
+  stdin: true
+  env:
+    - name: DOCKER_TLS_CERTDIR
+      value: ""  # Disables TLS for DinD (useful for local testing)
+  command:
+    - dockerd
+  args:
+    - --host=unix:///var/run/docker.sock
+    - --host=tcp://0.0.0.0:2375
+  volumeMounts:
+    - name: github-repo-volume
+      mountPath: /workspace/github-repo
+    - name: docker-socket
+      mountPath: /var/run/docker.sock
 
   - name: kubectl
     image: docker.io/bitnami/kubectl:latest
@@ -67,6 +74,8 @@ spec:
   volumes:
   - name: github-repo-volume
     emptyDir: {}
+  - name: docker-socket
+    emptyDir: {}
 
   imagePullSecrets:
   - name: docker-credentials
@@ -82,7 +91,7 @@ spec:
 
     stages {
 
-        stage('Install Git (if needed)') {
+        stage('Install Git & bash (if needed)') {
             steps {
                 container('kubectl') {
                     script {
