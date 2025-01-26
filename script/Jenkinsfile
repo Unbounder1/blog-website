@@ -29,14 +29,14 @@ spec:
     image: docker:latest
     tty: true
     securityContext:
-        runAsUser: 0
+      runAsUser: 0
     stdin: true
     command:
     - sleep
     args:
     - infinity
     volumeMounts:
-        - name: github-repo-volume
+      - name: github-repo-volume
         mountPath: /workspace/github-repo
 
   - name: kubectl
