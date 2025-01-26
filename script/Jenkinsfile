@@ -126,7 +126,7 @@ spec:
                         sh """
                             echo "Building Docker image(s)..."
                             ls -l /workspace/github-repo/script/resources/docker-build.sh
-                            bash ${CLONE_DIR}/script/resources/docker-build.sh ${REGISTRY_URL} all
+                            sh ${CLONE_DIR}/script/resources/docker-build.sh ${REGISTRY_URL} all
                         """
                     }
                 }
