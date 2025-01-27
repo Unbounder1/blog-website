@@ -30,9 +30,6 @@ spec:
       volumeMounts:
         - name: temp-storage
           mountPath: /var/lib/registry
-      volumes:
-      - name: temp-storage
-      emptyDir: {}
 
     - name: docker
       image: docker:20.10-dind
@@ -82,6 +79,8 @@ spec:
 
   volumes:
     - name: github-repo-volume
+      emptyDir: {}
+    - name: temp-storage
       emptyDir: {}
 
   imagePullSecrets:
