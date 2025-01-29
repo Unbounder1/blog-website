@@ -14,6 +14,8 @@ spec:
       labels:
         app: frontend-dev
     spec:
+      imagePullSecrets:
+        - name: registry-secret
       containers:
         - name: frontend-astro
           image: docker-registry.docker-registry.svc.cluster.local:5000/astro-app:latest
@@ -64,6 +66,8 @@ spec:
       labels:
         app: postgres-blog
     spec:
+      imagePullSecrets:
+        - name: registry-secret
       containers:
         - name: postgres
           image: docker-registry.docker-registry.svc.cluster.local:5000/postgres:latest
@@ -124,6 +128,8 @@ spec:
       #         echo "Waiting for database...";
       #         sleep 2;
       #       done;
+      imagePullSecrets:
+        - name: registry-secret
       containers:
       - name: gin-backend
         image: docker-registry.docker-registry.svc.cluster.local:5000/gin-backend:latest
