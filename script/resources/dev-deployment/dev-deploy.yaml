@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: frontend-astro
-          image: astro-app
+          image: docker-registry.docker-registry.svc.cluster.local:5000/astro-app
           imagePullPolicy: Never
           ports:
             - containerPort: 4321
@@ -67,7 +67,7 @@ spec:
     spec:
       containers:
         - name: postgres
-          image: postgres:latest
+          image: docker-registry.docker-registry.svc.cluster.local:5000/postgres:latest
           workingDir: /db
           envFrom:
             - configMapRef:
@@ -127,7 +127,7 @@ spec:
       #       done;
       containers:
       - name: gin-backend
-        image: gin-backend
+        image: docker-registry.docker-registry.svc.cluster.local:5000/gin-backend
         imagePullPolicy: Never
         resources:
           limits:
