@@ -185,7 +185,7 @@ spec:
                                     kubectl get all -n blog-dev || true
 
                                     echo "Applying Kubernetes manifests..."
-                                    kubectl apply -f ${CLONE_DIR}/dev-deployment -n blog-dev
+                                    kubectl apply -f ${CLONE_DIR}script/resources/dev-deployment -n blog-dev
                                 """
                             }
                         } catch (Exception e) {
