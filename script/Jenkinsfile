@@ -45,7 +45,12 @@ spec:
         - /bin/sh
       args:
         - -c
-        - "dockerd --host=unix:///var/run/docker.sock --host=tcp://0.0.0.0:2375 & while true; do sleep 100; done"
+       - |
+      dockerd \
+        --host=unix:///var/run/docker.sock \
+        --host=tcp://0.0.0.0:2375 \
+        --insecure-registry=docker-registry.docker-registry.svc.cluster.local:5000 \
+        & while true; do sleep 100; done
       volumeMounts:
         - name: github-repo-volume
           mountPath: /workspace/github-repo
