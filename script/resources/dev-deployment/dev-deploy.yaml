@@ -17,7 +17,6 @@ spec:
       containers:
         - name: frontend-astro
           image: docker-registry.docker-registry.svc.cluster.local:5000/astro-app
-          imagePullPolicy: Never
           ports:
             - containerPort: 4321
           resources:
@@ -128,7 +127,6 @@ spec:
       containers:
       - name: gin-backend
         image: docker-registry.docker-registry.svc.cluster.local:5000/gin-backend
-        imagePullPolicy: Never
         resources:
           limits:
             memory: "128Mi"
