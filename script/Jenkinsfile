@@ -92,7 +92,7 @@ spec:
     environment {
         GITHUB_REPO  = "https://github.com/Unbounder1/blog-website.git"
         CLONE_DIR    = "/workspace/github-repo"
-        REGISTRY_URL = "docker-registry.docker-registry.svc.cluster.local:5000"
+        REGISTRY_URL = "http://docker-registry.docker-registry.svc.cluster.local:5000"
     }
 
     stages {
