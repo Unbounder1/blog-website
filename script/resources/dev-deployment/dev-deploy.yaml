@@ -69,28 +69,11 @@ spec:
           image: docker-registry.docker-registry.svc.cluster.local:5000/postgres-blog
           imagePullPolicy: IfNotPresent
           workingDir: /db
-          env:
-            - name: POSTGRES_HOST
-              value: "postgres-blog-svc"
-            - name: POSTGRES_PORT
-              value: "5432"
-            - name: POSTGRES_USER
-              valueFrom:
-                secretKeyRef:
-                  name: astro-blog-secret
-                  key: POSTGRES_USER
-            - name: POSTGRES_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: astro-blog-secret
-                  key: POSTGRES_PASSWORD
-            - name: POSTGRES_NAME
-              valueFrom:
-                secretKeyRef:
-                  name: astro-blog-secret
-                  key: POSTGRES_NAME
-            - name: POSTGRES_SSLMODE
-              value: "disable"
+          envFrom:
+          - configMapRef:
+              name: astro-blog-env
+          - secretRef:
+              name: astro-blog-secret
           volumeMounts:
             - name: init-sql-script
               mountPath: /docker-entrypoint-initdb.d/
@@ -156,28 +139,11 @@ spec:
             cpu: "500m"
         ports:
         - containerPort: 8080
-        env:
-          - name: POSTGRES_HOST
-            value: "postgres-blog-svc"
-          - name: POSTGRES_PORT
-            value: "5432"
-          - name: POSTGRES_USER
-            valueFrom:
-              secretKeyRef:
-                name: astro-blog-secret
-                key: POSTGRES_USER
-          - name: POSTGRES_PASSWORD
-            valueFrom:
-              secretKeyRef:
-                name: astro-blog-secret
-                key: POSTGRES_PASSWORD
-          - name: POSTGRES_NAME
-            valueFrom:
-              secretKeyRef:
-                name: astro-blog-secret
-                key: POSTGRES_NAME
-          - name: POSTGRES_SSLMODE
-            value: "disable"
+        envFrom:
+          - configMapRef:
+              name: astro-blog-env
+          - secretRef:
+              name: astro-blog-secret
 ---
 apiVersion: v1
 kind: Service
