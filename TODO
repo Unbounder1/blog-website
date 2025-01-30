@@ -6,4 +6,4 @@
 - Multistage docker pipeline
 - Parallelize dev-deploy.sh script
 - Make multi-stage docker and bash file
-- FIGURE OUT HOW TO PULL HTTP DOCKER OR FIGURE OUT HOW TO SSL DEV-REGISTRY
+- SETUP INGRESS SO THAT WORKER NODE CAN ACCESS DOCKER REGISTRY THATS ON K8S CLUSTeRre4fw
