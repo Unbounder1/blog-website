@@ -4,13 +4,13 @@ metadata:
   name: astro-blog-env
 data:
   key: value
-  POSTGRES_HOST: postgres-blog-svc.default.svc.cluster.local
+  POSTGRES_HOST: postgres-blog-svc.blog-dev.svc.cluster.local
   POSTGRES_PORT: '5432'
   POSTGRES_USER: postgres
   POSTGRES_NAME: blogdigestdb
   POSTGRES_SSLMODE: disable
   BACKEND_PORT: '8080'
-  BACKEND_HOST: gin-backend.default.svc.cluster.local
+  BACKEND_HOST: gin-backend.blog-dev.svc.cluster.local
   MINIO_USER: minioadmin
   MINIO_PORT: '9000'
   MINIO_HOST: localhost
