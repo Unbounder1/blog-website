@@ -6,92 +6,97 @@ pipeline {
 apiVersion: v1
 kind: Pod
 metadata:
-  name: astro-blog-dep
+  labels:
+    jenkins: astro-blog-dep
 spec:
+
   containers:
-  - name: registry
-    image: registry:2
-    ports:
+    - name: registry
+      image: registry:2
+      securityContext:
+        runAsUser: 0
+      ports:
       - containerPort: 5000
-    tty: true
-    securityContext:
-      runAsUser: 0
-    stdin: true
-    command:
-    - sleep
-    args:
-    - infinity
-    volumeMounts:
-      - name: github-repo-volume
-        mountPath: /workspace/github-repo
+      command:
+        - /bin/sh
+      args:
+        - -c
+        - "while true; do sleep 100; done"
+      env:
+        - name: REGISTRY_STORAGE_FILESYSTEM_ROOTDIRECTORY
+          value: /var/lib/registry
+        - name: REGISTRY_HTTP_ADDR
+          value: 0.0.0.0:5000
+      volumeMounts:
+        - name: temp-storage
+          mountPath: /var/lib/registry
 
-  - name: docker
-    image: docker:20.10-dind
-    tty: true
-    securityContext:
-      privileged: true
-      runAsUser: 0
-    stdin: true
-    env:
-      - name: DOCKER_TLS_CERTDIR
-        value: ""
-    command:
-    - dockerd
-    args:
-    - --host=unix:///var/run/docker.sock
-    - --host=tcp://0.0.0.0:2375
-    volumeMounts:
-      - name: github-repo-volume
-        mountPath: /workspace/github-repo
-      - name: docker-socket
-        mountPath: /var/run/docker.sock
+    - name: docker
+      image: docker:20.10-dind
+      tty: true
+      stdin: true
+      securityContext:
+        privileged: true
+        runAsUser: 0
+      env:
+        - name: DOCKER_TLS_CERTDIR
+          value: ""
+      command:
+        - /bin/sh
+      args:
+        - -c
+        - "dockerd --host=unix:///var/run/docker.sock --host=tcp://0.0.0.0:2375 --insecure-registry=docker-registry.docker-registry.svc.cluster.local:5000 & while true; do sleep 100; done"
+      volumeMounts:
+        - name: github-repo-volume
+          mountPath: /workspace/github-repo
 
-  - name: kubectl
-    image: docker.io/bitnami/kubectl:latest
-    tty: true
-    securityContext:
-      runAsUser: 0
-    stdin: true
-    command:
-    - sleep
-    args:
-    - infinity
-    volumeMounts:
-      - name: github-repo-volume
-        mountPath: /workspace/github-repo
+    - name: kubectl
+      image: docker.io/bitnami/kubectl:latest
+      tty: true
+      stdin: true
+      securityContext:
+        runAsUser: 0
+      command:
+        - /bin/sh
+      args:
+        - -c
+        - "while true; do sleep 100; done"
+      volumeMounts:
+        - name: github-repo-volume
+          mountPath: /workspace/github-repo
 
-  - name: network-test
-    image: docker.io/nicolaka/netshoot:latest
-    tty: true
-    securityContext:
-      runAsUser: 0
-    stdin: true
-    command:
-    - sleep
-    args:
-    - infinity
+    - name: network-test
+      image: docker.io/nicolaka/netshoot:latest
+      tty: true
+      stdin: true
+      securityContext:
+        runAsUser: 0
+      command:
+        - /bin/sh
+      args:
+        - -c
+        - "while true; do sleep 100; done"
 
   volumes:
-  - name: github-repo-volume
-    emptyDir: {}
-  - name: docker-socket
-    emptyDir: {}
+    - name: github-repo-volume
+      emptyDir: {}
+    - name: temp-storage
+      emptyDir: {}
 
   imagePullSecrets:
-  - name: docker-credentials
+    - name: docker-credentials
 """
         }
     }
 
     environment {
-        GITHUB_REPO = "https://github.com/Unbounder1/blog-website.git"
-        CLONE_DIR = "/workspace/github-repo"
-        REGISTRY_URL = "localhost:5000"
+        GITHUB_REPO  = "https://github.com/Unbounder1/blog-website.git"
+        CLONE_DIR    = "/workspace/github-repo"
+        REGISTRY_URL = "docker-registry.docker-registry.svc.cluster.local:5000"
     }
 
     stages {
-
-        stage('Install Git & bash (if needed)') {
+        stage('Install Git (if needed)') {
             steps {
                 container('kubectl') {
                     script {
@@ -100,7 +105,10 @@ spec:
                           if ! command -v git &> /dev/null
                           then
                             echo 'Installing git...'
+                            # If image is Debian/Ubuntu-based:
                             apt-get update && apt-get install -y git
+                            # If Alpine-based, use:
+                            # apk update && apk add git
                           else
                             echo 'Git is already installed.'
                           fi
@@ -116,12 +124,10 @@ spec:
                     script {
                         sh """
                             echo "Cloning GitHub repository..."
-                            if [ ! -d "${CLONE_DIR}" ]; then
-                                mkdir -p ${CLONE_DIR}
-                            fi
+                            mkdir -p "${CLONE_DIR}"
                             git clone ${GITHUB_REPO} ${CLONE_DIR}
                             chmod +x ${CLONE_DIR}/script/resources/docker-build.sh
-                            ls -l /workspace/github-repo/script/resources/docker-build.sh
+                            ls -l ${CLONE_DIR}/script/resources/docker-build.sh
                         """
                     }
                 }
@@ -132,10 +138,31 @@ spec:
             steps {
                 container('docker') {
                     script {
+                        // install bash if missing
                         sh """
-                            echo "Building Docker image(s)..."
-                            ls -l /workspace/github-repo/script/resources/docker-build.sh
-                            sh ${CLONE_DIR}/script/resources/docker-build.sh ${REGISTRY_URL} all
+                            echo "Installing bash if missing..."
+                            if command -v apk >/dev/null 2>&1; then
+                                apk update && apk add bash
+                            else
+                                apt-get update && apt-get install -y bash
+                            fi
+                        """
+
+                        // wait for docker to be ready
+                        sh """
+                            echo "Waiting for Docker to be ready..."
+                            until docker info >/dev/null 2>&1; do
+                            echo "Docker daemon not yet accessible..."
+                            sleep 1
+                            done
+                            echo "Docker is up!"
+                        """
+
+                        // build docker images
+                        sh """
+                            echo "Building Docker images..."
+                            ls -l ${CLONE_DIR}/script/resources/docker-build.sh
+                            bash ${CLONE_DIR}/script/resources/docker-build.sh ${REGISTRY_URL} all
                         """
                     }
                 }
@@ -146,6 +173,8 @@ spec:
             steps {
                 container('kubectl') {
                     script {
+                        // Ensure you actually have a Jenkins credential with ID 'k8s-token'
+                        // that includes a valid kubeconfig or a token with cluster permissions.
                         try {
                             withKubeConfig([credentialsId: 'k8s-token', serverUrl: 'https://kubernetes.default.svc']) {
                                 sh """
@@ -153,11 +182,10 @@ spec:
                                     kubectl config current-context
 
                                     echo "Getting all resources in blog-dev namespace:"
-                                    kubectl get all -n blog-dev
+                                    kubectl get all -n blog-dev || true
 
                                     echo "Applying Kubernetes manifests..."
-                                    # Assuming your deployment YAMLs are in dev-deployment folder
-                                    kubectl apply -f ${CLONE_DIR}/dev-deployment -n blog-dev
+                                    kubectl apply -f ${CLONE_DIR}/script/resources/dev-deployment -n blog-dev
                                 """
                             }
                         } catch (Exception e) {

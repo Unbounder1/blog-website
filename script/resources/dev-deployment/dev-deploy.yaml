@@ -1,4 +1,4 @@
-#Frontend deployment
+# Frontend Deployment
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -16,8 +16,8 @@ spec:
     spec:
       containers:
         - name: frontend-astro
-          image: astro-app
-          imagePullPolicy: Never
+          image: docker-registry.docker-registry.svc.cluster.local:5000/astro-app
+          imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 4321
           resources:
@@ -46,9 +46,8 @@ spec:
 
 # -------------------
 
-#Backend deployment
+# PostgreSQL Deployment
 ---
-#postgresql
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -67,13 +66,14 @@ spec:
     spec:
       containers:
         - name: postgres
-          image: postgres:latest
+          image: docker-registry.docker-registry.svc.cluster.local:5000/postgres-blog
+          imagePullPolicy: IfNotPresent
           workingDir: /db
           envFrom:
-            - configMapRef:
-                name: astro-blog-env
-            - secretRef:
-                name: astro-blog-secret
+          - configMapRef:
+              name: astro-blog-env
+          - secretRef:
+              name: astro-blog-secret
           volumeMounts:
             - name: init-sql-script
               mountPath: /docker-entrypoint-initdb.d/
@@ -100,6 +100,10 @@ spec:
   ports:
   - port: 5432
     targetPort: 5432
+
+# -------------------
+
+# Backend Deployment
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -114,21 +118,21 @@ spec:
       labels:
         app: gin-backend
     spec:
-      # initContainers:
-      #   - name: wait-for-db
-      #     image: busybox
-      #     command:
-      #     - sh
-      #     - -c
-      #     - |
-      #       until nc -z postgres-db 5432; do
-      #         echo "Waiting for database...";
-      #         sleep 2;
-      #       done;
+      initContainers:
+        - name: wait-for-db
+          image: busybox
+          command:
+          - sh
+          - -c
+          - |
+            until nc -z postgres-blog-svc 5432; do
+              echo "Waiting for database...";
+              sleep 2;
+            done;
       containers:
       - name: gin-backend
-        image: gin-backend
-        imagePullPolicy: Never
+        image: docker-registry.docker-registry.svc.cluster.local:5000/gin-backend
+        imagePullPolicy: IfNotPresent
         resources:
           limits:
             memory: "128Mi"
@@ -136,11 +140,10 @@ spec:
         ports:
         - containerPort: 8080
         envFrom:
-            - configMapRef:
-                name: astro-blog-env
-            - secretRef:
-                name: astro-blog-secret
-              
+          - configMapRef:
+              name: astro-blog-env
+          - secretRef:
+              name: astro-blog-secret
 ---
 apiVersion: v1
 kind: Service
@@ -152,14 +155,3 @@ spec:
   ports:
   - port: 8080
     targetPort: 8080
-
-
-
-
-
-# ENV POSTGRES_HOST=
-# ENV POSTGRES_PORT=
-# ENV POSTGRES_USER=
-# ENV POSTGRES_PASSWORD=
-# ENV POSTGRES_NAME=
-# ENV POSTGRES_SSLMODE=
