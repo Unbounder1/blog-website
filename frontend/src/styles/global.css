@@ -11,9 +11,26 @@
     --text-color: #ffffff;
     --primary-color: #1e00ffdf;
     --secondary-color: #616161;
+    --object-color: #2D2D2D;
   }
 
   @font-face {
     font-family: "VGA";
     src: url('dos.ttf')
   }
+
+  @font-face {
+    font-family: 'Piazzolla';
+    src: url('Piazzolla.ttf');
+    font-weight: normal;
+    font-style: normal;
+  }
+  
+  /* Add font files for Pontano Sans */
+  @font-face {
+    font-family: 'Pontano Sans';
+    src: url('PontanoSans.ttf');
+    font-weight: normal;
+    font-style: normal;
+  }
+  

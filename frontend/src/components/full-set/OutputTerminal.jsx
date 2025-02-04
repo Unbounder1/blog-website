@@ -68,6 +68,32 @@ const BlogOutputFull = ({ blogArr, tags }) => {
 
     return (
         <div>
+            <ul className="results-list">
+            {searchResult.length > 0 ? (
+                searchResult.map((post) => (
+                    <li 
+                    key={post.id} 
+                    className="result-item"
+                    onClick={() => {
+                        const encodedTitle = slugify(post.title);
+                        window.location.href = `/blogs/${encodedTitle}`;
+                    }}
+                >
+                    <h2 className="post-title">{"> " + post.title}</h2>
+                </li>
+                ))
+            ) : (
+                <li className="no-results">No results found.</li>
+            )}
+        </ul>
+        </div>
+        
+    );
+};
+
+export default BlogOutputFull;
+
+{/* <div>
         <div className="search-bar-container">
             <input
                 type="text"
@@ -108,8 +134,4 @@ const BlogOutputFull = ({ blogArr, tags }) => {
                 <li className="no-results">No results found.</li>
             )}
         </ul>
-    </div>
-    );
-};
-
-export default BlogOutputFull;
+    </div> */}
