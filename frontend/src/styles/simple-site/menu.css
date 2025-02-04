@@ -1,0 +1,74 @@
+/* General resets */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+  
+  /* Use our CSS variables in the body styling */
+  body {
+    background-color: var(--background-color);
+    color: var(--text-color);
+    font-family: "VGA";
+  }
+  
+  /* Main container for links */
+  .intro-page {
+    padding: 6rem;
+  }
+  
+  /* Headings */
+  .intro-page h1,
+  .intro-page h2 {
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-size: 3rem;
+  }
+  
+  /* Lists */
+  .intro-page ul {
+    list-style: none;
+    margin-bottom: 2rem;
+  }
+  
+  .intro-page li {
+    margin: 0.5rem 0;
+  }
+  
+  /* Retro-style links */
+  .intro-page a {
+    color: var(--text-color);
+    text-decoration: none;
+    font-size: 1.5rem;
+  }
+  
+  .intro-page a:hover {
+    background-color: var(--text-color);
+    color: var(--background-color);
+  }
+  
+  /* Bottom bar */
+  .bottom-bar {
+    width: 100%;
+    hieght: 10%;
+    background-color: var(--primary-color);
+    color: var(--text-color);
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem;
+    position: fixed;
+    bottom: 6rem;
+    left: 0;
+  }
+  
+  .bottom-bar span {
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  
+  .bottom-bar .center {
+    text-align: center;
+    flex-grow: 1;
+  }

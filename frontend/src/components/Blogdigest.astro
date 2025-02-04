@@ -1,5 +1,6 @@
 ---
 import SearchBar from "./Searchbar";
+import BlogOutputFull from './full-set/OutputTerminal.jsx'
 import { queryDB } from "./Dbrouter"
 import dotenv from "dotenv";
 dotenv.config() 
@@ -10,4 +11,5 @@ const [digestData, tagData] = await Promise.all([
  ]);
 ---
 
-<SearchBar client:load blogArr={digestData} tags={tagData} />
+<!-- <SearchBar client:load blogArr={digestData} tags={tagData} /> -->
+<BlogOutputFull client:load blogArr={digestData} tags={tagData} />

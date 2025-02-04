@@ -1,136 +1,60 @@
-/* Search Bar Container */
 .search-bar-container {
     display: flex;
     flex-direction: column;
-    align-items: start;
-    gap: 15px;
-    margin: 20px 0;
+    margin-bottom: 20px;
+}
+
+.search-input {
+    width: 100%;
     padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
 }
 
-/* Input Field */
-.search-bar-container input[type="text"] {
-    background-color: var(--background-color);
-    width: 30%;
-    max-width: 300px;
-    padding: 10px 15px;
-    border: 2px solid var(--primary-color);
-    border-radius: 5px;
-    outline: none;
-    font-size: 20px;
-    transition: border-color 0.3s ease;
-}
-
-/* Input Field Focus State */
-.search-bar-container input[type="text"]:focus {
-    border-color: var(--primary-color);
-}
-
-/* Tag Container */
-.tag-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    justify-content: left;
-    padding: 10px;
-}
-
-/* Tag Buttons */
-.tag {
-    display: inline-block;
-    padding: 8px 12px;
-    margin: 5px;
-    border: 2px solid transparent; /* Set initial border width */
-    border-radius: 5px;
-    background-color: var(--secondary-color);
-    color: var(--text-color);
-    font-size: 14px;
-    font-weight: bold;
-    cursor: pointer;
-    user-select: none;
-    box-sizing: border-box; /* Include padding and border in total dimensions */
-    transition: background-color 0.3s, color 0.3s, border-color 0.3s;
-}
-
-/* Hover State */
-.tag:hover {
-    background-color: var(--text-color);
-    color: var(--background-color);
-}
-
-/* Selected State */
-.tag.selected {
-    background-color: var(--text-color);
-    color: var(--background-color);
-    border-color: var(--primary-color); /* Ensure the border width doesn't change */
-}
-
-/* Results List */
 .results-list {
     list-style-type: none;
     padding: 0;
-    width: 80%;
-    max-width: 800px;
-    margin: 0 auto; /* Center the list */
+    margin: 0;
 }
 
-/* Individual Result Item */
 .result-item {
-    background-color: #ffffff; /* White background for contrast */
-    margin: 15px 0;
-    padding: 20px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s, box-shadow 0.2s;
-}
-
-/* Hover Effect for Result Items */
-.result-item:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-}
-
-/* Post Title */
-.post-title {
-    margin: 0 0 10px 0;
-    font-size: 1.5em;
-    color: var(--primary-color);
-}
-
-/* Post Snippet */
-.post-snippet {
-    margin: 0 0 15px 0;
-    color: #555;
-    line-height: 1.6;
-}
-
-/* Post Tags */
-.post-tags {
+    padding: 15px;
+    border-bottom: 1px solid #ccc;
     margin-bottom: 10px;
+    background-color: #292929;
+    color: white;
 }
 
-.post-tags .tag {
-    padding: 5px 10px;
-    margin: 0 5px 5px 0;
-    border: 1px solid var(--primary-color);
-    border-radius: 3px;
-    background-color: var(--secondary-color);
-    color: var(--text-color);
-    font-size: 12px;
-    cursor: default; /* Non-clickable */
+.result-item:last-child {
+    border-bottom: none;
 }
 
-/* Post Date */
-.post-date {
-    color: #999;
-    font-size: 0.9em;
+.post-title {
+    font-size: 18px;
+    font-weight: bold;
+    color: white;
+    margin-bottom: 10px;
+    cursor: pointer;
+    transition: color 0.3s ease;
 }
 
-/* No Results Message */
-.no-results {
-    text-align: center;
-    color: #999;
-    font-size: 1.2em;
-    padding: 20px;
+.post-title:hover {
+    color: #28a745; /* Highlighted color for the title on hover */
+}
+
+.post-description {
+    font-size: 14px;
+    margin-bottom: 10px;
+    color: #cccccc;
+}
+
+.post-tags {
+    font-size: 14px;
+    color: #aaaaaa;
+}
+
+.tag {
+    display: inline;
+    color: #4caf50;
 }

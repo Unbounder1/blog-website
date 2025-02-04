@@ -1,0 +1,200 @@
+/* Add font files for Piazzolla */
+@font-face {
+  font-family: 'Piazzolla';
+  src: url('Piazzolla.ttf');
+  font-weight: normal;
+  font-style: normal;
+}
+
+/* Add font files for Pontano Sans */
+@font-face {
+  font-family: 'Pontano Sans';
+  src: url('PontanoSans.ttf');
+  font-weight: normal;
+  font-style: normal;
+}
+
+:root {
+  --font-family-roboto: 'Roboto', sans-serif;
+  --font-family-piazzolla: 'Piazzolla', sans-serif;
+  --font-family-pontano-sans: 'Pontano Sans', sans-serif;
+}
+
+.text {
+  font-size: 16px;
+  font-family: var(--font-family-roboto);
+  font-weight: normal;
+  line-height: 24px;
+}
+
+/* CSS Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.rectangle-4-3 {
+  width: 879px;
+  height: 629px;
+  background-color: rgba(37, 26, 26, 0.95);
+  border-radius: 8px;
+}
+
+.rectangle-6-5 {
+  width: 879px;
+  height: 629px;
+  background-color: rgba(0, 0, 0, 1);
+  border-radius: 8px;
+}
+
+.rectangle-5-6 {
+  width: 910px;
+  height: 68px;
+  background-color: rgba(0, 0, 0, 1);
+}
+
+.vector-2-7 {
+  width: 92px;
+  height: 15px;
+  border: 4px solid rgba(255, 255, 255, 1);
+}
+
+.mask-group-4 {
+  width: 879px;
+  height: 629px;
+}
+
+.vector-3-8 {
+  width: 874px;
+  height: 0px;
+  border: 2px solid rgba(113, 113, 113, 1);
+}
+
+.text-9 {
+  width: 879px;
+  height: 61px;
+  font-size: 24px;
+  font-family: var(--font-family-piazzolla);
+  font-weight: normal;
+  line-height: 24px;
+  text-align: left;
+}
+
+.text-10 {
+  width: 67px;
+  height: 57px;
+  font-size: 14px;
+  font-family: var(--font-family-pontano-sans);
+  font-weight: normal;
+  line-height: 24px;
+  text-align: center;
+  color: rgba(255, 255, 255, 1);
+}
+
+.rectangle-11-12 {
+  width: 92px;
+  height: 47.769229888916016px;
+  background-color: rgba(217, 217, 217, 1);
+  border: 1px solid rgba(255, 255, 255, 1);
+  border-radius: 5px;
+}
+
+.text-13 {
+  width: 80px;
+  height: 54px;
+  font-size: 14px;
+  font-family: var(--font-family-pontano-sans);
+  font-weight: normal;
+  line-height: 24px;
+  text-align: center;
+  color: rgba(0, 0, 0, 1);
+}
+
+.vector-4-14 {
+  width: 13px;
+  height: 14.538461685180664px;
+  border: 2px solid rgba(113, 113, 113, 1);
+}
+
+.group-1-11 {
+  width: 106px;
+  height: 54px;
+}
+
+.rectangle-11-16 {
+  width: 92px;
+  height: 47.769229888916016px;
+  background-color: rgba(0, 0, 0, 1);
+  border: 1px solid rgba(255, 255, 255, 0.37);
+  border-radius: 5px;
+}
+
+.text-17 {
+  width: 80px;
+  height: 54px;
+  font-size: 14px;
+  font-family: var(--font-family-pontano-sans);
+  font-weight: normal;
+  line-height: 24px;
+  text-align: center;
+  color: rgba(255, 255, 255, 1);
+}
+
+.vector-4-18 {
+  width: 13px;
+  height: 14.538461685180664px;
+  border: 2px solid rgba(113, 113, 113, 1);
+}
+
+.group-2-15 {
+  width: 106px;
+  height: 54px;
+}
+
+.rectangle-11-20 {
+  width: 134px;
+  height: 48px;
+  background-color: rgba(0, 0, 0, 1);
+  border: 1px solid rgba(255, 255, 255, 0.37);
+  border-radius: 5px;
+}
+
+.text-21 {
+  width: 80px;
+  height: 54px;
+  font-size: 14px;
+  font-family: var(--font-family-pontano-sans);
+  font-weight: normal;
+  line-height: 24px;
+  text-align: center;
+  color: rgba(255, 255, 255, 1);
+}
+
+.vector-4-22 {
+  width: 13px;
+  height: 14.538461685180664px;
+  border: 2px solid rgba(113, 113, 113, 1);
+}
+
+.group-3-19 {
+  width: 134px;
+  height: 54px;
+}
+
+.vector-5-23 {
+  width: 17px;
+  height: 18px;
+  border: 2px solid rgba(255, 255, 255, 1);
+}
+
+.component-2-2 {
+  width: 879px;
+  height: 629px;
+}
+
+.frame-1-1 {
+  width: 100%;
+  height: auto;
+  position: relative; /* or remove entirely if you don't need relative positioning */
+}
