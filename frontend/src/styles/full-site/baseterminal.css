@@ -16,6 +16,8 @@
     background: linear-gradient(135deg, #403c52, #1d2025);
     font-family: 'Courier New', Courier, monospace;
     color: #dcdcdc;
+    resize: both;
+    overflow: auto;
 }
 
 /* Tabs */
