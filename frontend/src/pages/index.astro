@@ -1,11 +1,11 @@
 ---
-// import Menu from '../components/simple-site/Menu.astro';
+import Menu from '../components/simple-site/Menu.astro';
 // import Blogdigest from '../components/Blogdigest.astro';
 import Layout from '../layouts/Layout.astro';
 // import BaseTerminal from '../components/full-set/BaseTerminal.astro'
 // import BlogOutputFull from '../components/full-set/OutputTerminal.jsx'
 import DraggableTerminal from "../components/full-set/BaseTerminal.jsx"
-//import "../styles/global.css";
+import "../styles/global.css";
 
 const blogArr = [
     { name: "a", body: "b" , tag: ["tag1", "tag2"]},
@@ -24,7 +24,7 @@ const blogArr = [
 </Layout> -->
 
 <Layout>
-  <!-- <Menu /> -->
+  <Menu />
    <DraggableTerminal client:load />
    <!-- <Blogdigest /> -->
 </Layout>

@@ -1,12 +1,7 @@
 
-body {
-    margin: 0;
-    padding: 0;
-    min-height: 100vh;
-    background: linear-gradient(135deg, #403c52, #1d2025);
-    font-family: 'Courier New', Courier, monospace;
-    color: #dcdcdc;
-}
+/* body {
+    
+} */
 
 .terminal {
     width: 600px;
@@ -15,6 +10,12 @@ body {
     overflow: hidden;
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
     cursor: grab; 
+    margin: 0;
+    padding: 0;
+    min-height: 30vh;
+    background: linear-gradient(135deg, #403c52, #1d2025);
+    font-family: 'Courier New', Courier, monospace;
+    color: #dcdcdc;
 }
 
 /* Tabs */
@@ -49,7 +50,7 @@ body {
     padding: 16px;
     background: url('https://via.placeholder.com/600x300') no-repeat center;
     background-size: cover;
-    height: 300px;
+    height: 20rem;
     display: flex;
     align-items: end;
 }
