@@ -1,14 +1,10 @@
 .result-list {
-    font-family: Piazzolla;
-    padding-left: 10px;
+    font-family: 'Courier New', Courier, monospace;
 }
 
 .result-item {
-    padding: 10 px;
-    margin-bottom: 15px;
     background-color: var(--background-color);
     color: var(--text-color);
-    transition: transform 0.2s;
 }
 
 .result-item:hover {
@@ -18,6 +14,8 @@
 
 ul {
     list-style-type: none;
+    margin: 0; 
+    padding: 0; 
 }
 
 .post-title {
@@ -25,4 +23,13 @@ ul {
     margin: 0; 
     font-size: 18px;
     font-weight: bold;
+}
+
+.blog-output {
+    flex-grow: 1;
+    background-color: blue;
+    width: 100%;
+    height: 100%;
+    padding: 0; 
+    margin: 0; 
 }

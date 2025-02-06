@@ -71,7 +71,7 @@ const BlogOutputFull = ({ blogArr, tags }) => {
             : filteredBySearch;
 
     return (
-        <div>
+        <div className="blog-output">
             <ul className="results-list">
             {searchResult.length > 0 ? (
                 searchResult.map((post) => (
