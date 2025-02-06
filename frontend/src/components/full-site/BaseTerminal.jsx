@@ -1,14 +1,21 @@
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useState } from "react";
 import Draggable from "react-draggable";
 import { ResizableBox } from "react-resizable";
 import "../../styles/full-site/baseterminal.css";
 
-const DraggableTerminal = () => {
+const DraggableTerminal = ({ children }) => {
   const nodeRef = useRef(null);
 
-  useEffect(() => {
-    console.log("Component mounted and hydrated.");
-  }, []);
+  const [command, setCommand] = useState("");
+  const [executedCommand, setExecutedCommand] = useState(null);
+
+  const handleKeyDown = (event) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      setExecutedCommand(command); 
+      setCommand(""); 
+    }
+  };
 
   return (
     <ResizableBox
@@ -31,8 +38,20 @@ const DraggableTerminal = () => {
 
           {/* Terminal Body */}
           <div className="terminal-body">
+            <div className="terminal-output">
+              <div> hi </div>
+              {children}
+            </div>
             <div className="prompt">
-              ~/ryan-dong/site: <span className="command">ls ./portfolio</span>
+                ~/ryan-dong/site: 
+                <input 
+                className="command" 
+                type="text" 
+                placeholder="ls ./"
+                value = {command}
+                onChange={(e) => setCommand(e.target.value)}
+                onKeyDown={handleKeyDown}
+                />
             </div>
           </div>
         </div>

@@ -16,6 +16,10 @@ function slugify(text) {
 
 const BlogOutputFull = ({ blogArr, tags }) => {
 
+    if (blogArr == null && tags == null){
+        return;
+    }
+
     console.log(blogArr[0].summary)
 
     const [searchInput, setSearchInput] = useState("");

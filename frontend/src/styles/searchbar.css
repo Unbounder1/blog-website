@@ -6,7 +6,7 @@
 .result-item {
     padding: 10 px;
     margin-bottom: 15px;
-    background-color: var(--object-color);
+    background-color: var(--background-color);
     color: var(--text-color);
     transition: transform 0.2s;
 }
