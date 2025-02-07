@@ -1,0 +1,25 @@
+---
+import WindowIsland from '../components/WindowIsland.astro';
+
+// Maybe these come from a static array or some server data known at build time
+const windowsData = [
+  { id: 1, title: 'Window A', content: 'Hello from A' },
+  { id: 2, title: 'Window B', content: 'Hello from B' },
+];
+---
+
+<html>
+  <body>
+    <TerminalIsland client:visible />
+    
+    {windowsData.map((win) => (
+      <WindowIsland 
+        key={win.id}
+        type={}
+        title={win.title}
+        content={win.content}
+        client:visible
+      />
+    ))}
+  </body>
+</html>

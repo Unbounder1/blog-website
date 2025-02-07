@@ -97,6 +97,29 @@ func main() {
 	// Create a new Gin router
 	router := gin.Default()
 
+	router.POST("/api/hmac", func(c *gin.Context) {
+		var jsonData map[string]string
+
+		// Bind JSON request to a map
+		if err := c.ShouldBindJSON(&jsonData); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request payload. Ensure 'data' is provided."})
+			return
+		}
+
+		// Check if 'data' key exists
+		data, exists := jsonData["data"]
+		if !exists {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "'data' field is required"})
+			return
+		}
+
+		// Generate HMAC hash
+		hmacHash := iface.GenerateHMAC(data)
+
+		// Respond with the generated hash
+		c.JSON(http.StatusOK, gin.H{"hash": hmacHash})
+	})
+
 	router.GET("/digest", middleware.HMACMiddleware(), func(c *gin.Context) {
 		blogs, err := iface.GetBlogs(db)
 		if err != nil {
