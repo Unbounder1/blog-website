@@ -1,18 +1,28 @@
 import React, { useRef, useState } from "react";
 import Draggable from "react-draggable";
 import { ResizableBox } from "react-resizable";
+import Blogdigest from "./GetBlogs.jsx";
 import "../../styles/full-site/baseterminal.css";
+import "../../styles/searchbar.css";
 
 const DraggableTerminal = ({ children }) => {
   const nodeRef = useRef(null);
-
+  
+  const [currentWindow, setWindow] = useState(<div></div>);
   const [command, setCommand] = useState("");
-  const [executedCommand, setExecutedCommand] = useState(null);
 
   const handleKeyDown = (event) => {
     if (event.key === "Enter") {
       event.preventDefault();
-      setExecutedCommand(command); 
+
+      let sanitizedCommand = command.split("#")[0].trim();
+
+      if (sanitizedCommand === "ls ./") {
+        setWindow(<Blogdigest />);
+      } else {
+        setWindow(<div>Command not recognized</div>);
+      }
+
       setCommand(""); 
     }
   };
@@ -39,8 +49,7 @@ const DraggableTerminal = ({ children }) => {
           {/* Terminal Body */}
           <div className="terminal-body">
             <div className="terminal-output">
-              <div> hi </div>
-              {children}
+              <Blogdigest />
             </div>
             <div className="prompt">
                 ~/ryan-dong/site: 
