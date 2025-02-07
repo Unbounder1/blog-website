@@ -49,7 +49,7 @@ const DraggableTerminal = ({ children }) => {
           {/* Terminal Body */}
           <div className="terminal-body">
             <div className="terminal-output">
-              <Blogdigest />
+              {currentWindow}
             </div>
             <div className="prompt">
                 ~/ryan-dong/site: 

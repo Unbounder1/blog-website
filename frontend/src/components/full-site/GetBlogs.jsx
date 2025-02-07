@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import SearchBar from "../Searchbar.jsx";
 import BlogOutputFull from "./ShellTerminal.jsx";
 import { queryDB } from "../../middleware/Dbrouter.jsx";
 
