@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import SearchBar from "../Searchbar.jsx";
 import BlogOutputFull from "./ShellTerminal.jsx";
-import { queryDB } from "../Dbrouter.jsx";
+import { queryDB } from "../../middleware/Dbrouter.jsx";
 
 const Blogdigest = () => {
   const [digestData, setDigestData] = useState([]);
@@ -16,14 +16,8 @@ const Blogdigest = () => {
       try {
         // Attempt to fetch digest and tag data in parallel
         const [digest, tags] = await Promise.all([
-          queryDB(
-            `http://${backendHost}:${backendPort}/digest`,
-            "/digest"
-          ),
-          queryDB(
-            `http://${backendHost}:${backendPort}/tags`,
-            "/tags"
-          )
+          fetch("/api/data?path=/digest").then(res => res.json()),
+          fetch("/api/data?path=/tags").then(res => res.json())
         ]);
         
         console.log("Fetched Digest Data:", digest);
