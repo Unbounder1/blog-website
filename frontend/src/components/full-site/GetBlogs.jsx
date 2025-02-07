@@ -1,41 +1,39 @@
-import { useEffect, useState } from "react";
-import BlogOutputFull from "./ShellTerminal.jsx";
-import { queryDB } from "../../middleware/Dbrouter.jsx";
+// File: BlogOutput.jsx
+import React, { useState, useEffect, useMemo } from "react";
+import Fuse from "fuse.js";
+import "../../styles/global.css";
+import "../../styles/blogoutput.css";
 
-const Blogdigest = () => {
+// Utility function to turn a post title into a URL-safe string
+function slugify(text) {
+  return text
+    .toString()
+    .normalize("NFD") // Normalize diacritics
+    .replace(/[\u0300-\u036f]/g, "") // Remove diacritics
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, "-") // Replace non-alphanumeric with hyphens
+    .replace(/^-+|-+$/g, ""); // Remove leading/trailing hyphens
+}
+
+function BlogOutput({ searchInput, selectedTags }) {
   const [digestData, setDigestData] = useState([]);
-  const [tagData, setTagData] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const backendHost = import.meta.env.PUBLIC_BACKEND_HOST || "localhost";
-  const backendPort = import.meta.env.PUBLIC_BACKEND_PORT || "8080";
-
+  // Fetch blog digest data when the component mounts
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Attempt to fetch digest and tag data in parallel
-        const [digest, tags] = await Promise.all([
-          fetch("/api/data?path=/digest").then(res => res.json()),
-          fetch("/api/data?path=/tags").then(res => res.json())
-        ]);
-        
+        const digest = await fetch("/api/data?path=/digest").then((res) =>
+          res.json()
+        );
         console.log("Fetched Digest Data:", digest);
-        console.log("Fetched Tag Data:", tags);
 
-        // Guard for digest
         if (Array.isArray(digest)) {
           setDigestData(digest);
         } else {
           console.warn("Empty or invalid digest data:", digest);
         }
-
-        // Guard for tags
-        if (Array.isArray(tags)) {
-          setTagData(tags);
-        } else {
-          console.warn("Empty or invalid tag data:", tags);
-        }
-
       } catch (error) {
         console.error("Error fetching from backend:", error);
       } finally {
@@ -44,25 +42,76 @@ const Blogdigest = () => {
     };
 
     fetchData();
-  }, [backendHost, backendPort]);
+  }, []); // Only render once
 
-  // Loading indicator
+  // Fuse.js instance for fuzzy searching
+  const fuse = useMemo(
+    () =>
+      new Fuse(digestData, {
+        keys: [
+          { name: "title", weight: 0.7 },
+          { name: "tags", weight: 0.5 },
+          { name: "summary", weight: 0.3 },
+        ],
+        threshold: 0.4,
+        includeScore: true,
+        ignoreLocation: true,
+      }),
+    [digestData]
+  );
+
+  // Filter the posts based on the search input and selected tags
+  const filteredBySearch =
+    searchInput.length > 0
+      ? fuse.search(searchInput).map((result) => result.item)
+      : digestData;
+
+  const searchResult =
+    selectedTags.length > 0
+      ? filteredBySearch.filter((post) =>
+          selectedTags.some((tag) => post.tags.includes(tag))
+        )
+      : filteredBySearch;
+
+  // Render states
   if (loading) {
     return <div>Loading...</div>;
   }
 
-  // If no data returned
   if (digestData.length === 0) {
     return <div>Error: Failed to load data.</div>;
   }
 
-  // Render
   return (
-    <div>
-      {/* <SearchBar blogArr={digestData} tags={tagData} /> */}
-      <BlogOutputFull blogArr={digestData} tags={tagData} />
-    </div>
+    <ul className="results-list">
+      {searchResult.length > 0 ? (
+        searchResult.map((post) => (
+          <li
+            key={post.id}
+            className="result-item"
+            onClick={() => {
+              const encodedTitle = slugify(post.title);
+              window.location.href = `/blogs/${encodedTitle}`;
+            }}
+          >
+            <h2 className="post-title">{"> " + post.title}</h2>
+            <p className="post-description">- Description: {post.summary}</p>
+            <div className="post-tags">
+              - Tags:{" "}
+              {post.tags.map((tag, idx) => (
+                <span key={idx} className="tag">
+                  {tag}
+                  {idx < post.tags.length - 1 && ","}
+                </span>
+              ))}
+            </div>
+          </li>
+        ))
+      ) : (
+        <li className="no-results">No results found.</li>
+      )}
+    </ul>
   );
-};
+}
 
-export default Blogdigest;
+export default BlogOutput;

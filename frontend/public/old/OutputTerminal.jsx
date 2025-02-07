@@ -12,7 +12,9 @@ function slugify(text) {
       .trim()
       .replace(/[^a-z0-9]+/g, '-')        // Replace non-alphanumeric with hyphens
       .replace(/^-+|-+$/g, '');           // Remove leading/trailing hyphens
-  }
+}
+
+
 
 const BlogOutputFull = ({ blogArr, tags }) => {
 
@@ -74,6 +76,7 @@ const BlogOutputFull = ({ blogArr, tags }) => {
                     className="result-item"
                     onClick={() => {
                         const encodedTitle = slugify(post.title);
+                        onOpenPost={}
                         window.location.href = `/blogs/${encodedTitle}`;
                     }}
                 >
