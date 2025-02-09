@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import BlogOutput from "./GetBlogs";
 import "../../styles/global.css";
-import "../../styles/blogoutput.css";
+import "../../styles/full-site/blogoutput.css";
 
 function BodyTerminal({ inputCommand }) {
   const [searchInput, setSearchInput] = useState("");
@@ -55,11 +55,14 @@ function BodyTerminal({ inputCommand }) {
   };
 
   // Update blog output when command or selected tags change
+  // UPDATE AVAILABLE COMMANDS HERE --------------------------------------
   useEffect(() => {
     if (inputCommand === "ls ./") {
       setWindow(
         <BlogOutput searchInput={searchInput} selectedTags={selectedTags} />
       );
+    } else if (inputCommand === "") { 
+      setWindow(<div></div>);
     } else {
       setWindow(<div>Do not recognize command</div>);
     }

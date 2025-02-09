@@ -3,6 +3,7 @@ import Draggable from "react-draggable";
 import { ResizableBox } from "react-resizable";
 import BodyTerminal from "./BodyTerminal.jsx";
 import "../../styles/full-site/baseterminal.css";
+import "../../styles/full-site/blogoutput.css";
 
 const Terminal = ({ children }) => {
   const nodeRef = useRef(null);
@@ -37,7 +38,6 @@ const Terminal = ({ children }) => {
           {/* Terminal Body */}
           <div className="terminal-body">
             <div className="terminal-output">
-              {/* Only one BodyTerminal instance*/}
               <BodyTerminal inputCommand={inputCommand} />
             </div>
             <div className="prompt">
