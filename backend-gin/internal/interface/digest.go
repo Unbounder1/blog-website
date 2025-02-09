@@ -72,7 +72,6 @@ func GetTags(db *sql.DB) ([]string, error) {
 		}
 		tagList = append(tagList, tag)
 	}
-	tagList = append([]string{"reset"}, tagList...)
 	return tagList, err
 }
 

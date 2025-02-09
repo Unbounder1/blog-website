@@ -2,7 +2,6 @@
     width: 600px;
     background: #1e1e1e;
     border-radius: 8px;
-    overflow: hidden;
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
     cursor: grab; 
     margin: 0;
@@ -17,36 +16,9 @@
     flex-direction: column;
 }
 
-/* Tabs */
-.tabs {
-    display: flex;
-    background: #2a2a2a;
-    padding: 8px;
-}
-
-.tab {
-    padding: 8px 12px;
-    color: #888;
-    background: #2a2a2a;
-    margin-right: 4px;
-    border-radius: 4px;
-    cursor: pointer;
-    user-select: none;
-}
-
-.tab.active {
-    color: #ffffff;
-    background: #3d3d3d;
-}
-
-.tab.add-tab {
-    background: #3d3d3d;
-    font-weight: bold;
-}
-
 /* Terminal Body */
 .terminal-body {
-    flex-grow: 1;  /* Makes it take the rest of the available space */
+    flex-grow: 1; 
     padding-bottom: 2px;
     background: url('https://via.placeholder.com/600x300') no-repeat center;
     background-size: cover;
@@ -57,6 +29,8 @@
     overflow-y: auto;
     width: 100%;
     height: 100%;
+    overflow: hidden !important;
+    white-space: nowrap;
 }
 
 .terminal-output {
