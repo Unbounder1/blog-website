@@ -1,0 +1,132 @@
+.blog-page {
+  width: 100%;
+}
+
+/* Keep the tabs container scrollable */
+.tabs-container {
+  background: #2a2a2a;
+  padding: 8px;
+  overflow-x: auto;
+  white-space: nowrap;
+  position: relative; /* needed for sticky children */
+}
+
+/* The tabs list as a flex container */
+.tabs {
+  display: flex;
+  align-items: center;
+  overflow-x: auto;
+  position: relative;
+}
+
+.tab {
+  padding: 8px 12px;
+  color: #888;
+  background: #2a2a2a;
+  margin-right: 4px;
+  border-radius: 4px;
+  cursor: pointer;
+  user-select: none;
+  flex-shrink: 0;
+}
+
+.tab.active {
+  color: #fff;
+  background: #3d3d3d;
+}
+
+.tab.add-tab {
+  background: #3d3d3d;
+  font-weight: bold;
+}
+
+/* --- FIX 1: Keep terminal tab always visible ---
+     Give the terminal tab a sticky position so that it remains at the left edge */
+.tab.terminal-tab {
+  position: sticky;
+  left: 0;
+  z-index: 10; /* a higher z-index ensures it sits above the scrolling tabs */
+}
+
+/* If you have additional plus panels, keep them as before */
+.plus-wrapper {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.inline-plus-panel {
+  display: flex;
+  margin-left: 8px;
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+/* Container: two-column layout */
+.blog-output-container {
+  display: flex;
+  outline: none; /* Remove focus outline; adjust as needed for accessibility */
+  min-height: 20vh; /* Full viewport height; adjust as necessary */
+}
+
+/* Left column: posts list */
+.posts-list {
+  flex: 0 0 40%;
+  border-right: 1px solid #ccc;
+  overflow-y: auto;
+  padding: 16px;
+  background: #f9f9f9;
+}
+
+/* Each post item */
+.result-item {
+  padding: 8px;
+  margin-bottom: 4px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+/* Highlight active (selected) post */
+.result-item.active {
+  background-color: #e0e0e0;
+}
+
+/* Post title styling */
+.post-title {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin: 0;
+}
+
+/* Right column: sidebar */
+.post-sidebar {
+  flex: 1;
+  padding: 16px;
+  overflow-y: auto;
+}
+
+/* Sidebar content */
+.sidebar-content {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Thumbnail image */
+.post-thumbnail {
+  max-width: 100%;
+  border-radius: 4px;
+}
+
+/* Post meta info */
+.post-meta {
+  font-size: 0.9em;
+  color: #555;
+}
+
+/* Optional summary styling */
+.post-summary {
+  font-size: 1em;
+  line-height: 1.4;
+}

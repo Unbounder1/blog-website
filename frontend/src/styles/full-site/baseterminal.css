@@ -11,14 +11,14 @@
     font-family: 'Courier New', Courier, monospace;
     color: #dcdcdc;
     resize: both;
-    overflow: auto;
+    overflow: hidden; /* Prevents external scrollbars */
     display: flex;
     flex-direction: column;
 }
 
 /* Terminal Body */
 .terminal-body {
-    flex-grow: 1; 
+    flex-grow: 1;  
     padding-bottom: 2px;
     background: url('https://via.placeholder.com/600x300') no-repeat center;
     background-size: cover;
@@ -26,13 +26,14 @@
     flex-direction: column;
     align-items: flex-start;
     justify-content: flex-end;
-    overflow-y: auto;
+    overflow-y: auto; /* Enables scrolling inside */
+    overflow-x: hidden; /* Prevents horizontal scrolling */
     width: 100%;
     height: 100%;
-    overflow: hidden !important;
     white-space: nowrap;
 }
 
+/* Ensure content does not expand outside the terminal */
 .terminal-output {
     display: flex;
     flex-direction: column;
@@ -40,6 +41,7 @@
     width: 100%;
     flex-grow: 1;
     overflow-y: auto;
+    min-width: 0; /* Prevents expanding */
     padding: 0;
     margin: 0;
 }
@@ -54,15 +56,16 @@
     padding: 8px;
 }
 
+/* Command Input */
 .command {
     font-family: 'Courier New', Courier, monospace;
     font-size: 16px;
     color: #79c0ff;
     background-color: transparent;
     border: none;
-
     flex-grow: 1;
     text-align: left;
     min-width: 10px; 
     outline: none;
+    white-space: nowrap;
 }
