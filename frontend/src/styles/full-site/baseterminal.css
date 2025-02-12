@@ -11,7 +11,7 @@
     font-family: 'Courier New', Courier, monospace;
     color: #dcdcdc;
     resize: both;
-    overflow: hidden; /* Prevents external scrollbars */
+    overflow: hidden; 
     display: flex;
     flex-direction: column;
 }

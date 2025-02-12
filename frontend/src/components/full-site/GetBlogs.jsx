@@ -75,7 +75,7 @@ function BlogOutput({ searchInput, selectedTags }) {
         )
       : filteredBySearch;
 
-  // DISPLAY THE FIRST 3 POSTS
+
   const visiblePosts = searchResult;
 
   // Make sure that the active index is still valid when visiblePosts changes.
@@ -101,7 +101,7 @@ function BlogOutput({ searchInput, selectedTags }) {
       e.preventDefault();
       setActiveIndex((prev) => Math.min(prev + 1, visiblePosts.length - 1));
     } else if (e.key === "Enter" && visiblePosts[activeIndex]) {
-      // Optionally, pressing Enter could navigate to the selected post:
+      
       const encodedTitle = slugify(visiblePosts[activeIndex].title);
       window.location.href = `/blogs/${encodedTitle}`;
     }

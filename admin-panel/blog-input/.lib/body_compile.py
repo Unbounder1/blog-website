@@ -172,12 +172,12 @@ def db_connection():
     or -1 on failure.
     """
     dotenv.load_dotenv()
-    DB_HOST = os.getenv('DB_HOST')
-    DB_PORT = os.getenv('DB_PORT')
-    DB_USER = os.getenv('DB_USER')
-    DB_PASSWORD = os.getenv('DB_PASSWORD')
-    DB_NAME = os.getenv('DB_NAME')
-    DB_SSLMODE = os.getenv('DB_SSLMODE')
+    DB_HOST = os.getenv('POSTGRES_HOST')
+    DB_PORT = os.getenv('POSTGRES_PORT')
+    DB_USER = os.getenv('POSTGRES_USER')
+    DB_PASSWORD = os.getenv('POSTGRES_PASSWORD')
+    DB_NAME = os.getenv('POSTGRES_NAME')
+    DB_SSLMODE = os.getenv('POSTGRES_SSLMODE')
 
     if not DB_HOST or not DB_PORT or not DB_USER or not DB_PASSWORD or not DB_NAME:
         raise ValueError("One or more required DB environment variables are not set.")
