@@ -15,7 +15,7 @@ function slugify(text) {
     .replace(/^-+|-+$/g, ""); // Remove leading/trailing hyphens
 }
 
-function BlogOutput({ searchInput, selectedTags }) {
+function BlogOutput({ searchInput, selectedTags, onOpenPost }) {
   const [digestData, setDigestData] = useState([]);
   const [loading, setLoading] = useState(true);
   // Track the index of the currently active (selected) post from the visible list.
@@ -103,7 +103,8 @@ function BlogOutput({ searchInput, selectedTags }) {
     } else if (e.key === "Enter" && visiblePosts[activeIndex]) {
       
       const encodedTitle = slugify(visiblePosts[activeIndex].title);
-      window.location.href = `/blogs/${encodedTitle}`;
+      onOpenPost(encodedTitle);
+      // window.location.href = `/blogs/${encodedTitle}`;
     }
   };
 

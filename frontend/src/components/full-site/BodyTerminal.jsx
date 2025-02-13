@@ -3,15 +3,15 @@ import BlogOutput from "./GetBlogs";
 import "../../styles/global.css";
 import "../../styles/full-site/blogoutput.css";
 
-function BodyTerminal({ inputCommand }) {
+function BodyTerminal({ inputCommand, onOpenPost }) {
   const [searchInput, setSearchInput] = useState("");
   const [currentWindow, setWindow] = useState(<div></div>);
   const [loading, setLoading] = useState(true);
 
   // State for managing tags
-  const [allTags, setAllTags] = useState([]); // Full list of tags
-  const [selectedTags, setSelectedTags] = useState([]); // Selected (visible) tags
-  const [showPlusPanel, setShowPlusPanel] = useState(false); // Toggle available tags
+  const [allTags, setAllTags] = useState([]); 
+  const [selectedTags, setSelectedTags] = useState([]); 
+  const [showPlusPanel, setShowPlusPanel] = useState(false); 
 
   // Fetch tags once on mount
   useEffect(() => {
@@ -59,7 +59,7 @@ function BodyTerminal({ inputCommand }) {
   useEffect(() => {
     if (inputCommand === "ls ./") {
       setWindow(
-        <BlogOutput searchInput={searchInput} selectedTags={selectedTags} />
+        <BlogOutput searchInput={searchInput} selectedTags={selectedTags} onOpenPost={onOpenPost} />
       );
     } else if (inputCommand === "") { 
       setWindow(<div></div>);

@@ -1,19 +1,19 @@
 import React, { useState } from 'react';
 
 import BlogWindow from './BlogWindow.jsx';
+import Terminal from './BaseTerminal.jsx';
+import '../../styles/full-site/window.css'
 
 export default function MultiWindowManager() {
   const [openWindows, setOpenWindows] = useState([]);
 
-  function openBlogWindow(slug, commandString) {
-    console.log('Full command typed:', commandString); 
+  function openBlogWindow(slug) {
     console.log('Opening post with slug:', slug);
 
     const newWin = {
       id: crypto.randomUUID(),
       type: 'blog',
-      slug,
-      command: commandString, 
+      slug
     };
     setOpenWindows((prev) => [...prev, newWin]);
   }
@@ -23,7 +23,7 @@ export default function MultiWindowManager() {
   }
 
   return (
-    <div >
+    <div className='window'>
       <Terminal onOpenPost={openBlogWindow} />
 
       {openWindows.map((win) =>
