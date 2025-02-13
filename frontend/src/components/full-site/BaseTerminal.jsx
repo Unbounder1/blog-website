@@ -1,60 +1,58 @@
-import React, { useRef, useState } from "react";
-import Draggable from "react-draggable";
-import { ResizableBox } from "react-resizable";
+import React, { useState } from "react";
+import { Rnd } from "react-rnd";
 import BodyTerminal from "./BodyTerminal.jsx";
 import "../../styles/full-site/baseterminal.css";
 import "../../styles/full-site/blogoutput.css";
 
-const Terminal = ({ children }) => {
-  const nodeRef = useRef(null);
-  
-  const [command, setCommand] = useState(""); // Current input command
-  const [inputCommand, setInputCommand] = useState(""); // Command passed to BodyTerminal
+const Terminal = ({ onOpenPost }) => {
+  const [command, setCommand] = useState(""); 
+  const [inputCommand, setInputCommand] = useState(""); 
 
   const handleKeyDown = (event) => {
     if (event.key === "Enter") {
       event.preventDefault();
       
-      let sanitizedCommand = command.split("#")[0].trim();
-      
-      // Instead of setting JSX, update the command state
+      const sanitizedCommand = command.split("#")[0].trim();
       setInputCommand(sanitizedCommand);
-
-      // Clear input field
       setCommand(""); 
     }
   };
 
   return (
-    <ResizableBox
-      width={200}
-      height={200}
-      minConstraints={[100, 100]}
-      maxConstraints={[500, 500]}
-      axis="both"
+    <Rnd
+      default={{
+        x: 0,
+        y: 0,
+        width: 200,
+        height: 200,
+      }}
+      minWidth={100}
+      minHeight={100}
+      maxWidth={500}
+      maxHeight={500}
+      dragHandleClassName="tabs"
     >
-      <Draggable nodeRef={nodeRef} handle=".tabs">
-        <div ref={nodeRef} className="terminal">
-          {/* Terminal Body */}
-          <div className="terminal-body">
-            <div className="terminal-output">
-              <BodyTerminal inputCommand={inputCommand} />
-            </div>
-            <div className="prompt">
-              ~/ryan-dong/site: 
-              <input 
-                className="command" 
-                type="text" 
-                placeholder="ls ./"
-                value={command}
-                onChange={(e) => setCommand(e.target.value)}
-                onKeyDown={handleKeyDown}
-              />
-            </div>
+      <div className="terminal">
+        
+        {/* Terminal Body */}
+        <div className="terminal-body">
+          <div className="terminal-output">
+            <BodyTerminal inputCommand={inputCommand} onOpenPost={onOpenPost} />
+          </div>
+          <div className="prompt">
+            ~/ryan-dong/site: 
+            <input 
+              className="command" 
+              type="text" 
+              placeholder="ls ./"
+              value={command}
+              onChange={(e) => setCommand(e.target.value)}
+              onKeyDown={handleKeyDown}
+            />
           </div>
         </div>
-      </Draggable>
-    </ResizableBox>
+      </div>
+    </Rnd>
   );
 };
 
