@@ -9,7 +9,6 @@ export default function MultiWindowManager() {
   const [topWindow, setTopWindow] = useState(null);
 
   function openBlogWindow(slug) {
-    console.log('Opening post with slug:', slug);
 
     const newWin = {
       id: crypto.randomUUID(),
@@ -17,7 +16,11 @@ export default function MultiWindowManager() {
       slug
     };
 
-    setOpenWindows((prev) => [...prev, newWin]);
+    setOpenWindows((prev) => {
+      const updated = [...prev, newWin];
+      setTopWindow(newWin.id);
+      return updated;
+    });
   }
   
   const closeWindow = (id) => {
