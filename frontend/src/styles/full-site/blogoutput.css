@@ -7,6 +7,7 @@
 /* Keep the tabs container scrollable */
 .tabs-container {
   background: #2a2a2a;
+  opacity: 100%;
   padding: 8px;
   overflow-x: auto;
   white-space: nowrap;
@@ -20,6 +21,7 @@
   align-items: center;
   overflow-x: auto;
   position: relative;
+  cursor: grab;
 }
 
 .tab {
@@ -43,12 +45,9 @@
   font-weight: bold;
 }
 
-/* --- FIX 1: Keep terminal tab always visible ---
-     Give the terminal tab a sticky position so that it remains at the left edge */
 .tab.terminal-tab {
   position: sticky;
   left: 0;
-  z-index: 10; /* a higher z-index ensures it sits above the scrolling tabs */
 }
 
 /* If you have additional plus panels, keep them as before */
@@ -85,11 +84,13 @@
 }
 
 /* Each post item */
-.result-iktem {
-  padding: 8px;
+.result-item {
+  padding: 4px;
   margin-bottom: 4px;
   cursor: pointer;
   border-radius: 4px;
+  font-size: 0.9em;
+  font-family: Piazzolla;
 }
 
 /* Highlight active (selected) post */
@@ -117,13 +118,17 @@
 .sidebar-content {
   display: flex;
   flex-direction: column;
+  align-items: left;
   gap: 12px;
+  height: 100%;
 }
 
 /* Thumbnail image */
 .post-thumbnail {
   max-width: 100%;
-  border-radius: 4px;
+  border-radius: 10px;
+  padding-left: 10%;
+  padding-right: 10%;
 }
 
 /* Post meta info */
@@ -132,8 +137,27 @@
   color: #555;
 }
 
+/* Tag info */
+
+.post-tags-container {
+  display: flex;
+  align-items: center; 
+  font-weight: bold;
+  gap: 5px; 
+}
+
+.post-tags {
+  display: inline-flex
+  font-weight: lighter;
+  color: green;
+  margin: 0;
+}
 /* Optional summary styling */
 .post-summary {
   font-size: 1em;
   line-height: 1.4;
+  max-width: 100%;
+  word-wrap: break-word; /* Breaks long words */
+  overflow-wrap: break-word; /* Alternative for better compatibility */
+  white-space: normal
 }

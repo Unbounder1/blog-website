@@ -7,7 +7,7 @@ export default function BlogWindow({ slug, onClose }) {
   const href = `/blogs/${slug}`;
 
   const [isMaximized, setIsMaximized] = useState(false);
-  const [size, setSize] = useState({ width: 600, height: 400 });
+  const [size, setSize] = useState({ width: 660, height: 1000 });
   const [position, setPosition] = useState({ x: 50, y: 50 }); // starting position
 
   // Store original size/position for restore

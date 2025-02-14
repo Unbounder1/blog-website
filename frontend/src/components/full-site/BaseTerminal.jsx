@@ -23,13 +23,11 @@ const Terminal = ({ onOpenPost }) => {
       default={{
         x: 0,
         y: 0,
-        width: 200,
-        height: 200,
+        width: 930,
+        height: 660,
       }}
       minWidth={100}
       minHeight={100}
-      maxWidth={500}
-      maxHeight={500}
       dragHandleClassName="tabs"
     >
       <div className="terminal">

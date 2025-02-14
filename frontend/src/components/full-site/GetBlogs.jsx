@@ -82,7 +82,7 @@ function BlogOutput({ searchInput, selectedTags, onOpenPost }) {
   useEffect(() => {
     if (activeIndex >= visiblePosts.length) {
       setActiveIndex(visiblePosts.length - 1);
-    }
+    } 
   }, [visiblePosts, activeIndex]);
 
   // Focus the container when the component mounts so that keyboard events are captured.
@@ -147,22 +147,50 @@ function BlogOutput({ searchInput, selectedTags, onOpenPost }) {
           <div className="sidebar-content">
             {/* Use the thumbnail if available; otherwise, a placeholder image */}
             <img
-              src={activePost.thumbnail || "/path/to/default-thumbnail.png"}
+              src={activePost.thumbnail || "/placeholder.png"}
               alt="Thumbnail"
               className="post-thumbnail"
             />
+            
+            <p className="post-summary">{activePost.summary}</p>
+
+            <div className="post-tags-container">
+              tags: 
+                <p className="post-tags">
+                  {activePost.tags ? activePost.tags.join(", ") : "No tags"} {/* Convert array to CSV */}
+                </p>
+            </div>
+
             <div className="post-meta">
               <div>
                 <strong>Created:</strong>{" "}
-                {activePost.created ? activePost.created : "Unknown"}
+                {activePost.created_at 
+                // convert to TIME
+                ? new Date(activePost.created_at).toLocaleString("en-US", {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                    hour: "2-digit",
+                    minute: "2-digit",
+                    hour12: true,
+                    timeZone: "UTC" // Change to user’s timezone if needed
+                  })
+                : "Unknown"}
               </div>
               <div>
                 <strong>Modified:</strong>{" "}
-                {activePost.modified ? activePost.modified : "Unknown"}
+                {activePost.updated_at ? new Date(activePost.updated_at).toLocaleString("en-US", {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                    hour: "2-digit",
+                    minute: "2-digit",
+                    hour12: true,
+                    timeZone: "UTC" // Change to user’s timezone if needed
+                  })
+                : "Unknown"}
               </div>
             </div>
-            {/* Optionally display a summary or additional info */}
-            <p className="post-summary">{activePost.summary}</p>
           </div>
         ) : (
           <div className="sidebar-placeholder">

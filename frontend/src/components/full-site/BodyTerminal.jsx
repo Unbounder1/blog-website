@@ -63,6 +63,9 @@ function BodyTerminal({ inputCommand, onOpenPost }) {
       );
     } else if (inputCommand === "") { 
       setWindow(<div></div>);
+      setWindow(
+        <BlogOutput searchInput={searchInput} selectedTags={selectedTags} onOpenPost={onOpenPost} />
+      );
     } else {
       setWindow(<div>Do not recognize command</div>);
     }
