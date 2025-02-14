@@ -1,0 +1,180 @@
+.blog-page {
+  width: 100%;
+  flex-grow: 1;  
+  overflow: hidden;
+}
+
+/* Input command formatting */
+.post-input-command {
+  align-items: center;
+  position: relative;
+  font-size: 16px;
+  color: #dcdcdc;
+  width: 100%; 
+  padding: 8px;
+}
+
+/* Keep the tabs container scrollable */
+.tabs-container {
+  background: #2a2a2a;
+  opacity: 100% !important;
+  padding: 8px;
+  overflow-x: auto;
+  white-space: nowrap;
+  position: relative; 
+  flex-grow: 1;
+}
+
+/* The tabs list as a flex container */
+.tabs {
+  display: flex;
+  align-items: center;
+  overflow-x: auto;
+  position: relative;
+  cursor: grab;
+}
+
+.tab {
+  padding: 8px 12px;
+  color: #888;
+  background: #2a2a2a;
+  margin-right: 4px;
+  border-radius: 4px;
+  cursor: pointer;
+  user-select: none;
+  flex-shrink: 0;
+  font-size: 0.7rem;
+}
+
+.tab.active {
+  color: #fff;
+  background: #3d3d3d;
+}
+
+.tab.add-tab {
+  background: #3d3d3d;
+}
+
+.tab.terminal-tab {
+  position: sticky;
+  left: 0;
+}
+
+/* If you have additional plus panels, keep them as before */
+.plus-wrapper {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.inline-plus-panel {
+  display: flex;
+  margin-left: 8px;
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+/* Container: two-column layout */
+.blog-output-container {
+  display: flex;
+  outline: none;
+  min-height: 20vh; 
+  flex-grow: 1; 
+  height: 100%;
+  width: 100%;
+  overflow: scroll;
+}
+
+/* Left column: posts list */
+.posts-list {
+  flex: 0 0 40%;
+  border-right: 1px solid #ccc;
+  overflow-y: auto;
+  padding: 16px;
+}
+
+/* Each post item */
+.result-item {
+  padding: 4px;
+  margin-bottom: 4px;
+  cursor: pointer;
+  font-size: 0.8em;
+}
+
+/* Highlight active (selected) post */
+.result-item.active {
+  background-color: var(--text-color);
+  color: var(--background-color);
+}
+
+/* Post title styling */
+.post-title {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin: 0;
+  font-weight: 100;
+  letter-spacing: -1px;
+  font-size: .9rem;
+}
+
+/* Right column: sidebar */
+.post-sidebar {
+  flex: 1;
+  padding: 16px;
+  overflow-y: auto;
+}
+
+/* Sidebar content */
+.sidebar-content {
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+  gap: 12px;
+  height: 100%;
+}
+
+/* Thumbnail image */
+.post-thumbnail {
+  max-width: 100%;
+  border-radius: 10px;
+  padding-left: 10%;
+  padding-right: 10%;
+}
+
+/* Post meta info */
+.post-meta {
+  font-size: 0.6rem;
+  font-weight: lighter;
+  color: #555;
+}
+
+/* Tag info */
+
+.post-tags-container {
+  display: flex;
+  align-items: center; 
+  gap: 5px; 
+}
+
+.post-tags {
+  display: inline-flex;
+  font-weight: lighter;
+  color: green;
+  margin: 0;
+}
+
+/* Optional summary styling */
+.post-summary {
+  font-size: 0.7rem;
+  line-height: 1.4;
+  max-width: 100%;
+  word-wrap: break-word; /* Breaks long words */
+  overflow-wrap: break-word; /* Alternative for better compatibility */
+  white-space: normal
+}
+
+/* Select to see a post styling */
+.sidebar-placeholder {
+  font-size: 0.7rem;
+}

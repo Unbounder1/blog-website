@@ -8,11 +8,11 @@ def main():
     dirList = [d for d in os.listdir('.') if (os.path.isdir(d) and d[0] != "_" and d[0] != ".")]
 
     for dir in dirList:
-        blog_id = compile_dir("template")
+        blog_id = compile_dir(dir)
 
         if blog_id == -1:
             continue
         else:
-            process_assets("template", blog_id)
+            process_assets(dir, blog_id)
 
 main()

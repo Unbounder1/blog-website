@@ -1,0 +1,70 @@
+.terminal {
+    border-radius: 8px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    margin: 0;
+    padding: 0;
+    min-height: 30vh;
+    background: linear-gradient(135deg, rgba(37, 26, 26, 0.8), rgba(24, 12, 39, 0.9));
+    font-family: 'Firacode';
+    color: #dcdcdc;
+    resize: both;
+    overflow: hidden; 
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    font-size: 0.7rem;
+}
+
+/* Terminal Body */
+.terminal-body {
+    flex-grow: 1;  
+    padding-bottom: 2px;
+    background-size: cover;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-end;
+    overflow-y: auto; /* Enables scrolling inside */
+    overflow-x: hidden; /* Prevents horizontal scrolling */
+    width: 100%;
+    height: 100%;
+    white-space: nowrap;
+}
+
+/* Ensure content does not expand outside the terminal */
+.terminal-output {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+    flex-grow: 1;
+    overflow-y: auto;
+    min-width: 0;
+    padding: 0;
+    margin: 0;
+}
+
+/* Prompt Styling */
+.prompt {
+    font-size: 16px;
+    color: #dcdcdc;
+    width: 100%; 
+    display: flex; 
+    align-items: center; 
+    padding: 8px;
+}
+
+/* Command Input */
+.command {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 16px;
+    color: #79c0ff;
+    background-color: transparent;
+    border: none;
+    flex-grow: 1;
+    text-align: left;
+    min-width: 10px; 
+    outline: none;
+    white-space: nowrap;
+}
