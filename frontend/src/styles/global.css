@@ -22,6 +22,11 @@
 }
 
 @font-face {
+  font-family: "Firacode";
+  src: url('Firacode.ttf')
+}
+
+@font-face {
   font-family: 'Piazzolla';
   src: url('Piazzolla.ttf');
   font-weight: normal;

@@ -89,8 +89,8 @@ function BodyTerminal({ inputCommand, onOpenPost }) {
           {/* Plus button with inline expanding panel */}
           {availableTags.length > 0 && (
             <div className="plus-wrapper">
-              <div className="tab add-tab" onClick={togglePlusPanel}>
-                +
+              <div className="tab add-tab" onClick={availableTags ? togglePlusPanel : ""}>
+                {availableTags ? "+" : "Loading..."}
               </div>
 
               {/* Inline expanding available tags */}

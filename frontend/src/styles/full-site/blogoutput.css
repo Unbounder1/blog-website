@@ -1,13 +1,23 @@
 .blog-page {
   width: 100%;
   flex-grow: 1;  
-  overflow: hidden; /* Prevents external scrollbars */
+  overflow: hidden;
+}
+
+/* Input command formatting */
+.post-input-command {
+  align-items: center;
+  position: relative;
+  font-size: 16px;
+  color: #dcdcdc;
+  width: 100%; 
+  padding: 8px;
 }
 
 /* Keep the tabs container scrollable */
 .tabs-container {
   background: #2a2a2a;
-  opacity: 100%;
+  opacity: 100% !important;
   padding: 8px;
   overflow-x: auto;
   white-space: nowrap;
@@ -33,6 +43,7 @@
   cursor: pointer;
   user-select: none;
   flex-shrink: 0;
+  font-size: 0.7rem;
 }
 
 .tab.active {
@@ -42,7 +53,6 @@
 
 .tab.add-tab {
   background: #3d3d3d;
-  font-weight: bold;
 }
 
 .tab.terminal-tab {
@@ -88,9 +98,7 @@
   padding: 4px;
   margin-bottom: 4px;
   cursor: pointer;
-  border-radius: 4px;
-  font-size: 0.9em;
-  font-family: Piazzolla;
+  font-size: 0.8em;
 }
 
 /* Highlight active (selected) post */
@@ -105,6 +113,9 @@
   overflow: hidden;
   text-overflow: ellipsis;
   margin: 0;
+  font-weight: 100;
+  letter-spacing: -1px;
+  font-size: .9rem;
 }
 
 /* Right column: sidebar */
@@ -133,7 +144,8 @@
 
 /* Post meta info */
 .post-meta {
-  font-size: 0.9em;
+  font-size: 0.6rem;
+  font-weight: lighter;
   color: #555;
 }
 
@@ -142,22 +154,27 @@
 .post-tags-container {
   display: flex;
   align-items: center; 
-  font-weight: bold;
   gap: 5px; 
 }
 
 .post-tags {
-  display: inline-flex
+  display: inline-flex;
   font-weight: lighter;
   color: green;
   margin: 0;
 }
+
 /* Optional summary styling */
 .post-summary {
-  font-size: 1em;
+  font-size: 0.7rem;
   line-height: 1.4;
   max-width: 100%;
   word-wrap: break-word; /* Breaks long words */
   overflow-wrap: break-word; /* Alternative for better compatibility */
   white-space: normal
+}
+
+/* Select to see a post styling */
+.sidebar-placeholder {
+  font-size: 0.7rem;
 }

@@ -1,13 +1,11 @@
 .terminal {
-    background-color: #251a1a;
     border-radius: 8px;
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
     margin: 0;
     padding: 0;
     min-height: 30vh;
-    background: linear-gradient(135deg, #380e0e, #30072e);
-    opacity: 90%;
-    font-family: 'Courier New', Courier, monospace;
+    background: linear-gradient(135deg, rgba(37, 26, 26, 0.8), rgba(24, 12, 39, 0.9));
+    font-family: 'Firacode';
     color: #dcdcdc;
     resize: both;
     overflow: hidden; 
@@ -15,6 +13,7 @@
     flex-direction: column;
     width: 100%;
     height: 100%;
+    font-size: 0.7rem;
 }
 
 /* Terminal Body */
@@ -41,7 +40,7 @@
     width: 100%;
     flex-grow: 1;
     overflow-y: auto;
-    min-width: 0; /* Prevents expanding */
+    min-width: 0;
     padding: 0;
     margin: 0;
 }

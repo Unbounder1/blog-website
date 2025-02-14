@@ -46,8 +46,8 @@ export default function MultiWindowManager() {
         <Terminal onOpenPost={openBlogWindow} />
       </div>
 
-      {openWindows.map((win) =>
-        win.type === "blog" ? (
+      {openWindows.map((win) => {
+        if (win.type === "blog") {
           <div 
             key={win.id}
             onMouseDown={() => bringToFront(win.id)}
@@ -60,7 +60,11 @@ export default function MultiWindowManager() {
               onClose={() => closeWindow(win.id)}
             />
           </div>
-        ) : null
+        } else if (win.type === "notes"){
+
+
+        }
+        }
       )}
     </div>
   );
