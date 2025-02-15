@@ -47,25 +47,35 @@ export default function MultiWindowManager() {
       </div>
 
       {openWindows.map((win) => {
-        if (win.type === "blog") {
-          <div 
-            key={win.id}
-            onMouseDown={() => bringToFront(win.id)}
-            style={{ 
-              position: "relative",
-              zIndex: win.id === topWindow ? 999 : 1 }}
-          >
-            <BlogWindow
-              slug={win.slug}
-              onClose={() => closeWindow(win.id)}
-            />
-          </div>
-        } else if (win.type === "notes"){
-
-
+        if (win.type === 'blog') {
+          return (
+            <div 
+              key={win.id}
+              onMouseDown={() => bringToFront(win.id)}
+              style={{ position: "relative", zIndex: win.id === topWindow ? 999 : 1 }}
+            >
+              <BlogWindow
+                slug={win.slug}
+                onClose={() => closeWindow(win.id)}
+              />
+            </div>
+          );
+        } else if (win.type === 'chat') {
+          return (
+            <div 
+              key={win.id}
+              onMouseDown={() => bringToFront(win.id)}
+              style={{ position: "relative", zIndex: win.id === topWindow ? 999 : 1 }}
+            >
+              <ChatWindow
+                onClose={() => closeWindow(win.id)}
+              />
+            </div>
+          );
+        } else {
+          return null; // Fallback case (optional)
         }
-        }
-      )}
+      })}
     </div>
   );
 }
