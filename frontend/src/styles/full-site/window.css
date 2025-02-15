@@ -5,3 +5,14 @@
     background: url("/wallpaper.png");
     background-size: cover;
 }
+
+.notes-icon {
+    position: "relative";
+    background-color: white;
+}
+
+.notes-image {
+    width: 100%;
+    height: 100%;
+
+}

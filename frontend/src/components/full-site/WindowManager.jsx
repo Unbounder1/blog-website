@@ -2,18 +2,21 @@ import React, { useState } from 'react';
 
 import BlogWindow from './BlogWindow.jsx';
 import Terminal from './BaseTerminal.jsx';
+import NotesWindow from './NoteWindow.jsx';
+import IconNotes from './IconNotes.jsx';
+
 import '../../styles/full-site/window.css'
 
 export default function MultiWindowManager() {
   const [openWindows, setOpenWindows] = useState([]);
   const [topWindow, setTopWindow] = useState(null);
 
-  function openBlogWindow(slug) {
+  function openNewWindow(data, type) {
 
     const newWin = {
       id: crypto.randomUUID(),
-      type: 'blog',
-      slug
+      type: type,
+      data
     };
 
     setOpenWindows((prev) => {
@@ -43,8 +46,10 @@ export default function MultiWindowManager() {
           position: "relative",
           zIndex: topWindow === "terminal" ? 999 : 1 }}
       >
-        <Terminal onOpenPost={openBlogWindow} />
+        <Terminal onOpenPost={openNewWindow} />
       </div>
+
+      <IconNotes className="notes-icon" onOpenPost={openNewWindow} imageIcon="placeholder.png" displayTitle="TEst"/>
 
       {openWindows.map((win) => {
         if (win.type === 'blog') {
@@ -55,19 +60,19 @@ export default function MultiWindowManager() {
               style={{ position: "relative", zIndex: win.id === topWindow ? 999 : 1 }}
             >
               <BlogWindow
-                slug={win.slug}
+                slug={win.data}
                 onClose={() => closeWindow(win.id)}
               />
             </div>
           );
-        } else if (win.type === 'chat') {
+        } else if (win.type === 'notes') {
           return (
             <div 
               key={win.id}
               onMouseDown={() => bringToFront(win.id)}
               style={{ position: "relative", zIndex: win.id === topWindow ? 999 : 1 }}
             >
-              <ChatWindow
+              <NotesWindow
                 onClose={() => closeWindow(win.id)}
               />
             </div>

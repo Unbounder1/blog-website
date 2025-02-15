@@ -103,7 +103,7 @@ function BlogOutput({ searchInput, selectedTags, onOpenPost }) {
     } else if (e.key === "Enter" && visiblePosts[activeIndex]) {
       
       const encodedTitle = slugify(visiblePosts[activeIndex].title);
-      onOpenPost(encodedTitle);
+      onOpenPost(encodedTitle, 'blog');
       // window.location.href = `/blogs/${encodedTitle}`;
     }
   };
