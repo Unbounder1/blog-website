@@ -12,7 +12,7 @@ import '../../styles/full-site/page.css';
   // Store original size/position for restore
   const originalSettings = useRef({ size, position });
 
-  // Set up the notepad content state, loading from localStorage if available.
+  // Set up the notepad content state --- SET NOTEPAD STUFF HERE
   const [noteText, setNoteText] = useState(() => {
     return localStorage.getItem('notepadText') ||
       "Welcome to your Notepad! Type your notes here...";
@@ -84,9 +84,9 @@ import '../../styles/full-site/page.css';
           <span>Notepad</span>
           <div>
             <button onClick={toggleMaximize}>
-              {isMaximized ? 'Restore' : 'Maximize'}
+                {isMaximized ? '❐' : '□'}
             </button>
-            <button onClick={onClose}>Close</button>
+            <button className="window-close-btn" onClick={onClose}>&times;</button>
           </div>
         </div>
         {/* Text area that fills the rest of the window */}
