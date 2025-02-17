@@ -136,7 +136,10 @@ function BlogOutput({ searchInput, selectedTags, onOpenPost }) {
             className={`result-item ${activeIndex === index ? "active" : ""}`}
             onClick={() => setActiveIndex(index)}
           >
-            <h2 className="post-title">{"> " + post.title}</h2>
+            <h2 className="post-title">
+              {/* <img className="post-title-foldericon" src="/foldericon.png"/> */}
+              { (activeIndex === index) ? "📂 " + post.title : "📁 " + post.title}
+            </h2>
           </div>
         ))}
       </div>

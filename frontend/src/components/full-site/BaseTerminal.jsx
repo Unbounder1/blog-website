@@ -23,8 +23,8 @@ const Terminal = ({ onOpenPost }) => {
       default={{
         x: 0,
         y: 0,
-        width: 930,
-        height: 660,
+        width: 720,
+        height: 430,
       }}
       minWidth={100}
       minHeight={100}

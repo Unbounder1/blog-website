@@ -63,9 +63,9 @@ function BodyTerminal({ inputCommand, onOpenPost }) {
       );
     } else if (inputCommand === "") { 
       setWindow(<div></div>);
-      setWindow(
-        <BlogOutput searchInput={searchInput} selectedTags={selectedTags} onOpenPost={onOpenPost} />
-      );
+      // setWindow(
+      //   <BlogOutput searchInput={searchInput} selectedTags={selectedTags} onOpenPost={onOpenPost} />
+      // );
     } else {
       setWindow(<div>Do not recognize command</div>);
     }
@@ -87,16 +87,18 @@ function BodyTerminal({ inputCommand, onOpenPost }) {
           ))}
 
           {/* Plus button with inline expanding panel */}
-          {availableTags.length > 0 && (
-            <div className="plus-wrapper">
-              <div className="tab add-tab" onClick={availableTags ? togglePlusPanel : ""}>
-                {availableTags ? "+" : "Loading..."}
-              </div>
+          <div className="plus-wrapper">
+            <div className="tab add-tab" onClick={togglePlusPanel}>
+              +
+            </div>
 
-              {/* Inline expanding available tags */}
-              {showPlusPanel && (
-                <div className="inline-plus-panel">
-                  {availableTags.map((tag) => (
+            {/* Inline expanding available tags */}
+            {showPlusPanel && (
+              <div className="inline-plus-panel">
+                {loading ? (
+                  <div className="loading-message">Loading tags...</div>
+                ) : availableTags.length > 0 ? (
+                  availableTags.map((tag) => (
                     <div
                       key={tag}
                       className="tab"
@@ -104,11 +106,13 @@ function BodyTerminal({ inputCommand, onOpenPost }) {
                     >
                       {tag}
                     </div>
-                  ))}
-                </div>
-              )}
-            </div>
-          )}
+                  ))
+                ) : (
+                  <div className="no-tags">No more tags available</div>
+                )}
+              </div>
+            )}
+          </div>
         </div>
       </div>
 

@@ -7,26 +7,36 @@ export default function BlogWindow({ slug, onClose }) {
   const href = `/blogs/${slug}`;
 
   const [isMaximized, setIsMaximized] = useState(false);
-  const [size, setSize] = useState({ width: 660, height: 1000 });
+  const [size, setSize] = useState({ width: 660, height: 800 });
   const [position, setPosition] = useState({ x: 50, y: 50 }); // starting position
+
+  const [renderTick, setRenderTick] = useState(0);
+
 
   // Store original size/position for restore
   const originalSettings = useRef({ size, position });
 
   const handleDragStart = useCallback(() => {
     if (iframeRef.current) {
-      iframeRef.current.style.pointerEvents = 'none';
+      iframeRef.current.style.pointerEvents = "none";
+      console.log(iframeRef.current.style.pointerEvents);
     }
   }, []);
 
   const handleDragStop = useCallback((e, d) => {
-    if (iframeRef.current) {
-      iframeRef.current.style.pointerEvents = 'auto';
-    }
     setPosition({ x: d.x, y: d.y });
+    setTimeout(() => {
+      if (iframeRef.current) {
+        iframeRef.current.style.pointerEvents = "auto";
+        console.log(iframeRef.current.style.pointerEvents);
+      }
+    }, 0);
+    setRenderTick((tick) => tick + 1);
+
   }, []);
 
   const handleResizeStop = useCallback((e, direction, ref, delta, pos) => {
+    console.log(iframeRef.current.style.pointerEvents);
     setSize({
       width: ref.offsetWidth,
       height: ref.offsetHeight,
@@ -46,6 +56,7 @@ export default function BlogWindow({ slug, onClose }) {
     }
     setIsMaximized(prev => !prev);
   }, [isMaximized, size, position]);
+  
 
   return (
     <Rnd
@@ -54,16 +65,19 @@ export default function BlogWindow({ slug, onClose }) {
       onDragStart={handleDragStart}
       onDragStop={handleDragStop}
       onResizeStop={handleResizeStop}
+      minWidth={500}
+      minHeight={400}
       bounds="window"
       dragHandleClassName="blog-window-header"
       style={{ zIndex: 1000, willChange: 'transform' }} // performance hint
+      
     >
       <div className="blog-window">
         {/* Browser-like Header */}
         <div className="blog-window-header">
           <div className="blog-window-tabs">
-            <span className="blog-window-title">Blog Post</span>
-            <span className="blog-window-slug">{slug}</span>
+            <span className="blog-window-title"></span>
+            <span className="blog-window-slug">{window.location.href + slug}</span>
           </div>
           <div className="blog-window-controls">
             <button className="window-maximize-btn" onClick={toggleMaximize}>

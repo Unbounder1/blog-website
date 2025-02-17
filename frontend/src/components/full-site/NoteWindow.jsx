@@ -2,7 +2,12 @@ import React, { useRef, useState, useCallback, useEffect } from 'react';
 import { Rnd } from 'react-rnd';
 import '../../styles/full-site/page.css';
 
- export default function NotesWindow({ onClose }) {
+// ensure localstorage reset on reload
+if (typeof window !== 'undefined') {
+    localStorage.removeItem("notepadText");
+}
+
+export default function NotesWindow({ onClose }) {
   const iframeRef = useRef(null);
 
   const [isMaximized, setIsMaximized] = useState(false);
@@ -15,10 +20,21 @@ import '../../styles/full-site/page.css';
   // Set up the notepad content state --- SET NOTEPAD STUFF HERE
   const [noteText, setNoteText] = useState(() => {
     return localStorage.getItem('notepadText') ||
-      "Welcome to your Notepad! Type your notes here...";
+`Welcome to my Blog! 
+
+Available Commands:
+
+ls ./ # lists all projects, navigate with up/down arrows
+rm -rf # load back to default screen
+
+Links:
+
+Double click on icons to open/download contents
+
+`;
   });
 
-  // Save the noteText to localStorage whenever it changes.
+  // Saves notepad on change
   useEffect(() => {
     localStorage.setItem('notepadText', noteText);
   }, [noteText]);

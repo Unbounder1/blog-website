@@ -7,6 +7,24 @@ import IconNotes from './IconNotes.jsx';
 
 import '../../styles/full-site/window.css'
 
+function isFocused(winId, topWindow){
+  if (win.id === topWindow) {
+    return `
+            <div className="unfocused-window"></div>
+            <div 
+              key={win.id}
+              onMouseDown={() => bringToFront(win.id)}
+              style={{ position: "relative", zIndex: win.id === topWindow ? 999 : 1 }}
+            >`
+  } else {
+    `       <div 
+              key={win.id}
+              onMouseDown={() => bringToFront(win.id)}
+              style={{ position: "relative", zIndex: win.id === topWindow ? 999 : 1 }}
+            >`
+  }
+}
+
 export default function MultiWindowManager() {
   const [openWindows, setOpenWindows] = useState([]);
   const [topWindow, setTopWindow] = useState(null);
@@ -57,11 +75,13 @@ export default function MultiWindowManager() {
             <div 
               key={win.id}
               onMouseDown={() => bringToFront(win.id)}
-              style={{ position: "relative", zIndex: win.id === topWindow ? 999 : 1 }}
+              style={{ position: "relative", zIndex: win.id === topWindow ? 999 : 1, backgroundColor: win.id }}
+              className= {win.id === topWindow ? "unfocused-window" : "focused-window"}
             >
               <BlogWindow
                 slug={win.data}
                 onClose={() => closeWindow(win.id)}
+                style={{backgroundColor: win.id === topWindow ? "rgba(0, 0, 0, 0.193)" : none }}
               />
             </div>
           );
