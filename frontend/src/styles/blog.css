@@ -1,111 +1,160 @@
 /* Global Reset */
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
-  
-  /* Base Body Styles */
-  body {
-    font-family: Georgia, 'Times New Roman', Times, serif;
-    font-size: 1rem;
-    line-height: 1.8;
-    color: #333;
-    background-color: #fdfdfd;
-    padding: 20px;
-  }
-  
-  /* Container (center content on larger screens) */
-  @media (min-width: 768px) {
-    body {
-      max-width: 800px;
-      margin: auto;
-      padding: 40px;
-    }
-  }
-  
-  /* Newspaper Article Layout */
-  .article {
-    /* Use a multi-column layout on larger screens */
-    column-count: 2;
-    column-gap: 40px;
-  }
-  
-  /* Drop Cap for the first paragraph in an article */
-  .article p:first-of-type::first-letter {
-    float: left;
-    font-size: 3.5rem;
-    line-height: 1;
-    padding-right: 8px;
-    font-weight: bold;
-  }
-  
-  /* Table of Contents Styling */
-  .toc {
-    background-color: #fff;
-    padding: 20px;
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
-    margin-bottom: 40px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-  }
-  .toc h2 {
-    font-family: 'Helvetica Neue', sans-serif;
-    font-size: 1.5rem;
-    margin-bottom: 15px;
-    border-bottom: 2px solid #e0e0e0;
-    padding-bottom: 10px;
-  }
-  .toc ul {
-    list-style: none;
-    padding-left: 0;
-  }
-  .toc li {
-    margin-bottom: 10px;
-  }
-  .toc a {
-    text-decoration: none;
-    color: #007acc;
-    transition: color 0.3s ease;
-  }
-  .toc a:hover {
-    color: #005f99;
-    text-decoration: underline;
-  }
-  
-  /* Headings Styling */
-  h2 {
-    font-size: 2rem;
-    margin-top: 40px;
-    margin-bottom: 20px;
-    border-bottom: 1px solid #ddd;
-    padding-bottom: 10px;
-    font-family: 'Playfair Display', Georgia, serif;
-  }
-  h3 {
-    font-size: 1.5rem;
-    margin-top: 30px;
-    margin-bottom: 15px;
-    color: #555;
-  }
-  
-  /* Paragraph Styling */
-  p {
-    margin-bottom: 20px;
-    text-align: justify;
-  }
-  
-  /* Images Styling */
-  img,
-  .Image {
-    max-width: 100%;
-    height: auto;
-    display: block;
-    margin: 20px auto;
-  }
-  
-  /* Bold Text */
-  strong {
-    font-weight: bold;
-    color: #222;
-  }
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* CSS Variables for consistent styling */
+:root {
+  --primary-font: 'Merriweather', Georgia, 'Times New Roman', Times, serif;
+  --secondary-font: 'Roboto', Helvetica, Arial, sans-serif;
+  --heading-font: 'Playfair Display', var(--primary-font);
+  --background-color: #fcfcfc;
+  --text-color: #333;
+  --accent-color: #007acc;
+  --accent-hover: #005f99;
+  --border-color: #e0e0e0;
+  --shadow-color: rgba(0, 0, 0, 0.1);
+}
+
+/* Base Body Styles */
+body {
+  font-family: var(--primary-font);
+  font-size: 1rem;
+  line-height: 1.75;
+  color: var(--text-color);
+  background-color: var(--background-color);
+  display: flex;
+  justify-content: center; 
+  align-items: flex-start;
+  min-height: 100vh; /* Ensure the content fills the viewport height */
+  padding: 20px;
+}
+
+/* Centered Content Wrapper */
+.container {
+  max-width: 900px;
+  width: 100%;
+  background: #fff;
+  padding: 40px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px var(--shadow-color);
+  text-align: left; /* Ensure text aligns properly inside */
+}
+
+/* Article Layout */
+.article {
+  column-count: 2;
+  column-gap: 40px;
+  margin-top: 20px;
+}
+
+/* Drop Cap for first paragraph */
+.article p:first-of-type::first-letter {
+  float: left;
+  font-size: 3.5rem;
+  line-height: 1;
+  padding-right: 8px;
+  font-weight: bold;
+  font-family: var(--heading-font);
+}
+
+/* Table of Contents */
+/* Table of Contents Styling */
+.toc {
+  background-color: #fff;
+  padding: 20px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  margin-bottom: 40px;
+  box-shadow: 0 4px 12px var(--shadow-color);
+}
+
+.toc h2 {
+  font-family: var(--secondary-font);
+  font-size: 1.5rem;
+  margin-bottom: 15px;
+  border-bottom: 2px solid var(--border-color);
+  padding-bottom: 10px;
+}
+
+/* Main list for categories */
+.toc ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+/* First-level TOC items */
+.toc > ul > li {
+  font-weight: bold;
+  font-size: 1.1rem;
+  margin-bottom: 10px;
+}
+
+/* Nested subtitles (e.g., 1.1, 1.2) */
+.toc ul ul {
+  list-style-type: none;
+  padding-left: 20px;
+  margin-top: 5px;
+  border-left: 2px solid var(--border-color);
+  padding-left: 15px;
+}
+
+/* Subtitles styling */
+.toc ul ul li {
+  font-weight: normal;
+  font-size: 1rem;
+  margin-bottom: 5px;
+}
+
+/* TOC Links */
+.toc a {
+  text-decoration: none;
+  color: var(--accent-color);
+  transition: color 0.3s ease;
+}
+
+.toc a:hover {
+  color: var(--accent-hover);
+  text-decoration: underline;
+}
+
+/* Headings */
+h2 {
+  font-family: var(--heading-font);
+  font-size: 2rem;
+  margin-top: 40px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 10px;
+  color: var(--text-color);
+}
+h3 {
+  font-family: var(--heading-font);
+  font-size: 1.5rem;
+  margin-top: 30px;
+  margin-bottom: 15px;
+  color: #555;
+}
+
+/* Paragraphs */
+p {
+  margin-bottom: 20px;
+  text-align: justify;
+}
+
+/* Images */
+img,
+.Image {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 20px auto;
+}
+
+/* Bold Text */
+strong {
+  font-weight: bold;
+  color: #222;
+}

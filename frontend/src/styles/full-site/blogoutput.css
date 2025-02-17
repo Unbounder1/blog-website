@@ -95,8 +95,7 @@
 
 /* Each post item */
 .result-item {
-  padding: 4px;
-  margin-bottom: 4px;
+  padding-top: 4px;
   cursor: pointer;
   font-size: 0.8em;
 }

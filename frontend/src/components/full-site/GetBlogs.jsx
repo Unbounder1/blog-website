@@ -103,7 +103,7 @@ function BlogOutput({ searchInput, selectedTags, onOpenPost }) {
     } else if (e.key === "Enter" && visiblePosts[activeIndex]) {
       
       const encodedTitle = slugify(visiblePosts[activeIndex].title);
-      onOpenPost(encodedTitle);
+      onOpenPost(encodedTitle, 'blog');
       // window.location.href = `/blogs/${encodedTitle}`;
     }
   };
@@ -136,7 +136,10 @@ function BlogOutput({ searchInput, selectedTags, onOpenPost }) {
             className={`result-item ${activeIndex === index ? "active" : ""}`}
             onClick={() => setActiveIndex(index)}
           >
-            <h2 className="post-title">{"> " + post.title}</h2>
+            <h2 className="post-title">
+              {/* <img className="post-title-foldericon" src="/foldericon.png"/> */}
+              { (activeIndex === index) ? "📂 " + post.title : "📁 " + post.title}
+            </h2>
           </div>
         ))}
       </div>
