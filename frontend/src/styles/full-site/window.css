@@ -4,6 +4,7 @@
     position: "absolute";
     background: url("/wallpaper.png");
     background-size: cover;
+    overflow: hidden;
 }
 
 .notes-icon {
