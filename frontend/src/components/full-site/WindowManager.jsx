@@ -75,13 +75,11 @@ export default function MultiWindowManager() {
             <div 
               key={win.id}
               onMouseDown={() => bringToFront(win.id)}
-              style={{ position: "relative", zIndex: win.id === topWindow ? 999 : 1, backgroundColor: win.id }}
-              className= {win.id === topWindow ? "unfocused-window" : "focused-window"}
+              style={{ position: "relative", zIndex: win.id === topWindow ? 999 : 1 }}
             >
               <BlogWindow
                 slug={win.data}
                 onClose={() => closeWindow(win.id)}
-                style={{backgroundColor: win.id === topWindow ? "rgba(0, 0, 0, 0.193)" : none }}
               />
             </div>
           );
