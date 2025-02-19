@@ -1,4 +1,4 @@
-import React, { useRef, useState, useCallback, useEffect } from 'react';
+import { useRef, useState, useCallback, useEffect } from 'react';
 import { Rnd } from 'react-rnd';
 import '../../styles/full-site/page.css';
 
@@ -11,7 +11,7 @@ export default function NotesWindow({ onClose }) {
   const iframeRef = useRef(null);
 
   const [isMaximized, setIsMaximized] = useState(false);
-  const [size, setSize] = useState({ width: 660, height: 1000 });
+  const [size, setSize] = useState({ width: 388, height: 500 });
   const [position, setPosition] = useState({ x: 50, y: 50 }); // starting position
 
   // Store original size/position for restore

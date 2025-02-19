@@ -3,27 +3,9 @@ import React, { useState } from 'react';
 import BlogWindow from './BlogWindow.jsx';
 import Terminal from './BaseTerminal.jsx';
 import NotesWindow from './NoteWindow.jsx';
-import IconNotes from './IconNotes.jsx';
+import IconComponent from './IconComponent.jsx';
 
 import '../../styles/full-site/window.css'
-
-function isFocused(winId, topWindow){
-  if (win.id === topWindow) {
-    return `
-            <div className="unfocused-window"></div>
-            <div 
-              key={win.id}
-              onMouseDown={() => bringToFront(win.id)}
-              style={{ position: "relative", zIndex: win.id === topWindow ? 999 : 1 }}
-            >`
-  } else {
-    `       <div 
-              key={win.id}
-              onMouseDown={() => bringToFront(win.id)}
-              style={{ position: "relative", zIndex: win.id === topWindow ? 999 : 1 }}
-            >`
-  }
-}
 
 export default function MultiWindowManager() {
   const [openWindows, setOpenWindows] = useState([]);
@@ -67,7 +49,24 @@ export default function MultiWindowManager() {
         <Terminal onOpenPost={openNewWindow} />
       </div>
 
-      <IconNotes className="notes-icon" onOpenPost={openNewWindow} imageIcon="noteicon.png" displayTitle="Notes"/>
+      {/* Icons On The Desktop */}
+      <IconComponent 
+        className="notes-icon" 
+        onOpenPost={openNewWindow} 
+        imageIcon="noteicon.png" 
+        displayTitle="Notes"
+        defaultX="123"
+        defaultY="211"
+      
+      />
+      <IconComponent 
+        className="github-icon" 
+        onOpenPost={openNewWindow} 
+        imageIcon="githubicon.png" 
+        displayTitle="Github"
+        defaultX="122"
+        defaultY="294"
+      />
 
       {openWindows.map((win) => {
         if (win.type === 'blog') {
@@ -83,7 +82,7 @@ export default function MultiWindowManager() {
               />
             </div>
           );
-        } else if (win.type === 'notes') {
+        } else if (win.type === 'Notes') {
           return (
             <div 
               key={win.id}
