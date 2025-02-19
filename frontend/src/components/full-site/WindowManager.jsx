@@ -67,7 +67,7 @@ export default function MultiWindowManager() {
         <Terminal onOpenPost={openNewWindow} />
       </div>
 
-      <IconNotes className="notes-icon" onOpenPost={openNewWindow} imageIcon="placeholder.png" displayTitle="TEst"/>
+      <IconNotes className="notes-icon" onOpenPost={openNewWindow} imageIcon="noteicon.png" displayTitle="Notes"/>
 
       {openWindows.map((win) => {
         if (win.type === 'blog') {

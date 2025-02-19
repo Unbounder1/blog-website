@@ -20,7 +20,8 @@ export default function NotesWindow({ onClose }) {
   // Set up the notepad content state --- SET NOTEPAD STUFF HERE
   const [noteText, setNoteText] = useState(() => {
     return localStorage.getItem('notepadText') ||
-`Welcome to my Blog! 
+`--------------------------------------------
+Welcome to my Blog! 
 
 Available Commands:
 
@@ -31,6 +32,9 @@ Links:
 
 Double click on icons to open/download contents
 
+You can also type notes here (saves for the session)!
+
+--------------------------------------------
 `;
   });
 
@@ -80,6 +84,8 @@ Double click on icons to open/download contents
       onDragStart={handleDragStart}
       onDragStop={handleDragStop}
       onResizeStop={handleResizeStop}
+      minWidth={388}
+      minHeight={400}
       bounds="window"
       dragHandleClassName="notes-window-header"
       style={{ zIndex: 1000, willChange: 'transform' }} // performance hint
