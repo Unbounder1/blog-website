@@ -91,7 +91,7 @@ spec:
 
     environment {
         GITHUB_REPO  = "https://github.com/Unbounder1/blog-website.git"
-        CLONE_DIR    = "/workspace/github-repo"
+        CLONE_DIR    = "/home/jenkins/agent/workspace/blog-website"
         REGISTRY_URL = "docker-registry.docker-registry.svc.cluster.local:5000"
     }
 
@@ -123,7 +123,7 @@ spec:
                 container('kubectl') {
                     script {
                         checkout scm
-                        
+
                         sh """
                             chmod +x ${CLONE_DIR}/script/resources/docker-build.sh
                             ls -l ${CLONE_DIR}/script/resources/docker-build.sh
