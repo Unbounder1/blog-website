@@ -122,10 +122,9 @@ spec:
             steps {
                 container('kubectl') {
                     script {
+                        checkout scm
+                        
                         sh """
-                            echo "Cloning GitHub repository..."
-                            mkdir -p "${CLONE_DIR}"
-                            git clone ${GITHUB_REPO} ${CLONE_DIR} -b ${env.BRANCH_NAME}
                             chmod +x ${CLONE_DIR}/script/resources/docker-build.sh
                             ls -l ${CLONE_DIR}/script/resources/docker-build.sh
                         """
