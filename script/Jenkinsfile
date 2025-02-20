@@ -122,13 +122,13 @@ spec:
             steps {
                 container('kubectl') {
                     script {
-                        sh """
-                            echo "Cloning GitHub repository..."
-                            mkdir -p "${CLONE_DIR}"
-                            git clone ${GITHUB_REPO} ${CLONE_DIR}
-                            chmod +x ${CLONE_DIR}/script/resources/docker-build.sh
-                            ls -l ${CLONE_DIR}/script/resources/docker-build.sh
-                        """
+                        checkout([
+                            $class: 'GitSCM',
+                            branches: [[name: "*/${env.BRANCH_NAME}"]], // Uses Jenkins' detected branch
+                            userRemoteConfigs: [[url: 'https://github.com/your-org/your-repo.git']]
+                        ])
+                        sh "chmod +x ${CLONE_DIR}/script/resources/docker-build.sh"
+                        sh "ls -l ${CLONE_DIR}/script/resources/docker-build.sh"
                     }
                 }
             }
