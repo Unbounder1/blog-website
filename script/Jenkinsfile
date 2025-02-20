@@ -90,7 +90,6 @@ spec:
     }
 
     environment {
-        GITHUB_REPO  = "https://github.com/Unbounder1/blog-website.git"
         CLONE_DIR    = "/workspace/github-repo"
         REGISTRY_URL = "docker-registry.docker-registry.svc.cluster.local:5000"
     }
@@ -124,8 +123,8 @@ spec:
                     script {
                         checkout([
                             $class: 'GitSCM',
-                            branches: [[name: "*/${env.BRANCH_NAME}"]], // Uses Jenkins' detected branch
-                            userRemoteConfigs: [[url: 'https://github.com/your-org/your-repo.git']]
+                            branches: [[name: "*/${env.BRANCH_NAME}"]], 
+                            userRemoteConfigs: [[url: 'https://github.com/Unbounder1/blog-website.git']]
                         ])
                         sh "chmod +x ${CLONE_DIR}/script/resources/docker-build.sh"
                         sh "ls -l ${CLONE_DIR}/script/resources/docker-build.sh"
