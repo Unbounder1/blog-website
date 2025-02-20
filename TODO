@@ -7,3 +7,4 @@
 - Parallelize dev-deploy.sh script
 - Make multi-stage docker and bash file
 - SETUP INGRESS SO THAT WORKER NODE CAN ACCESS DOCKER REGISTRY THATS ON K8S CLUSTeRre4fw
+- Modify CI/CD to be rollout 
