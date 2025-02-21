@@ -14,6 +14,12 @@ export default function MultiWindowManager() {
 
   function openNewWindow(data, type) {
 
+    if (type === 'Github') {
+      window.open('https://github.com/Unbounder1', '_blank');
+      return; 
+    }
+  
+
     const newWin = {
       id: crypto.randomUUID(),
       type: type,
@@ -106,7 +112,6 @@ export default function MultiWindowManager() {
           );
         } 
         else if (win.type === 'Github') {
-          window.open('https://github.com/Unbounder1', '_blank');
         } 
         
         else {
