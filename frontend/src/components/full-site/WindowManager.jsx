@@ -4,6 +4,7 @@ import BlogWindow from './BlogWindow.jsx';
 import Terminal from './BaseTerminal.jsx';
 import NotesWindow from './NoteWindow.jsx';
 import IconComponent from './IconComponent.jsx';
+import IframeWindow from './IframeWindow.jsx';
 
 import '../../styles/full-site/window.css'
 
@@ -68,6 +69,14 @@ export default function MultiWindowManager() {
         defaultY="294"
       />
 
+      <IconComponent 
+        className="resume-icon" 
+        onOpenPost={openNewWindow} 
+        imageIcon="noteicon.png" 
+        displayTitle="resume"
+        defaultX="122"
+        defaultY="376"
+      />
       {openWindows.map((win) => {
         if (win.type === 'blog') {
           return (
@@ -82,7 +91,8 @@ export default function MultiWindowManager() {
               />
             </div>
           );
-        } else if (win.type === 'Notes') {
+        } 
+        else if (win.type === 'Notes') {
           return (
             <div 
               key={win.id}
@@ -94,7 +104,12 @@ export default function MultiWindowManager() {
               />
             </div>
           );
-        } else {
+        } 
+        else if (win.type === 'Github') {
+          window.open('https://github.com/Unbounder1', '_blank');
+        } 
+        
+        else {
           return null; // Fallback case (optional)
         }
       })}
