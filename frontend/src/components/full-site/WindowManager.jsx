@@ -45,6 +45,7 @@ export default function MultiWindowManager() {
   };
 
   return (
+    <div className="window-simple-wallpaper">
     <div className="window-container">
       <div 
         className="window" 
@@ -118,6 +119,7 @@ export default function MultiWindowManager() {
           return null; // Fallback case (optional)
         }
       })}
+    </div>
     </div>
   );
 }
