@@ -3,33 +3,22 @@ import React, { useState } from 'react';
 import BlogWindow from './BlogWindow.jsx';
 import Terminal from './BaseTerminal.jsx';
 import NotesWindow from './NoteWindow.jsx';
-import IconNotes from './IconNotes.jsx';
+import IconComponent from './IconComponent.jsx';
+import IframeWindow from './IframeWindow.jsx';
 
 import '../../styles/full-site/window.css'
-
-function isFocused(winId, topWindow){
-  if (win.id === topWindow) {
-    return `
-            <div className="unfocused-window"></div>
-            <div 
-              key={win.id}
-              onMouseDown={() => bringToFront(win.id)}
-              style={{ position: "relative", zIndex: win.id === topWindow ? 999 : 1 }}
-            >`
-  } else {
-    `       <div 
-              key={win.id}
-              onMouseDown={() => bringToFront(win.id)}
-              style={{ position: "relative", zIndex: win.id === topWindow ? 999 : 1 }}
-            >`
-  }
-}
 
 export default function MultiWindowManager() {
   const [openWindows, setOpenWindows] = useState([]);
   const [topWindow, setTopWindow] = useState(null);
 
   function openNewWindow(data, type) {
+
+    if (type === 'Github') {
+      window.open('https://github.com/Unbounder1', '_blank');
+      return; 
+    }
+  
 
     const newWin = {
       id: crypto.randomUUID(),
@@ -56,6 +45,7 @@ export default function MultiWindowManager() {
   };
 
   return (
+    <div className="window-simple-wallpaper">
     <div className="window-container">
       <div 
         className="window" 
@@ -67,8 +57,33 @@ export default function MultiWindowManager() {
         <Terminal onOpenPost={openNewWindow} />
       </div>
 
-      <IconNotes className="notes-icon" onOpenPost={openNewWindow} imageIcon="placeholder.png" displayTitle="TEst"/>
+      {/* Icons On The Desktop */}
+      <IconComponent 
+        className="notes-icon" 
+        onOpenPost={openNewWindow} 
+        imageIcon="noteicon.png" 
+        displayTitle="Notes"
+        defaultX="123"
+        defaultY="211"
+      
+      />
+      <IconComponent 
+        className="github-icon" 
+        onOpenPost={openNewWindow} 
+        imageIcon="githubicon.png" 
+        displayTitle="Github"
+        defaultX="122"
+        defaultY="294"
+      />
 
+      <IconComponent 
+        className="resume-icon" 
+        onOpenPost={openNewWindow} 
+        imageIcon="noteicon.png" 
+        displayTitle="resume"
+        defaultX="122"
+        defaultY="376"
+      />
       {openWindows.map((win) => {
         if (win.type === 'blog') {
           return (
@@ -83,7 +98,8 @@ export default function MultiWindowManager() {
               />
             </div>
           );
-        } else if (win.type === 'notes') {
+        } 
+        else if (win.type === 'Notes') {
           return (
             <div 
               key={win.id}
@@ -95,10 +111,15 @@ export default function MultiWindowManager() {
               />
             </div>
           );
-        } else {
+        } 
+        else if (win.type === 'Github') {
+        } 
+        
+        else {
           return null; // Fallback case (optional)
         }
       })}
+    </div>
     </div>
   );
 }

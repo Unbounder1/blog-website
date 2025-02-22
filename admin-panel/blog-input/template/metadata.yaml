@@ -12,3 +12,4 @@ updated_at: 2025-01-11 04:41:10.343779+00:00
 variables:
   var1: null
   var2: null
+delete: true

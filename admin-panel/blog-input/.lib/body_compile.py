@@ -369,6 +369,13 @@ def compile_dir(dir):
         metadata_dict = yaml.safe_load(file)
     metadata = DotMap(metadata_dict)
 
+    connection = db_connection()
+
+    if hasattr(metadata, 'delete') and metadata.delete == True:
+        blog_id = get_id(connection)
+        delete_db(connection, metadata)
+        return 1
+
     # Ensure updated_at
     if not hasattr(metadata, 'updated_at') or metadata.updated_at is None:
         metadata.updated_at = datetime.datetime.now(datetime.timezone.utc)
@@ -380,8 +387,6 @@ def compile_dir(dir):
     if not hasattr(metadata, 'created_at') or metadata.created_at is None:
         metadata.created_at = datetime.datetime.now(datetime.timezone.utc)
 
-    connection = db_connection()
-
     if connection == -1:
         return 1
     
@@ -389,7 +394,7 @@ def compile_dir(dir):
 
     # If table is empty, blog_id might be None, so we set it to 1
     if blog_id is None:
-        blog_id = 0
+        blog_id = 1
 
     # Check if user provided an ID
     if hasattr(metadata, 'id') and metadata.id is not None:
