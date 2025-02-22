@@ -17,6 +17,9 @@ export default function MultiWindowManager() {
     if (type === 'Github') {
       window.open('https://github.com/Unbounder1', '_blank');
       return; 
+    } else if (type === 'LinkedIn') {
+      window.open('https://www.linkedin.com/in/ryan-dong-81175422a', '_blank');
+      return;
     }
   
 
@@ -83,6 +86,15 @@ export default function MultiWindowManager() {
         displayTitle="resume"
         defaultX="122"
         defaultY="376"
+      />
+
+      <IconComponent 
+        className="linkedin-icon" 
+        onOpenPost={openNewWindow} 
+        imageIcon="linkedinicon.png" 
+        displayTitle="LinkedIn"
+        defaultX="122"
+        defaultY="454"
       />
       {openWindows.map((win) => {
         if (win.type === 'blog') {
