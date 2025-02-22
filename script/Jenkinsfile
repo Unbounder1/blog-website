@@ -202,10 +202,25 @@ spec:
                     script {
                         try {
                             withKubeConfig([credentialsId: 'k8s-token', serverUrl: 'https://kubernetes.default.svc']) {
-                                sh """
+
+                              sh '''
+                                end=$((SECONDS + 600))
+
+                                while [ ${SECONDS} -lt ${end} ]; do
                                     echo "Testing connectivity to frontend service..."
-                                    curl -v http://frontend-dev-svc.blog-dev.svc.cluster.local:4321
-                                """
+                                    
+                                    if curl -s --max-time 5 http://frontend-dev-svc.blog-dev.svc.cluster.local:4321; then
+                                        echo "Service is reachable."
+                                        exit 0
+                                    else
+                                        echo "Service unreachable, retrying..."
+                                    fi
+                                    sleep 5
+                                done
+
+                                echo "Connectivity test failed after multiple retries."
+                                exit 1
+                              '''
                             }
                         } catch (Exception e) {
                             echo "Connectivity test failed: ${e.message}"
