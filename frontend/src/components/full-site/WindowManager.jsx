@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import BlogWindow from './BlogWindow.jsx';
 import Terminal from './BaseTerminal.jsx';
@@ -11,11 +11,25 @@ import '../../styles/full-site/window.css'
 export default function MultiWindowManager() {
   const [openWindows, setOpenWindows] = useState([]);
   const [topWindow, setTopWindow] = useState(null);
+  const [imageLoaded, setImageLoaded] = useState(false); // load full image after rest of stuff
+
+  useEffect(() => {
+    if (document.readyState === "complete") {
+      setImageLoaded(true);
+    } else {
+      const handleLoad = () => setImageLoaded(true);
+      window.addEventListener("load", handleLoad);
+      return () => window.removeEventListener("load", handleLoad);
+    }
+  }, []);
 
   function openNewWindow(data, type) {
 
     if (type === 'Github') {
       window.open('https://github.com/Unbounder1', '_blank');
+      return; 
+    } else if (type === 'LinkedIn') {
+      window.open('https://www.linkedin.com/in/ryan-dong-81175422a', '_blank');
       return; 
     }
   
@@ -46,7 +60,10 @@ export default function MultiWindowManager() {
 
   return (
     <div className="window-simple-wallpaper">
-    <div className="window-container">
+    <div 
+      className="window-container"
+      style={{ backgroundImage: imageLoaded ? 'url("/wallpaper.png")' : "none" }}
+      >
       <div 
         className="window" 
         onMouseDown={() => bringToFront("terminal")}
@@ -84,6 +101,16 @@ export default function MultiWindowManager() {
         defaultX="122"
         defaultY="376"
       />
+
+      <IconComponent 
+        className="linkedin-icon" 
+        onOpenPost={openNewWindow} 
+        imageIcon="linkedinicon.png" 
+        displayTitle="LinkedIn"
+        defaultX="197"
+        defaultY="295"
+      />
+      
       {openWindows.map((win) => {
         if (win.type === 'blog') {
           return (
