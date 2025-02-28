@@ -48,7 +48,5 @@ All commands are run from the root of the project, from a terminal:
 Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
 
 
-Initial throttle -> 4G fast -> 8,530ms
-Priority rendering -> 5000ms for not full quality wallpaper, 8000 for full
-Image compression & convert to webp -> 3000 initial loading, 5000 total
- 
+TODO:
+Implement prefetching for blogs
