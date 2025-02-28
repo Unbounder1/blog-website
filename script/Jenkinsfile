@@ -9,28 +9,6 @@ metadata:
   labels:
     jenkins: astro-blog-dep
 spec:
-
-  containers:
-    - name: registry
-      image: registry:2
-      securityContext:
-        runAsUser: 0
-      ports:
-      - containerPort: 5000
-      command:
-        - /bin/sh
-      args:
-        - -c
-        - "while true; do sleep 100; done"
-      env:
-        - name: REGISTRY_STORAGE_FILESYSTEM_ROOTDIRECTORY
-          value: /var/lib/registry
-        - name: REGISTRY_HTTP_ADDR
-          value: 0.0.0.0:5000
-      volumeMounts:
-        - name: temp-storage
-          mountPath: /var/lib/registry
-
     - name: docker
       image: docker:20.10-dind
       tty: true
