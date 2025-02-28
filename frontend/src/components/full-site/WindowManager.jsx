@@ -62,7 +62,7 @@ export default function MultiWindowManager() {
     <div className="window-simple-wallpaper">
     <div 
       className="window-container"
-      style={{ backgroundImage: imageLoaded ? 'url("/wallpaper.png")' : "none" }}
+      style={{ backgroundImage: imageLoaded ? 'url("/wallpaper.webp")' : "none" }}
       >
       <div 
         className="window" 
@@ -78,7 +78,7 @@ export default function MultiWindowManager() {
       <IconComponent 
         className="notes-icon" 
         onOpenPost={openNewWindow} 
-        imageIcon="noteicon.png" 
+        imageIcon="noteicon.webp" 
         displayTitle="Notes"
         defaultX="123"
         defaultY="211"
@@ -87,7 +87,7 @@ export default function MultiWindowManager() {
       <IconComponent 
         className="github-icon" 
         onOpenPost={openNewWindow} 
-        imageIcon="githubicon.png" 
+        imageIcon="githubicon.webp" 
         displayTitle="Github"
         defaultX="122"
         defaultY="294"
@@ -96,7 +96,7 @@ export default function MultiWindowManager() {
       <IconComponent 
         className="resume-icon" 
         onOpenPost={openNewWindow} 
-        imageIcon="noteicon.png" 
+        imageIcon="noteicon.webp" 
         displayTitle="resume"
         defaultX="122"
         defaultY="376"
@@ -105,7 +105,7 @@ export default function MultiWindowManager() {
       <IconComponent 
         className="linkedin-icon" 
         onOpenPost={openNewWindow} 
-        imageIcon="linkedinicon.png" 
+        imageIcon="linkedinicon.webp" 
         displayTitle="LinkedIn"
         defaultX="197"
         defaultY="295"

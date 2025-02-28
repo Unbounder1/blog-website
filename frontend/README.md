@@ -49,3 +49,6 @@ Feel free to check [our documentation](https://docs.astro.build) or jump into ou
 
 
 Initial throttle -> 4G fast -> 8,530ms
+Priority rendering -> 5000ms for not full quality wallpaper, 8000 for full
+Image compression & convert to webp -> 3000 initial loading, 5000 total
+ 
