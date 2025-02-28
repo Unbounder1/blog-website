@@ -12,7 +12,7 @@ export default function NotesWindow({ onClose }) {
 
   const [isMaximized, setIsMaximized] = useState(false);
   const [size, setSize] = useState({ width: 388, height: 500 });
-  const [position, setPosition] = useState({ x: 50, y: 50 }); // starting position
+  const [position, setPosition] = useState({ x: 1107, y: 280 }); // starting position
 
   // Store original size/position for restore
   const originalSettings = useRef({ size, position });

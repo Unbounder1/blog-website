@@ -36,11 +36,8 @@ function IconComponent({ onOpenPost, imageIcon, displayTitle, defaultX, defaultY
         style={{ width: "100%", height: "100%" }}
         draggable="false"
       />
-      <div style={{ 
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center", }}> 
-          {displayTitle} 
+      <div className="icon-text">
+        {displayTitle}
       </div>
     </Rnd>
   );

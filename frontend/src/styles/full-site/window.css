@@ -39,3 +39,11 @@
 .icon:hover {
     background-color: rgba(74,144,226,0.3); 
 }
+
+.icon-text {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Piazzolla';
+
+}

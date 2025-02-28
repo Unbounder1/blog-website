@@ -13,7 +13,7 @@ export default function MultiWindowManager() {
   const [topWindow, setTopWindow] = useState(null);
   const [imageLoaded, setImageLoaded] = useState(false); // load full image after rest of stuff
 
-  useEffect(() => {
+  useEffect(() => { // on startup
     if (document.readyState === "complete") {
       setImageLoaded(true);
     } else {
@@ -21,6 +21,7 @@ export default function MultiWindowManager() {
       window.addEventListener("load", handleLoad);
       return () => window.removeEventListener("load", handleLoad);
     }
+    openNewWindow("Notes", "Notes")
   }, []);
 
   function openNewWindow(data, type) {
@@ -33,7 +34,6 @@ export default function MultiWindowManager() {
       return; 
     }
   
-
     const newWin = {
       id: crypto.randomUUID(),
       type: type,
