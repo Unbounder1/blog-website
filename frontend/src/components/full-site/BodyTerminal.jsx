@@ -61,6 +61,8 @@ function BodyTerminal({ inputCommand, onOpenPost }) {
       setWindow(
         <BlogOutput searchInput={searchInput} selectedTags={selectedTags} onOpenPost={onOpenPost} />
       );
+    } else if (inputCommand === "rm -rf") { 
+      window.open('/', '_blank');
     } else if (inputCommand === "") { 
       setWindow(<div></div>);
       // setWindow(

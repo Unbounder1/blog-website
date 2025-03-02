@@ -9,6 +9,7 @@ metadata:
   labels:
     jenkins: astro-blog-dep
 spec:
+  containers:
     - name: docker
       image: docker:20.10-dind
       tty: true
