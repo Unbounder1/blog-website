@@ -21,7 +21,7 @@ const Terminal = ({ onOpenPost }) => {
   return (
     <Rnd
       default={{
-        x: 305,
+        x: 260,
         y: 100,
         width: 720,
         height: 430,
