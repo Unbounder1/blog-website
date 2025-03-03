@@ -2,23 +2,28 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-export async function GET({ request }) {
+export async function GET({ params }) {
   try {
     const backendHost = process.env.BACKEND_HOST || "backend-svc.blog-prod.svc.cluster.local";
     const backendPort = process.env.BACKEND_PORT || "8080";
 
-    const url = new URL(request.url);
-    const imagePath = url.pathname.replace("/image/", ""); // Remove "/image/" prefix
+    // Extract blogID and imageName from the URL
+    const blogID = params.blogID;
+    const imageName = params.imageName;
 
-    if (!imagePath) {
-      return new Response(JSON.stringify({ error: "Missing image path" }), {
+    if (!blogID || !imageName) {
+      return new Response(JSON.stringify({ error: "Missing blog ID or image name" }), {
         status: 400,
         headers: { "Content-Type": "application/json" },
       });
     }
 
-    const backendUrl = `http://${backendHost}:${backendPort}/image/${imagePath}`;
+    // Proxy request to Gin backend
+    const backendUrl = `http://${backendHost}:${backendPort}/image/blog/${blogID}/${imageName}`;
 
+    console.log(`Fetching image from: ${backendUrl}`);
+
+    // Fetch the image from the backend
     const response = await fetch(backendUrl);
 
     if (!response.ok) {
@@ -28,11 +33,10 @@ export async function GET({ request }) {
       });
     }
 
-    const contentType = response.headers.get("Content-Type") || "image/png";
     return new Response(await response.arrayBuffer(), {
       status: 200,
       headers: {
-        "Content-Type": contentType,
+        "Content-Type": response.headers.get("Content-Type") || "image/png",
       },
     });
   } catch (error) {

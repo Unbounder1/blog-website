@@ -141,17 +141,23 @@ func main() {
 	})
 
 	router.GET("/image/blog/:blogID/:imageName", func(c *gin.Context) {
-		blog_id := c.Param("blogID")
+		blogID := c.Param("blogID")
 		imageName := c.Param("imageName")
 
-		object, err := minioClient.GetObject(c, "blog", blog_id+"/"+imageName, minio.GetObjectOptions{})
+		object, err := minioClient.GetObject(c, "blog", blogID+"/"+imageName, minio.GetObjectOptions{})
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to retrieve image from MinIO"})
 			return
 		}
 		defer object.Close()
 
-		c.Header("Content-Type", "image/png")
+		contentType := http.DetectContentType(make([]byte, 512))
+		_, err = object.Read([]byte(contentType))
+		if err != nil {
+			contentType = "application/octet-stream"
+		}
+
+		c.Header("Content-Type", contentType)
 		c.Header("Content-Disposition", "inline; filename="+imageName)
 
 		// Stream the object directly to the response
