@@ -144,27 +144,41 @@ func main() {
 		blogID := c.Param("blogID")
 		imageName := c.Param("imageName")
 
+		objectInfo, err := minioClient.StatObject(c, "blog", blogID+"/"+imageName, minio.StatObjectOptions{})
+		if err != nil {
+			c.JSON(http.StatusNotFound, gin.H{"error": "Image not found in MinIO"})
+			return
+		}
+
 		object, err := minioClient.GetObject(c, "blog", blogID+"/"+imageName, minio.GetObjectOptions{})
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to retrieve image from MinIO"})
 			return
 		}
-		defer object.Close()
 
-		contentType := http.DetectContentType(make([]byte, 512))
-		_, err = object.Read([]byte(contentType))
+		buffer := make([]byte, 512)
+		_, err = object.Read(buffer)
 		if err != nil {
-			contentType = "application/octet-stream"
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to read image data"})
+			return
 		}
 
+		contentType := http.DetectContentType(buffer)
+
+		// Set headers
 		c.Header("Content-Type", contentType)
 		c.Header("Content-Disposition", "inline; filename="+imageName)
+		c.Header("Content-Length", fmt.Sprintf("%d", objectInfo.Size))
+
+		// Reset the object read pointer to the beginning
+		object.Seek(0, io.SeekStart)
 
 		// Stream the object directly to the response
-		c.Stream(func(w io.Writer) bool {
-			_, copyErr := io.Copy(w, object)
-			return copyErr == nil
-		})
+		_, err = io.Copy(c.Writer, object)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to stream image data"})
+			return
+		}
 	})
 
 	router.GET("/blog/:blogTitle", middleware.HMACMiddleware(), func(c *gin.Context) {
