@@ -16,6 +16,7 @@ export default function MultiWindowManager() {
   useEffect(() => { // on startup
     
     openNewWindow("Notes", "Notes")
+    openNewWindow("Terminal", "Terminal")
 
     if (document.readyState === "complete") {
       setImageLoaded(true);

@@ -30,7 +30,7 @@ rm -rf # load back to default screen
 
 Links:
 
-Double click on icons to open/download contents
+Double-click on icons to open/download contents
 
 You can also type notes here (saves for the session)!
 
