@@ -7,7 +7,7 @@ export default function BlogWindow({ slug, onClose }) {
   const href = `/blogs/${slug}`;
 
   const [isMaximized, setIsMaximized] = useState(false);
-  const [size, setSize] = useState({ width: 660, height: 800 });
+  const [size, setSize] = useState({ width: "40.38vw", height: "74.07vh"  });
   const [position, setPosition] = useState({ x: 50, y: 50 }); // starting position
 
   const [renderTick, setRenderTick] = useState(0);
@@ -67,7 +67,7 @@ export default function BlogWindow({ slug, onClose }) {
       onResizeStop={handleResizeStop}
       minWidth={500}
       minHeight={400}
-      bounds="window"
+      bounds={false} 
       dragHandleClassName="blog-window-header"
       style={{ zIndex: 1000, willChange: 'transform' }} // performance hint
       

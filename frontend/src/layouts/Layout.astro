@@ -1,11 +1,23 @@
+---
+const currentUrl = Astro.request.url;
+---
 <!doctype html>
 <html lang="en" data-theme="dark">
 	<head>
+		<!-- EMBED DATA -->
+		<meta property="og:title" content="Ryan's Portfolio" />
+		<meta property="og:type" content="website" />
+		<meta property="og:url" content={currentUrl} />
+		<meta property="og:image" content={{currentUrl} + "/wallpaper-min.webp"} />
+		<meta property="og:description" content="Welcome to my Portfolio Website!" />
+		<meta name="theme-color" content="#FF0000">
+
+		<!-- General Data -->
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="generator" content={Astro.generator} />
-		<title>Astro Basics</title>
+		<title>Portfolio</title>
 	</head>
 	<body>
 		<slot />

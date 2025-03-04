@@ -150,7 +150,7 @@ function BlogOutput({ searchInput, selectedTags, onOpenPost }) {
           <div className="sidebar-content">
             {/* Use the thumbnail if available; otherwise, a placeholder image */}
             <img
-              src={activePost.thumbnail || "/placeholder.png"}
+              src={activePost.thumbnail || "/placeholder.webp"}
               alt="Thumbnail"
               className="post-thumbnail"
             />

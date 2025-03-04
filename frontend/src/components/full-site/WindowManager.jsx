@@ -14,6 +14,9 @@ export default function MultiWindowManager() {
   const [imageLoaded, setImageLoaded] = useState(false); // load full image after rest of stuff
 
   useEffect(() => { // on startup
+    
+    openNewWindow("Notes", "Notes")
+
     if (document.readyState === "complete") {
       setImageLoaded(true);
     } else {
@@ -21,7 +24,7 @@ export default function MultiWindowManager() {
       window.addEventListener("load", handleLoad);
       return () => window.removeEventListener("load", handleLoad);
     }
-    openNewWindow("Notes", "Notes")
+
   }, []);
 
   function openNewWindow(data, type) {
@@ -34,16 +37,29 @@ export default function MultiWindowManager() {
       return; 
     }
   
-    const newWin = {
-      id: crypto.randomUUID(),
-      type: type,
-      data
-    };
-
     setOpenWindows((prev) => {
-      const updated = [...prev, newWin];
+      let updatedWindows = [...prev];
+  
+      // Only allow one terminal open at a time
+      if (type === 'Terminal') {
+        const existingTerminal = prev.find(win => win.type === 'Terminal');
+  
+        if (existingTerminal) {
+          closeWindow(existingTerminal.id);
+          updatedWindows = prev.filter(win => win.id !== existingTerminal.id);
+        }
+      }
+  
+      const newWin = {
+        id: crypto.randomUUID(),
+        type: type,
+        data
+      };
+  
+      updatedWindows.push(newWin);
       setTopWindow(newWin.id);
-      return updated;
+      
+      return updatedWindows;
     });
   }
   
@@ -64,17 +80,18 @@ export default function MultiWindowManager() {
       className="window-container"
       style={{ backgroundImage: imageLoaded ? 'url("/wallpaper.webp")' : "none" }}
       >
-      <div 
-        className="window" 
-        onMouseDown={() => bringToFront("terminal")}
-        style={{ 
-          position: "relative",
-          zIndex: topWindow === "terminal" ? 999 : 1 }}
-      >
-        <Terminal onOpenPost={openNewWindow} />
-      </div>
 
       {/* Icons On The Desktop */}
+
+      <IconComponent 
+        className="terminal-icon" 
+        onOpenPost={openNewWindow} 
+        imageIcon="terminalicon.webp" 
+        displayTitle="Terminal"
+        defaultX="197"
+        defaultY="211"
+      />
+
       <IconComponent 
         className="notes-icon" 
         onOpenPost={openNewWindow} 
@@ -82,8 +99,8 @@ export default function MultiWindowManager() {
         displayTitle="Notes"
         defaultX="123"
         defaultY="211"
-      
       />
+
       <IconComponent 
         className="github-icon" 
         onOpenPost={openNewWindow} 
@@ -112,7 +129,21 @@ export default function MultiWindowManager() {
       />
       
       {openWindows.map((win) => {
-        if (win.type === 'blog') {
+        if ( win.type === 'Terminal'){
+          return (
+            <div 
+            className="window" 
+            key={win.id}
+            onMouseDown={() => bringToFront(win.id)}
+            style={{ position: "relative", zIndex: topWindow === "terminal" ? 999 : 1 }}
+            >
+              <Terminal 
+                onOpenPost={openNewWindow}
+                onClose={() => closeWindow(win.id)} />
+            </div>
+          )
+        }
+        else if (win.type === 'blog') {
           return (
             <div 
               key={win.id}
