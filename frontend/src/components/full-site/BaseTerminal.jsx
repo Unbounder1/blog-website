@@ -23,19 +23,20 @@ const Terminal = ({ onOpenPost }) => {
       default={{
         x: 305,
         y: 100,
-        width: 720,
-        height: 430,
+        width: "34vw",
+        height: "39.81vh",
       }}
-      minWidth={100}
-      minHeight={100}
+      minWidth="21vw"
+      minHeight="9.26vh"
       dragHandleClassName="tabs"
+      bounds={false} 
     >
       <div className="terminal">
         
         {/* Terminal Body */}
         <div className="terminal-body">
           <div className="terminal-output">
-            <BodyTerminal inputCommand={inputCommand} onOpenPost={onOpenPost} />
+            <BodyTerminal inputCommand={inputCommand} onOpenPost={onOpenPost}/>
           </div>
           <div className="prompt">
             ~/ryan-dong/site: 

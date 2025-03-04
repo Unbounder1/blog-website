@@ -11,7 +11,7 @@ export default function NotesWindow({ onClose }) {
   const iframeRef = useRef(null);
 
   const [isMaximized, setIsMaximized] = useState(false);
-  const [size, setSize] = useState({ width: 388, height: 500 });
+  const [size, setSize] = useState({ width: "20.21vw", height: "46.3vh" });
   const [position, setPosition] = useState({ x: 1107, y: 280 }); // starting position
 
   // Store original size/position for restore
@@ -85,8 +85,8 @@ You can also type notes here (saves for the session)!
       onDragStop={handleDragStop}
       onResizeStop={handleResizeStop}
       minWidth={388}
-      minHeight={400}
-      bounds="window"
+      minHeight={330}
+      bounds={false}
       dragHandleClassName="notes-window-header"
       style={{ zIndex: 1000, willChange: 'transform' }} // performance hint
     >
