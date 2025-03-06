@@ -32,7 +32,17 @@ function BlogOutput({ searchInput, selectedTags, onOpenPost }) {
         );
         console.log("Fetched Digest Data:", digest);
         if (Array.isArray(digest)) {
-          setDigestData(digest);
+          // setDigestData(digest);
+
+          // DEBUGGING -------
+          const multipliedData = Array(10).fill(null).flatMap((_, i) => 
+            digest.map((item) => ({
+              ...item, 
+              id: `${item.id}-copy${i}` // Unique key using original id + index
+            }))
+          );
+          
+          setDigestData(multipliedData);
         } else {
           console.warn("Empty or invalid digest data:", digest);
         }
@@ -45,6 +55,12 @@ function BlogOutput({ searchInput, selectedTags, onOpenPost }) {
 
     fetchData();
   }, []); // Only run once on mount
+
+  useEffect(() => {
+    if (!loading && digestData.length > 0 && containerRef.current) {
+      containerRef.current.focus();
+    }
+  }, [loading, digestData]);
 
   // Fuse.js instance for fuzzy searching over our posts.
   const fuse = useMemo(
@@ -85,12 +101,12 @@ function BlogOutput({ searchInput, selectedTags, onOpenPost }) {
     } 
   }, [visiblePosts, activeIndex]);
 
-  // Focus the container when the component mounts so that keyboard events are captured.
+
   useEffect(() => {
-    if (containerRef.current) {
-      containerRef.current.focus();
+    if (visiblePosts.length > 0) {
+      setActiveIndex(0); 
     }
-  }, []);
+  }, [visiblePosts]); 
 
   // Handle up/down arrow key navigation.
   const handleKeyDown = (e) => {
@@ -108,6 +124,17 @@ function BlogOutput({ searchInput, selectedTags, onOpenPost }) {
     }
   };
 
+  // auto scroll if out of frame
+  useEffect(() => {
+    if (visiblePosts.length > 0) {
+      const targetId = `post-${activeIndex}`;
+      const element = document.getElementById(targetId);
+      if (element) {
+        element.scrollIntoView({ block: "nearest" });
+      }
+    }
+  }, [activeIndex]);
+
   // Render states
   if (loading) {
     return <div>Loading...</div>;
@@ -119,6 +146,8 @@ function BlogOutput({ searchInput, selectedTags, onOpenPost }) {
 
   // The currently selected post from our visible list.
   const activePost = visiblePosts[activeIndex];
+  
+  
 
   return (
     // The container is given tabIndex so it can capture key events.
@@ -133,6 +162,8 @@ function BlogOutput({ searchInput, selectedTags, onOpenPost }) {
         {visiblePosts.map((post, index) => (
           <div
             key={post.id}
+            href={`#post-${index}`}
+            id={`post-${index}`}
             className={`result-item ${activeIndex === index ? "active" : ""}`}
             onClick={() => setActiveIndex(index)}
           >
@@ -150,7 +181,7 @@ function BlogOutput({ searchInput, selectedTags, onOpenPost }) {
           <div className="sidebar-content">
             {/* Use the thumbnail if available; otherwise, a placeholder image */}
             <img
-              src={activePost.thumbnail || "/placeholder.webp"}
+              src={activePost.thumbnail}
               alt="Thumbnail"
               className="post-thumbnail"
             />
