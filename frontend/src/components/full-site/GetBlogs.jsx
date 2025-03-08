@@ -32,9 +32,9 @@ function BlogOutput({ searchInput, selectedTags, onOpenPost }) {
         );
         console.log("Fetched Digest Data:", digest);
         if (Array.isArray(digest)) {
-          // setDigestData(digest);
 
-          // DEBUGGING -------
+          // DEBUGGING ------- Testing a long list of blogs
+          if (import.meta.env.MODE === "development") {
           const multipliedData = Array(10).fill(null).flatMap((_, i) => 
             digest.map((item) => ({
               ...item, 
@@ -43,6 +43,9 @@ function BlogOutput({ searchInput, selectedTags, onOpenPost }) {
           );
           
           setDigestData(multipliedData);
+          } else {
+            setDigestData(digest);
+          }
         } else {
           console.warn("Empty or invalid digest data:", digest);
         }
