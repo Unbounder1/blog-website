@@ -3,7 +3,7 @@ import BlogOutput from "./GetBlogs";
 import "../../styles/global.css";
 import "../../styles/full-site/blogoutput.css";
 
-function BodyTerminal({ inputCommand, onOpenPost, onClose }) {
+function BodyTerminal({ inputCommand, onOpenPost }) {
   const [searchInput, setSearchInput] = useState("");
   const [currentWindow, setWindow] = useState(<div></div>);
   const [loading, setLoading] = useState(true);

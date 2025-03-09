@@ -18,17 +18,17 @@
 
 @font-face {
   font-family: "VGA";
-  src: url('/dos.ttf')
+  src: url('/dos.woff')
 }
 
 @font-face {
   font-family: "Firacode";
-  src: url('/Firacode.ttf')
+  src: url('/Firacode.woff')
 }
 
 @font-face {
   font-family: 'Piazzolla';
-  src: url('/Piazzolla.ttf');
+  src: url('/Piazzolla.woff');
   font-weight: normal;
   font-style: normal;
 }
@@ -36,7 +36,7 @@
 /* Add font files for Pontano Sans */
 @font-face {
   font-family: 'Pontano Sans';
-  src: url('/PontanoSans.ttf');
+  src: url('/PontanoSans.woff');
   font-weight: normal;
   font-style: normal;
 }

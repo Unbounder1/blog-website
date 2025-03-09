@@ -1,5 +1,6 @@
 .blog-page {
   width: 100%;
+  height: 100%;
   flex-grow: 1;  
   overflow: hidden;
 }
@@ -78,9 +79,8 @@
 .blog-output-container {
   display: flex;
   outline: none;
-  min-height: 20vh; 
   flex-grow: 1; 
-  height: 100%;
+  height: 80%;
   width: 100%;
   overflow: scroll;
 }
