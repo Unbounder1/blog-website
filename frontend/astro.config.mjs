@@ -9,4 +9,6 @@ export default defineConfig({
   integrations: [react()],
   output: 'server', 
   adapter: node({ mode: 'standalone' }),
+  prefetch: true,
+  
 });

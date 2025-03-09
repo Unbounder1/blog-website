@@ -1,5 +1,6 @@
 ---
 import Layout from '../../layouts/Blog_Layout.astro';
+import "../../styles/blog.css";
 import { queryDB } from '../../middleware/Dbrouter'
 import dotenv from "dotenv";
 
@@ -17,16 +18,33 @@ export async function getStaticPaths() {
   }));
 }
 
+const currentUrl = Astro.request.url;
 const { title } = Astro.params;
 
 "http://" + process.env.BACKEND_HOST + ":" + process.env.BACKEND_PORT + "/blog/" + title
 const blog = await queryDB("http://" + process.env.BACKEND_HOST + ":" + process.env.BACKEND_PORT + "/blog/" + title, `/blog/${title}`);
 ---
+<!doctype html>
+<html lang="en" data-theme="dark">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width" />
+		<meta name="generator" content={Astro.generator} />
+		<link rel="preload" as="wallpaper.webp" href="/wallpaper.webp">
+		<title>Astro Basics</title>
 
-<Layout>
-  <div class="container">
-    <h1>{blog.title}</h1>
-    <p><strong>Tags:</strong> {blog.tags.join(', ')}</p>
-    <div class="blog-content" set:html={blog.body}></div>
-  </div>
-</Layout>
+    <!-- EMBED DATA -->
+		<meta property="og:title" content={title} />
+		<meta property="og:type" content="website" />
+		<meta property="og:url" content={currentUrl} />
+		<meta name="theme-color" content="#FF0000">
+
+	</head>
+	<body>
+    <div class="container">
+      <h1>{blog.title}</h1>
+      <p><strong>Tags:</strong> {blog.tags.join(', ')}</p>
+      <div class="blog-content" set:html={blog.body}></div>
+    </div>
+	</body>
+</html>
