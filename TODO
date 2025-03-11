@@ -1,11 +1,7 @@
-- Add README Documentation to everything
-- Test deployment yaml files (ordering)
-- Create temporary registry for jenkins
 - Create permanent registry somehow
 - Add rest of jenkins deployment stuff
 - Multistage docker pipeline
 - Parallelize dev-deploy.sh script
 - Make multi-stage docker and bash file
 - Implement EDB HA
-- SETUP INGRESS SO THAT WORKER NODE CAN ACCESS DOCKER REGISTRY THATS ON K8S CLUSTeRre4fw
-- Modify CI/CD to be rollout 
+- Implement circuit scan backend functionality with drawing
