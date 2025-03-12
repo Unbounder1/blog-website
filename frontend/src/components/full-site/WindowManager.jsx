@@ -36,6 +36,23 @@ export default function MultiWindowManager() {
     } else if (type === 'LinkedIn') {
       window.open('https://www.linkedin.com/in/ryan-dong-81175422a', '_blank');
       return; 
+    } else if (type === 'resume') {
+
+      fetch("resume.pdf").then((response) => {
+        response.blob().then((blob) => {
+        
+            // Creating new object of PDF file
+            const fileURL =
+                window.URL.createObjectURL(blob);
+                
+            // Setting various property values
+            let alink = document.createElement("a");
+            alink.href = fileURL;
+            alink.download = "ryan-dong-resume.pdf";
+            alink.click();
+        });
+    });
+      return; 
     }
   
     setOpenWindows((prev) => {
