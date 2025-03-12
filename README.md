@@ -1,5 +1,7 @@
 # INFO
 
+VISIT THE SITE HERE: [https://www.ryan-dong.com](https://www.ryan-dong.com)
+
 ## Technologies
 
 Frontend -> astro.js, react
