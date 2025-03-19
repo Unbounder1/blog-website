@@ -9,8 +9,8 @@ export async function GET({ request }) {
     // PATH
     // path_ip = ip host, ie localhost
     // path_port = ip port, ie port
-    // path_specs = 
-    // Fetch Format ->  http://path_ip:path_port/path_specs/
+    // path_spec = 
+    // Fetch Format ->  http://path_ip:path_port/path_spec/
 
     // CONTENT
     // body_content
