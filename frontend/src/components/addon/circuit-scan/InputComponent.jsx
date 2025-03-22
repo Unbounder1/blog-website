@@ -11,7 +11,7 @@ const InputComponent = () => {
 
         for (file in files){
             // Convert the file to base64 text
-            reader.readAsDataURL(files[0]);
+            reader.readAsDataURL(file);
 
             // on reader load somthing...
             reader.onload = () => {
