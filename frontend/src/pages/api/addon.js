@@ -17,11 +17,11 @@ export async function GET({ request }) {
     // 
 
   try {
-    const backendHost = process.env.BACKEND_HOST;
-    const backendPort = process.env.BACKEND_PORT;
 
     const url = new URL(request.url);
-    const path = url.searchParams.get("path");
+    const path_ip = url.searchParams.get("path_ip");
+    const path_port = url.searchParams.get("path_port");
+    const path_specs = url.searchParams.get("path_specs");
 
     if (!backendHost || !backendPort) {
       return new Response(JSON.stringify({ error: "Missing BACKEND_HOST or BACKEND_PORT" }), {
@@ -37,10 +37,10 @@ export async function GET({ request }) {
       });
     }
 
-    const link = `http://${backendHost}:${backendPort}${path}`;
+    const link = `http://${path_ip}:${path_port}${path_specs}`;
 
     // Query the backend
-    const data = await queryDB(link, path);
+    const data = await queryDB(link, path, request.body);
 
     return new Response(JSON.stringify(data), {
       status: 200,
