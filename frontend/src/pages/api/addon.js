@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 
 dotenv.config(); 
 
-export async function GET({ request }) { 
+export async function POST({ request }) { 
     // General Format for Addons:
 
     // PATH
@@ -18,17 +18,11 @@ export async function GET({ request }) {
 
   try {
 
-    const url = new URL(request.url);
-    const path_ip = url.searchParams.get("path_ip");
-    const path_port = url.searchParams.get("path_port");
-    const path_specs = url.searchParams.get("path_specs");
+    const body = await request.json();
 
-    if (!backendHost || !backendPort) {
-      return new Response(JSON.stringify({ error: "Missing BACKEND_HOST or BACKEND_PORT" }), {
-        status: 500,
-        headers: { "Content-Type": "application/json" },
-      });
-    }
+    const path_ip = body.path_ip;
+    const path_port = body.path_port;
+    const path_specs = body.path_specs;
 
     if (!path) {
       return new Response(JSON.stringify({ error: "Missing required query parameter: path" }), {
@@ -40,7 +34,7 @@ export async function GET({ request }) {
     const link = `http://${path_ip}:${path_port}${path_specs}`;
 
     // Query the backend
-    const data = await queryDB(link, path, request.body);
+    const data = await queryDB(link, path, body);
 
     return new Response(JSON.stringify(data), {
       status: 200,

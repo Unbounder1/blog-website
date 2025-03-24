@@ -28,6 +28,44 @@ const InputComponent = () => {
         console.log("Selected files:", files);
     };
 
+    const handleSubmit = (e) => {
+        e.preventDefault(); // Prevent default form submission if inside a form
+
+        const fetchData = async () => {
+            try {
+
+                // PATH
+                // path_ip = ip host, ie localhost
+                // path_port = ip port, ie port
+                // path_specs = 
+                // Fetch Format ->  http://path_ip:path_port/path_specs/
+
+                const payload = {
+                    path_ip: "/digest", 
+                    path_port: "",
+                    path_specs: "",
+                    input: ""
+                };
+
+                const response = await fetch("/api/addon", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(payload),
+                });
+
+                const output = await response.json();
+                console.log(output);
+
+            } catch (error) {
+                console.error("Error querying circuit-scan addon", error);
+            }
+        };
+
+        fetchData();
+    };
+
     return (
         <form method="post" encType="multipart/form-data">
             <div>
