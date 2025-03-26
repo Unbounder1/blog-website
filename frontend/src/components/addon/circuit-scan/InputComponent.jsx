@@ -2,11 +2,12 @@ import React, { useState } from "react";
 
 const InputComponent = () => {
     const [selectedFiles, setSelectedFiles] = useState([]);
-    const cur_file = "";
+    const [processOutput, setProcessOutput] = useState({});
 
     const handleFileChange = (e) => {
         const files = Array.from(e.target.files);
         setSelectedFiles(files);
+        setProcessOutput({});
 
         console.log("Selected files:", files);
     };
@@ -45,6 +46,7 @@ const InputComponent = () => {
 
                 const output = await response.json();
                 console.log(output);
+                setProcessOutput(output);
 
             } catch (error) {
                 console.error("Error querying circuit-scan addon", error);
@@ -55,6 +57,7 @@ const InputComponent = () => {
     };
 
     return (
+    <div>
         <form method="post" encType="multipart/form-data">
             <div>
                 <label htmlFor="image_uploads">Choose images to upload (PNG, JPG)</label>
@@ -85,7 +88,47 @@ const InputComponent = () => {
                 type="submit"
                 onClick={handleSubmit}>Submit</button>
             </div>
+
         </form>
+
+        {processOutput && (
+                <div style={{ marginTop: "20px" }}>
+                    {processOutput["ltspice"] && (
+                        <div>
+                            <h3>LTSpice Schematic (.asc)</h3>
+                            <a
+                                href={`data:text/plain;charset=utf-8,${encodeURIComponent(processOutput["ltspice"])}`}
+                                download="circuit.asc"
+                                style={{ display: "inline-block", marginBottom: "20px" }}
+                            >
+                                <button>Download LTSpice File</button>
+                            </a>
+                        </div>
+                    )}
+                    {processOutput["mlplot"] && (
+                        <div>
+                            <h3>ML Plot</h3>
+                            <img
+                                src={`data:image/png;base64,${processOutput["mlplot"]}`}
+                                alt="ML Plot"
+                                style={{ width: "100%", maxWidth: "800px", marginBottom: "20px" }}
+                            />
+                        </div>
+                    )}
+
+                    {processOutput["graph"] && (
+                        <div>
+                            <h3>Graph Output</h3>
+                            <img
+                                src={`data:image/png;base64,${processOutput["graph"]}`}
+                                alt="Graph Output"
+                                style={{ width: "100%", maxWidth: "800px", marginBottom: "20px" }}
+                            />
+                        </div>
+                    )}
+                </div>
+            )}
+    </div>
     );
 };
 
