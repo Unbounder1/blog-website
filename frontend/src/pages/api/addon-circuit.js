@@ -9,32 +9,25 @@ export async function POST({ request }) {
     // PATH
     // path_ip = ip host, ie localhost
     // path_port = ip port, ie port
-    // path_specs = 
-    // Fetch Format ->  http://path_ip:path_port/path_specs/
+    // Fetch Format ->  http://path_ip:path_port/
 
     // CONTENT
     // body_content
-    // 
 
   try {
 
     const body = await request.json();
 
-    const path_ip = body.path_ip;
-    const path_port = body.path_port;
-    const path_specs = body.path_specs;
+    const backendHost = process.env.BACKEND_HOST;
+    const backendPort = process.env.BACKEND_PORT;
 
-    if (!path) {
-      return new Response(JSON.stringify({ error: "Missing required query parameter: path" }), {
-        status: 400,
-        headers: { "Content-Type": "application/json" },
-      });
-    }
+    const url = new URL(request.url);
+    const path = url.searchParams.get("path");
 
-    const link = `http://${path_ip}:${path_port}${path_specs}`;
+    const link = `http://${backendHost}:${backendPort}/addon/circuit-scan/`;
 
     // Query the backend
-    const data = await queryDB(link, path, body);
+    const data = await queryDB(link, "/addon/circuit-scan/", body);
 
     return new Response(JSON.stringify(data), {
       status: 200,

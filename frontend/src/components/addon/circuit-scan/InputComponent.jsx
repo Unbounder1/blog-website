@@ -2,28 +2,11 @@ import React, { useState } from "react";
 
 const InputComponent = () => {
     const [selectedFiles, setSelectedFiles] = useState([]);
+    const cur_file = "";
 
     const handleFileChange = (e) => {
         const files = Array.from(e.target.files);
         setSelectedFiles(files);
-
-        let reader = new FileReader();
-
-        for (file in files){
-            // Convert the file to base64 text
-            reader.readAsDataURL(file);
-
-            // on reader load somthing...
-            reader.onload = () => {
-                // Make a fileInfo Object
-                console.log("Called", reader);
-                let baseURL = reader.result;
-                const extracted = baseURL.split(",")[1];
-                console.log(extracted);
-            };
-        }
-        
-        console.log(fileInfo);
 
         console.log("Selected files:", files);
     };
@@ -33,21 +16,26 @@ const InputComponent = () => {
 
         const fetchData = async () => {
             try {
-
-                // PATH
-                // path_ip = ip host, ie localhost
-                // path_port = ip port, ie port
-                // path_specs = 
-                // Fetch Format ->  http://path_ip:path_port/path_specs/
+                const base64String = await new Promise((resolve, reject) => {
+                    const reader = new FileReader();
+                
+                    reader.readAsDataURL(selectedFiles[0]);
+                
+                    reader.onload = () => {
+                      const base64 = reader.result.split(",")[1]; 
+                      resolve(base64);
+                    };
+                
+                    reader.onerror = (error) => reject(error);
+                  });
+                
 
                 const payload = {
-                    path_ip: "/digest", 
-                    path_port: "",
-                    path_specs: "",
-                    input: ""
+                    path_specs: "", // Fetch Format ->  http://path_ip:path_port/path_specs
+                    input: base64String // Base64 Input Image
                 };
 
-                const response = await fetch("/api/addon", {
+                const response = await fetch("/api/addon-circuit", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
@@ -93,7 +81,9 @@ const InputComponent = () => {
             </div>
 
             <div>
-                <button type="submit">Submit</button>
+                <button 
+                type="submit"
+                onClick={handleSubmit}>Submit</button>
             </div>
         </form>
     );
