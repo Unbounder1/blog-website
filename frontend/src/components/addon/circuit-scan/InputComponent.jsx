@@ -65,7 +65,7 @@ const InputComponent = () => {
                     type="file"
                     id="image_uploads"
                     name="image_uploads"
-                    accept=".jpg, .jpeg, .png"
+                    accept=".jpg, .jpeg, .png, .webp"
                     onChange={handleFileChange}
                     multiple 
                 />
