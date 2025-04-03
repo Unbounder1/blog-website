@@ -44,18 +44,6 @@ spec:
         - name: github-repo-volume
           mountPath: /workspace/github-repo
 
-    - name: network-test
-      image: docker.io/nicolaka/netshoot:latest
-      tty: true
-      stdin: true
-      securityContext:
-        runAsUser: 0
-      command:
-        - /bin/sh
-      args:
-        - -c
-        - "while true; do sleep 100; done"
-
   volumes:
     - name: github-repo-volume
       emptyDir: {}
