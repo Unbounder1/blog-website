@@ -2,6 +2,7 @@ import React, { useState } from "react";
 
 const InputComponent = () => {
     const [selectedFiles, setSelectedFiles] = useState([]);
+    const [isProcessing, setIsProcessing] = useState(false);
     const [processOutput, setProcessOutput] = useState({});
     const [processInput, setProcessInput] = useState("");
 
@@ -19,11 +20,15 @@ const InputComponent = () => {
             setProcessInput(base64);
         };
 
+        setProcessOutput({});
+        setIsProcessing(false);
+
         console.log("Selected files:", files);
     };
 
     const handleSubmit = (e) => {
         e.preventDefault(); // Prevent default form submission if inside a form
+        setIsProcessing(true);
 
         const fetchData = async () => {
             try {
@@ -67,7 +72,7 @@ const InputComponent = () => {
     };
 
     return (
-    <div style={{ overflow: !important "scroll" }}>
+    <div style={{ overflow: "scroll" }}>
         <form method="post" encType="multipart/form-data">
             <div>
                 <label htmlFor="image_uploads">Choose images to upload (PNG, JPG)</label>
@@ -100,9 +105,18 @@ const InputComponent = () => {
             </div>
 
             <div>
-                <button 
-                type="submit"
-                onClick={handleSubmit}>Submit</button>
+                {!isProcessing && (
+                    <button 
+                    type="submit"
+                    onClick={handleSubmit}>Submit</button>
+                )}
+
+                {isProcessing && Object.keys(processOutput).length === 0 && (
+                    <div>Processing Input...</div>
+                )}
+
+
+                
             </div>
 
         </form>
