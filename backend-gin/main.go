@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"database/sql"
 	"fmt"
 	"io"
@@ -200,6 +201,37 @@ func main() {
 			return
 		}
 		c.JSON(200, titles)
+	})
+
+	// ------------------------- ADDONS ------------------------
+
+	// Circuit-Scan Addon
+	router.POST("/addon/circuit-scan/", func(c *gin.Context) {
+		path := "http://" + getEnv("CIRCUIT_SCAN_HOST", "127.0.0.1") + ":" + getEnv("CIRCUIT_SCAN_PORT", "5000") + "/process_image"
+
+		requestBody, err := io.ReadAll(c.Request.Body)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to read request body"})
+			return
+		}
+
+		// Forward the raw body to the external API
+		resp, err := http.Post(path, c.Request.Header.Get("Content-Type"), io.NopCloser(bytes.NewReader(requestBody)))
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to forward request"})
+			return
+		}
+		defer resp.Body.Close()
+
+		out, err := io.ReadAll(resp.Body)
+
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to read request"})
+			return
+		}
+		// Stream the response from the external API back to the client
+		c.Data(resp.StatusCode, resp.Header.Get("Content-Type"), out)
+
 	})
 
 	// Start the server on the specified port

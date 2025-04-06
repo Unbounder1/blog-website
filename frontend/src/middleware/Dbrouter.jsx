@@ -6,26 +6,37 @@ function generateHmac(data) {
     return CryptoJS.HmacSHA256(data, process.env.HMAC_API_KEY).toString(CryptoJS.enc.Hex);
 }
 
-export async function queryDB(link, path) {
+export async function queryDB(link, path, body = null) {
     try {
-        // Generate the HMAC for the URL
-        const hmac = generateHmac(path);
+      const hmac = generateHmac(path);
+  
+      const options = {
+        headers: {
+          "X-HMAC-Signature": hmac,
+        },
+        method: body ? "POST" : "GET",
+        ...(body && { 
+          body: JSON.stringify(body),
+          headers: {
+            ...{ "X-HMAC-Signature": hmac },
+            "Content-Type": "application/json"
+          }
+        }),
+      };
 
-        const response = await fetch(link, {
-            method: "GET",
-            headers: {
-                "X-HMAC-Signature": hmac,
-            },
-        });
-
-        if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-
-        const responseData = await response.json();
-        return responseData;
+      //console.log("Sending to:", `${link}`);
+      //console.log("Payload:", JSON.stringify(body, null, 2));     
+  
+      const response = await fetch(link, options);
+  
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+  
+      const responseData = await response.json();
+      return responseData;
     } catch (error) {
-        console.error("Error querying the database:", error);
-        throw error; 
+      console.error("Error querying the database:", error);
+      throw error;
     }
-}
+  }
