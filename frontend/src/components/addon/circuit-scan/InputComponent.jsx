@@ -3,11 +3,21 @@ import React, { useState } from "react";
 const InputComponent = () => {
     const [selectedFiles, setSelectedFiles] = useState([]);
     const [processOutput, setProcessOutput] = useState({});
+    const [processInput, setProcessInput] = useState("");
 
     const handleFileChange = (e) => {
         const files = Array.from(e.target.files);
         setSelectedFiles(files);
         setProcessOutput({});
+
+        const reader = new FileReader();
+                
+        reader.readAsDataURL(files[0]);
+    
+        reader.onload = () => {
+            const base64 = reader.result.split(",")[1]; 
+            setProcessInput(base64);
+        };
 
         console.log("Selected files:", files);
     };
@@ -57,7 +67,7 @@ const InputComponent = () => {
     };
 
     return (
-    <div>
+    <div style={{ overflow: !important "scroll" }}>
         <form method="post" encType="multipart/form-data">
             <div>
                 <label htmlFor="image_uploads">Choose images to upload (PNG, JPG)</label>
@@ -74,9 +84,15 @@ const InputComponent = () => {
             <div className="preview">
                 {selectedFiles.length > 0 ? (
                     <ul>
-                        {selectedFiles.map((file, index) => (
-                            <li key={index}>{file.name}</li>
-                        ))}
+                        {processInput != "" && (
+                            <div style={{ marginTop: "20px" }}>
+                                <img
+                                    src={`data:image/png;base64,${processInput}`}
+                                    alt="Input Image"
+                                    style={{ width: "100%", maxWidth: "800px", marginBottom: "20px" }}
+                                />
+                            </div>
+                        )}
                     </ul>
                 ) : (
                     <p>No files currently selected for upload</p>

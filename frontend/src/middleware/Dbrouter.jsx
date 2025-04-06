@@ -24,8 +24,8 @@ export async function queryDB(link, path, body = null) {
         }),
       };
 
-      console.log("Sending to:", `${link}`);
-        console.log("Payload:", JSON.stringify(body, null, 2));     
+      //console.log("Sending to:", `${link}`);
+      //console.log("Payload:", JSON.stringify(body, null, 2));     
   
       const response = await fetch(link, options);
   
