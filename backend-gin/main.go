@@ -208,6 +208,7 @@ func main() {
 	// Circuit-Scan Addon
 	router.POST("/addon/circuit-scan/", func(c *gin.Context) {
 		path := "http://" + getEnv("CIRCUIT_SCAN_HOST", "127.0.0.1") + ":" + getEnv("CIRCUIT_SCAN_PORT", "5000") + "/process_image"
+		println("Circuitscan backend query path: " + path)
 
 		requestBody, err := io.ReadAll(c.Request.Body)
 		if err != nil {
