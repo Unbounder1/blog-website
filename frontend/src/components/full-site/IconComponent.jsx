@@ -1,11 +1,11 @@
-import React, { useRef } from "react";
+import { useRef } from "react";
 import { Rnd } from "react-rnd";
 
 function IconComponent({ onOpenPost, imageIcon, displayTitle, defaultX, defaultY }) {
   const iconRef = useRef(null);
 
   // On double-click, call the open callback.
-  const handleDoubleClick = (e) => {
+  const handleDoubleClick = () => {
     console.log("CLICKED TWICE")
     onOpenPost(displayTitle, displayTitle);
   };

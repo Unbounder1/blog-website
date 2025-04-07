@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 
 const InputComponent = () => {
     const [selectedFiles, setSelectedFiles] = useState([]);
@@ -22,8 +22,6 @@ const InputComponent = () => {
 
         setProcessOutput({});
         setIsProcessing(false);
-
-        console.log("Selected files:", files);
     };
 
     const handleSubmit = (e) => {
@@ -60,7 +58,6 @@ const InputComponent = () => {
                 });
 
                 const output = await response.json();
-                console.log(output);
                 setProcessOutput(output);
 
             } catch (error) {
@@ -163,53 +160,3 @@ const InputComponent = () => {
 };
 
 export default InputComponent;
-
-// <script>
-// document.addEventListener("DOMContentLoaded", function () {
-//     const input = document.querySelector("input");
-//     const preview = document.querySelector(".preview");
-//     const submit = document.querySelector("button");
-
-//     if (!input || !preview) {
-//       console.error("Input or preview element not found!");
-//       return;
-//     }
-
-//     // On upload files
-//     input.addEventListener("change", function (event) {
-//       base64_files = [];
-//       console.log(event.target.files); 
-//       preview.innerHTML = ""; // Clear previous preview
-
-//       const files = Array.from(event.target.files);
-//       if (files.length === 0) {
-//         preview.textContent = "No files currently selected for upload";
-//       } else {
-//         files.forEach((file) => {
-//           const reader = new FileReader();
-//           reader.readAsDataURL(file); // Convert file to a data URL
-
-//           reader.onload = function () {
-
-//               // Display image
-//               const img = document.createElement("img");
-//               img.src = reader.result; // Set the image source to the data URL
-//               img.style.width = "1000px"; // Adjust size
-//               img.style.marginRight = "10px";
-//               preview.appendChild(img);
-
-//               // Extract base64
-//               base64_files.push(reader.result.split(",")[1]);
-
-//           };
-
-
-//         });
-//       }
-//     });
-
-//     submit.addEventListener("change", )
-
-//     console.log(preview); 
-//   });
-// </script>

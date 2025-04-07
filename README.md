@@ -30,3 +30,5 @@ Uses gin (golang), run go mod main.go
 -> ./resources/dev-deployment for quick test deployment
 -> ./Jenkins file for CI/CD processes
 -> actual deployment on my homelab repository 
+
+Add route using: cloudflared tunnel route dns blog-prod www.ryan-dong.com

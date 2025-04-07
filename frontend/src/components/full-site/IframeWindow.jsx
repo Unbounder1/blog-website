@@ -1,4 +1,4 @@
-import React, { useRef, useState, useCallback } from 'react';
+import { useRef, useState, useCallback } from 'react';
 import { Rnd } from 'react-rnd';
 import '../../styles/full-site/page.css';
 
@@ -19,7 +19,6 @@ export default function IframeWindow({ slug, onClose }) {
   const handleDragStart = useCallback(() => {
     if (iframeRef.current) {
       iframeRef.current.style.pointerEvents = "none";
-      console.log(iframeRef.current.style.pointerEvents);
     }
   }, []);
 
@@ -28,15 +27,13 @@ export default function IframeWindow({ slug, onClose }) {
     setTimeout(() => {
       if (iframeRef.current) {
         iframeRef.current.style.pointerEvents = "auto";
-        console.log(iframeRef.current.style.pointerEvents);
       }
     }, 0);
     setRenderTick((tick) => tick + 1);
 
   }, []);
 
-  const handleResizeStop = useCallback((e, direction, ref, delta, pos) => {
-    console.log(iframeRef.current.style.pointerEvents);
+  const handleResizeStop = useCallback((ref, pos) => {
     setSize({
       width: ref.offsetWidth,
       height: ref.offsetHeight,

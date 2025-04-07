@@ -19,7 +19,6 @@ export default function BlogWindow({ slug, onClose }) {
   const handleDragStart = useCallback(() => {
     if (iframeRef.current) {
       iframeRef.current.style.pointerEvents = "none";
-      console.log(iframeRef.current.style.pointerEvents);
     }
   }, []);
 
@@ -28,7 +27,6 @@ export default function BlogWindow({ slug, onClose }) {
     setTimeout(() => {
       if (iframeRef.current) {
         iframeRef.current.style.pointerEvents = "auto";
-        console.log(iframeRef.current.style.pointerEvents);
       }
     }, 0);
     setRenderTick((tick) => tick + 1);
@@ -36,7 +34,6 @@ export default function BlogWindow({ slug, onClose }) {
   }, []);
 
   const handleResizeStop = useCallback((e, direction, ref, delta, pos) => {
-    console.log(iframeRef.current.style.pointerEvents);
     setSize({
       width: ref.offsetWidth,
       height: ref.offsetHeight,

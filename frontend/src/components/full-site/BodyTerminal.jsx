@@ -20,7 +20,7 @@ function BodyTerminal({ inputCommand, onOpenPost }) {
         const tags = await fetch("/api/data?path=/tags").then((res) =>
           res.json()
         );
-        console.log("Fetched Tag Data:", tags);
+        // console.log("Fetched Tag Data:", tags);
 
         if (Array.isArray(tags)) {
           setAllTags(tags);

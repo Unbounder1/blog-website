@@ -51,7 +51,7 @@
   /* Bottom bar */
   .bottom-bar {
     width: 100%;
-    hieght: 10%;
+    height: 10%;
     background-color: var(--primary-color);
     color: var(--text-color);
     display: flex;

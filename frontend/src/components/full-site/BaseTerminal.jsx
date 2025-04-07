@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Rnd } from "react-rnd";
 import BodyTerminal from "./BodyTerminal.jsx";
 import "../../styles/full-site/baseterminal.css";
