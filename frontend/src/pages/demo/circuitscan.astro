@@ -2,10 +2,14 @@
 import Layout from '../../layouts/Page_Layout.astro';
 import "../../styles/global.css";
 import InputComponent from '../../components/addon/circuit-scan/InputComponent';
-
+import "../../styles/full-site/circuitscan.css"
 // Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
 // Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
 ---
 <Layout>
-   <InputComponent client:load />
+   <div class="page-container">
+      <div class="title">CircuitScan</div>
+      <div class="subtitle">Convert Circuit to LT-Spice Schematic</div>
+      <InputComponent client:load />
+   </div>
 </Layout>

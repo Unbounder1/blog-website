@@ -145,6 +145,15 @@ export default function MultiWindowManager() {
         defaultX="197"
         defaultY="295"
       />
+
+      <IconComponent 
+        className="circuitscan-icon" 
+        onOpenPost={openNewWindow} 
+        imageIcon="circuitscanicon.webp" 
+        displayTitle="CircuitScan"
+        defaultX="1119"
+        defaultY="150"
+      />
       
       {openWindows.map((win) => {
         if ( win.type === 'Terminal'){
@@ -184,6 +193,20 @@ export default function MultiWindowManager() {
             >
               <NotesWindow
                 onClose={() => closeWindow(win.id)}
+              />
+            </div>
+          );
+        } 
+        else if (win.type === 'CircuitScan') {
+          return (
+            <div 
+              key={win.id}
+              onMouseDown={() => bringToFront(win.id)}
+              style={{ position: "relative", zIndex: win.id === topWindow ? 999 : 1 }}
+            >
+              <IframeWindow
+                onClose={() => closeWindow(win.id)}
+                slug="/demo/circuitscan"
               />
             </div>
           );
