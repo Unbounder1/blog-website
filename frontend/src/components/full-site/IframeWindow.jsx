@@ -10,9 +10,6 @@ export default function IframeWindow({ slug, onClose }) {
   const [size, setSize] = useState({ width: 660, height: 800 });
   const [position, setPosition] = useState({ x: 50, y: 50 }); // starting position
 
-  const [renderTick, setRenderTick] = useState(0);
-
-
   // Store original size/position for restore
   const originalSettings = useRef({ size, position });
 
@@ -29,8 +26,6 @@ export default function IframeWindow({ slug, onClose }) {
         iframeRef.current.style.pointerEvents = "auto";
       }
     }, 0);
-    setRenderTick((tick) => tick + 1);
-
   }, []);
 
   const handleResizeStop = useCallback((ref, pos) => {
