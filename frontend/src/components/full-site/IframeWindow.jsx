@@ -89,6 +89,7 @@ export default function IframeWindow({ slug, onClose }) {
         {/* Content Area */}
         <div className="blog-window-content">
           <iframe
+            style={{ width: '100%', height: '100%', border: 'none' }}
             ref={iframeRef}
             src={href}
             className="iframe"

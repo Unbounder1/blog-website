@@ -1,162 +1,213 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
+import { ReactSketchCanvas } from "react-sketch-canvas";
+import "../../../styles/full-site/circuitscan.css";
+import ToggleSwitch from "../../ToggleSwitch";
 
 const InputComponent = () => {
-    const [selectedFiles, setSelectedFiles] = useState([]);
-    const [isProcessing, setIsProcessing] = useState(false);
-    const [processOutput, setProcessOutput] = useState({});
-    const [processInput, setProcessInput] = useState("");
+  const [selectedFiles, setSelectedFiles] = useState([]);
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [processOutput, setProcessOutput] = useState({});
+  const [processInput, setProcessInput] = useState("");
+  const [isUpload, setIsUpload] = useState(true);
 
-    const handleFileChange = (e) => {
-        const files = Array.from(e.target.files);
-        setSelectedFiles(files);
-        setProcessOutput({});
+  useEffect(() => {
+    setIsProcessing(false);
 
-        const reader = new FileReader();
-                
-        reader.readAsDataURL(files[0]);
-    
-        reader.onload = () => {
-            const base64 = reader.result.split(",")[1]; 
-            setProcessInput(base64);
-        };
+  }, [isUpload]);
 
-        setProcessOutput({});
-        setIsProcessing(false);
+  // Handling canvas refs
+  const canvasRef = useRef(null);
+
+  const handleUndo = () => {
+    setProcessOutput({});
+    canvasRef.current?.undo();
+  };
+
+  const handleRedo = () => {
+    canvasRef.current?.redo(); 
+  };
+
+  // Handling upload files
+  const handleFileChange = (e) => {
+    const files = Array.from(e.target.files);
+    setSelectedFiles(files);
+    setProcessOutput({});
+
+    const reader = new FileReader();
+    reader.readAsDataURL(files[0]);
+
+    reader.onload = () => {
+      const base64 = reader.result.split(",")[1];
+      setProcessInput(base64);
     };
 
-    const handleSubmit = (e) => {
-        e.preventDefault(); // Prevent default form submission if inside a form
-        setIsProcessing(true);
+    setIsProcessing(false);
+  };
 
-        const fetchData = async () => {
-            try {
-                const base64String = await new Promise((resolve, reject) => {
-                    const reader = new FileReader();
-                
-                    reader.readAsDataURL(selectedFiles[0]);
-                
-                    reader.onload = () => {
-                      const base64 = reader.result.split(",")[1]; 
-                      resolve(base64);
-                    };
-                
-                    reader.onerror = (error) => reject(error);
-                  });
-                
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setIsProcessing(true);
+    setProcessOutput({});
 
-                const payload = {
-                    path_specs: "", // Fetch Format ->  http://path_ip:path_port/path_specs
-                    input: base64String // Base64 Input Image
-                };
-
-                const response = await fetch("/api/addon-circuit", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify(payload),
-                });
-
-                const output = await response.json();
-                setProcessOutput(output);
-
-            } catch (error) {
-                console.error("Error querying circuit-scan addon", error);
+    const fetchData = async () => {
+        try {
+          let base64String = "";
+      
+          if (isUpload) {
+            // Handle image upload
+            base64String = await new Promise((resolve, reject) => {
+              const reader = new FileReader();
+              reader.readAsDataURL(selectedFiles[0]);
+      
+              reader.onload = () => {
+                const result = reader.result.split(",")[1];
+                resolve(result);
+              };
+      
+              reader.onerror = (error) => reject(error);
+            });
+          } else {
+            // Handle drawing
+            const dataUrl = await canvasRef.current?.exportImage("png");
+            if (dataUrl) {
+              base64String = dataUrl.split(",")[1];
+            } else {
+              throw new Error("Failed to export canvas image.");
             }
-        };
+          }
+      
+          const payload = {
+            path_specs: "", // Add if needed
+            input: base64String,
+          };
+      
+          const response = await fetch("/api/addon-circuit", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(payload),
+          });
 
-        fetchData();
-    };
+          if (!response.ok) {
+            const errorText = await response.text();
+            setIsProcessing(false);
+            setProcessOutput({ error: errorText });
+          }
+          else {
+          const output = await response.json();
+          setProcessOutput(output);
+        }
+        } catch (error) {
+          console.error("Error querying circuit-scan addon", error);
+        } finally {
+            setIsProcessing(false);
+        }
+      };
 
-    return (
-    <div style={{ overflow: "scroll" }}>
-        <form method="post" encType="multipart/form-data">
-            <div>
-                <label htmlFor="image_uploads">Choose images to upload (PNG, JPG)</label>
-                <input
-                    type="file"
-                    id="image_uploads"
-                    name="image_uploads"
-                    accept=".jpg, .jpeg, .png, .webp"
-                    onChange={handleFileChange}
-                    multiple 
+    fetchData();
+  };
+
+  return (
+    <div className="input-container">
+        <ToggleSwitch isOn={isUpload} setIsOn={setIsUpload} onString={"Upload Image"} offString={"Draw Input"}/>
+        <form onSubmit={handleSubmit} encType="multipart/form-data">
+
+        { isUpload ? 
+        // If uploading option
+        <div className="upload-section">
+          <label htmlFor="image_uploads">Choose images to upload (PNG, JPG)</label>
+          <input
+            type="file"
+            id="image_uploads"
+            name="image_uploads"
+            accept=".jpg, .jpeg, .png, .webp"
+            onChange={handleFileChange}
+            multiple
+            className="upload-input"
+          />
+
+        <div className="preview">
+          {selectedFiles.length > 0 ? (
+            processInput !== "" && (
+              <div>
+                <img
+                  src={`data:image/png;base64,${processInput}`}
+                  alt="Input Preview"
                 />
-            </div>
+              </div>
+            )
+          ) : (
+            <p>No files currently selected for upload</p>
+          )}
+        </div>
+        </div>
+        :
+        // If drawing input
+        <div className="canvas-wrapper">
+          <ReactSketchCanvas
+            ref={canvasRef}
+            className="canvas-style"
+            strokeWidth={4}
+            strokeColor="black"
+          />
+          <div className="canvas-buttons">
+          <button type="button" className="undo-stroke" onClick={handleUndo}>← Undo</button>
+          <button type="button" className="redo-stroke" onClick={handleRedo}>Redo →</button>
+          </div>
+        </div>
 
-            <div className="preview">
-                {selectedFiles.length > 0 ? (
-                    <ul>
-                        {processInput != "" && (
-                            <div style={{ marginTop: "20px" }}>
-                                <img
-                                    src={`data:image/png;base64,${processInput}`}
-                                    alt="Input Image"
-                                    style={{ width: "100%", maxWidth: "800px", marginBottom: "20px" }}
-                                />
-                            </div>
-                        )}
-                    </ul>
-                ) : (
-                    <p>No files currently selected for upload</p>
-                )}
-            </div>
+        }
 
+        <div style={{ marginBottom: "1rem" }}>
+          <button type="submit" disabled={(isUpload || isProcessing) && (isProcessing || selectedFiles.length === 0) }>
+            {isProcessing ? "Processing..." : "Submit"}
+          </button>
+        </div>
+      </form>
+
+      {processOutput && Object.keys(processOutput).length > 0 && (
+        <div className="output-section">
+
+            {processOutput["error"] && (
+            <div>Something went wrong, please try again</div>
+          )}
+
+          {processOutput["ltspice"] && (
             <div>
-                {!isProcessing && (
-                    <button 
-                    type="submit"
-                    onClick={handleSubmit}>Submit</button>
-                )}
-
-                {isProcessing && Object.keys(processOutput).length === 0 && (
-                    <div>Processing Input...</div>
-                )}
-
-
-                
+              <h3>LTSpice Schematic (.asc)</h3>
+              <a
+                href={`data:text/plain;charset=utf-8,${encodeURIComponent(processOutput["ltspice"])}`}
+                download="circuit.asc"
+              >
+                <button>Download LTSpice File</button>
+              </a>
             </div>
+          )}
 
-        </form>
+          {processOutput["mlplot"] && (
+            <div>
+              <h3>ML Plot</h3>
+              <img
+                src={`data:image/png;base64,${processOutput["mlplot"]}`}
+                alt="ML Plot"
+              />
+            </div>
+          )}
 
-        {processOutput && (
-                <div style={{ marginTop: "20px" }}>
-                    {processOutput["ltspice"] && (
-                        <div>
-                            <h3>LTSpice Schematic (.asc)</h3>
-                            <a
-                                href={`data:text/plain;charset=utf-8,${encodeURIComponent(processOutput["ltspice"])}`}
-                                download="circuit.asc"
-                                style={{ display: "inline-block", marginBottom: "20px" }}
-                            >
-                                <button>Download LTSpice File</button>
-                            </a>
-                        </div>
-                    )}
-                    {processOutput["mlplot"] && (
-                        <div>
-                            <h3>ML Plot</h3>
-                            <img
-                                src={`data:image/png;base64,${processOutput["mlplot"]}`}
-                                alt="ML Plot"
-                                style={{ width: "100%", maxWidth: "800px", marginBottom: "20px" }}
-                            />
-                        </div>
-                    )}
-
-                    {processOutput["graph"] && (
-                        <div>
-                            <h3>Graph Output</h3>
-                            <img
-                                src={`data:image/png;base64,${processOutput["graph"]}`}
-                                alt="Graph Output"
-                                style={{ width: "100%", maxWidth: "800px", marginBottom: "20px" }}
-                            />
-                        </div>
-                    )}
-                </div>
-            )}
+          {processOutput["graph"] && (
+            <div>
+              <h3>Graph Output</h3>
+              <img
+                src={`data:image/png;base64,${processOutput["graph"]}`}
+                alt="Graph Output"
+              />
+            </div>
+          )}
+        </div>
+      )}
     </div>
-    );
+  );
 };
 
 export default InputComponent;
