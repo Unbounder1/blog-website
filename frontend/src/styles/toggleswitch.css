@@ -19,7 +19,7 @@
   .slider {
     position: absolute;
     cursor: pointer;
-    background-color: #ccc;
+    background-color: #df3232;
     border-radius: 34px;
     top: 0;
     left: 0;
@@ -41,7 +41,7 @@
   }
   
   input:checked + .slider {
-    background-color: #4caf50;
+    background-color: #7069fa;
   }
   
   input:checked + .slider::before {

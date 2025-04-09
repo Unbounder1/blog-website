@@ -88,12 +88,20 @@ const InputComponent = () => {
             },
             body: JSON.stringify(payload),
           });
-      
+
+          if (!response.ok) {
+            const errorText = await response.text();
+            setIsProcessing(false);
+            setProcessOutput({ error: errorText });
+          }
+          else {
           const output = await response.json();
           setProcessOutput(output);
+        }
         } catch (error) {
-          
           console.error("Error querying circuit-scan addon", error);
+        } finally {
+            setIsProcessing(false);
         }
       };
 
@@ -160,6 +168,11 @@ const InputComponent = () => {
 
       {processOutput && Object.keys(processOutput).length > 0 && (
         <div className="output-section">
+
+            {processOutput["error"] && (
+            <div>Something went wrong, please try again</div>
+          )}
+
           {processOutput["ltspice"] && (
             <div>
               <h3>LTSpice Schematic (.asc)</h3>
