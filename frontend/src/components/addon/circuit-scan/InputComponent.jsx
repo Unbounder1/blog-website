@@ -150,6 +150,7 @@ const InputComponent = () => {
             className="canvas-style"
             strokeWidth={4}
             strokeColor="black"
+            
           />
           <div className="canvas-buttons">
           <button type="button" className="undo-stroke" onClick={handleUndo}>← Undo</button>
