@@ -132,6 +132,7 @@ const InputComponent = () => {
             processInput !== "" && (
               <div>
                 <img
+                  className="output-images"
                   src={`data:image/png;base64,${processInput}`}
                   alt="Input Preview"
                 />
@@ -190,6 +191,7 @@ const InputComponent = () => {
             <div>
               <h3>ML Plot</h3>
               <img
+                className="output-images"
                 src={`data:image/png;base64,${processOutput["mlplot"]}`}
                 alt="ML Plot"
               />
@@ -200,6 +202,7 @@ const InputComponent = () => {
             <div>
               <h3>Graph Output</h3>
               <img
+                className="output-images"
                 src={`data:image/png;base64,${processOutput["graph"]}`}
                 alt="Graph Output"
               />

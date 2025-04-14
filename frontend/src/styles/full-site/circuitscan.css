@@ -37,8 +37,8 @@
     overflow: hidden;
   }
 
-  .upload-section img {
-    max-width: 100%;
+  .output-images {
+    max-width: 38rem;
     max-height: 18rem;
     object-fit: contain;
   }
