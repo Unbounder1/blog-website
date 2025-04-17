@@ -2,6 +2,8 @@ import { useState, useRef, useEffect } from "react";
 import { ReactSketchCanvas } from "react-sketch-canvas";
 import "../../../styles/full-site/circuitscan.css";
 import ToggleSwitch from "../../ToggleSwitch";
+import SliderComponent from "../../SliderComponent";
+import { Slide } from "@mui/material";
 
 const InputComponent = () => {
   const [selectedFiles, setSelectedFiles] = useState([]);
@@ -166,6 +168,8 @@ const InputComponent = () => {
             {isProcessing ? "Processing..." : "Submit"}
           </button>
         </div>
+
+        <SliderComponent title="Confidence threshold" maxVal={1} minVal={0} step={0.01} />
       </form>
 
       {processOutput && Object.keys(processOutput).length > 0 && (
