@@ -3,6 +3,7 @@ import Slider from '@mui/material/Slider';
 import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
+import '../styles/slidercomponent.css'
 
 // Slider component with a linked text input
 const SliderComponent = ({
@@ -57,7 +58,10 @@ const SliderComponent = ({
                 step: step,
                 min: minVal,
                 max: maxVal,
-                type: 'number'
+                type: 'number',
+                sx: {
+                  color: 'white',
+                }
              }
           }}
         style={{ width: 80 }}

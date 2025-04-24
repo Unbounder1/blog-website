@@ -12,6 +12,17 @@ const InputComponent = () => {
   const [processInput, setProcessInput] = useState("");
   const [isUpload, setIsUpload] = useState(true);
 
+  const [confidenceThreshold, setConfidenceThreshold] = useState(0.5); // object detection accuracy threshold
+  const [resizeImageMax, setResizeImageMax] = useState(1000); // resize image size
+  const [normalizeX, setNormalizeX] = useState(80); // default goal resistor size-x
+  const [normalizeY, setNormalizeY] = useState(80); // default goal resistor size-y
+  const [binaryThresholdMin, setBinaryThresholdMin] = useState(160); // min threshold for binary conversion
+  const [binaryThresholdMax, setBinaryThresholdMax] = useState(255); // max threshold for binary conversion
+  const [kdTreeBoundingThreshold, setKdTreeBoundingThreshold] = useState(1); // bounding box threshold for KD-tree
+  const [gridSize, setGridSize] = useState(128); // LTSpice grid snapping size
+  const [textSearchSize, setTextSearchSize] = useState(2); // number of OCR text guesses per component
+  const [textSearchRadius, setTextSearchRadius] = useState(300); // radius for OCR text search around components
+
   useEffect(() => {
     setIsProcessing(false);
 
@@ -169,7 +180,19 @@ const InputComponent = () => {
           </button>
         </div>
 
-        <SliderComponent title="Confidence threshold" maxVal={1} minVal={0} step={0.01} />
+        {/* SLIDER COMPONENTS --------------------- */}
+        <div className="slider-section">
+          <SliderComponent setValue={setConfidenceThreshold} value={confidenceThreshold} title="Confidence Threshold" maxVal={1} minVal={0} step={0.01} />
+          <SliderComponent setValue={setResizeImageMax} value={resizeImageMax} title="Resize Image Max" maxVal={5000} minVal={100} step={10} />
+          <SliderComponent setValue={setNormalizeX} value={normalizeX} title="Normalize X (Resistor Width)" maxVal={200} minVal={10} step={1} />
+          <SliderComponent setValue={setNormalizeY} value={normalizeY} title="Normalize Y (Resistor Height)" maxVal={200} minVal={10} step={1} />
+          <SliderComponent setValue={setBinaryThresholdMin} value={binaryThresholdMin} title="Binary Threshold Min" maxVal={255} minVal={0} step={1} />
+          <SliderComponent setValue={setBinaryThresholdMax} value={binaryThresholdMax} title="Binary Threshold Max" maxVal={255} minVal={0} step={1} />
+          <SliderComponent setValue={setKdTreeBoundingThreshold} value={kdTreeBoundingThreshold} title="KDTree Bounding Threshold" maxVal={10} minVal={0} step={1} />
+          <SliderComponent setValue={setGridSize} value={gridSize} title="LTSpice Grid Size" maxVal={512} minVal={8} step={8} />
+          <SliderComponent setValue={setTextSearchSize} value={textSearchSize} title="Text Search Tries per Component" maxVal={10} minVal={1} step={1} />
+          <SliderComponent setValue={setTextSearchRadius} value={textSearchRadius} title="Text Search Radius" maxVal={1000} minVal={50} step={10} />
+        </div>
       </form>
 
       {processOutput && Object.keys(processOutput).length > 0 && (
