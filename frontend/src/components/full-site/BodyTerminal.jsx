@@ -57,7 +57,7 @@ function BodyTerminal({ inputCommand, onOpenPost }) {
   // Update blog output when command or selected tags change
   // UPDATE AVAILABLE COMMANDS HERE --------------------------------------
   useEffect(() => {
-    if (inputCommand === "ls ./") {
+    if (inputCommand === "ls ./" || inputCommand === "ls" || inputCommand === "ls .") {
       setWindow(
         <BlogOutput searchInput={searchInput} selectedTags={selectedTags} onOpenPost={onOpenPost} />
       );
