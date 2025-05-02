@@ -3,7 +3,6 @@ import Slider from '@mui/material/Slider';
 import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
-import '../styles/slidercomponent.css'
 
 // Slider component with a linked text input
 const SliderComponent = ({
@@ -34,9 +33,9 @@ const SliderComponent = ({
   };
 
   return (
-    <Box display="flex" alignItems="center" gap={2} padding={2} width={350}>
+    <Box display="flex" alignItems="center" gap={2} padding={2} width={100}>
       <Box flex={1}>
-        <Typography variant="h6">{title}</Typography>
+        <Typography variant="h6" style={{fontSize: '1rem'}}>{title}</Typography>
         <Slider
           value={typeof value === 'number' ? value : 0}
           onChange={handleSliderChange}
@@ -44,6 +43,10 @@ const SliderComponent = ({
           max={maxVal}
           step={step}
           valueLabelDisplay="auto"
+          sx={{
+            width: 150,
+            fontSize: '0.8rem'
+          }}
         />
       </Box>
       <TextField
@@ -61,10 +64,11 @@ const SliderComponent = ({
                 type: 'number',
                 sx: {
                   color: 'white',
+                  width: '10vh',
+                  fontSize: '0.8rem'
                 }
              }
           }}
-        style={{ width: 80 }}
       />
     </Box>
   );
