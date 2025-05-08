@@ -11,7 +11,8 @@ const SliderComponent = ({
   title = "Parameter Name",
   minVal = 0,
   maxVal = 100,
-  step = 1
+  step = 1,
+  disabled = false
 }) => {
   const handleSliderChange = (event, newValue) => {
     setValue(newValue);
@@ -42,6 +43,7 @@ const SliderComponent = ({
           min={minVal}
           max={maxVal}
           step={step}
+          disabled={disabled}
           valueLabelDisplay="auto"
           sx={{
             width: 150,
@@ -56,6 +58,7 @@ const SliderComponent = ({
         value={value}
         onChange={handleInputChange}
         onBlur={handleBlur}
+        disabled={!disabled}
         slotProps={{
             input: { 
                 step: step,

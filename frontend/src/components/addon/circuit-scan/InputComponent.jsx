@@ -90,8 +90,18 @@ const InputComponent = () => {
           }
       
           const payload = {
-            path_specs: "", // Add if needed
+            path_specs: "", 
             input: base64String,
+            confidenceThreshold,
+            resizeImageMax,
+            normalizeX,
+            normalizeY,
+            binaryThresholdMin,
+            binaryThresholdMax,
+            kdTreeBoundingThreshold,
+            gridSize,
+            textSearchSize,
+            textSearchRadius,
           };
       
           const response = await fetch("/api/addon-circuit", {
@@ -181,7 +191,10 @@ const InputComponent = () => {
         </div>
 
         {/* SLIDER COMPONENTS --------------------- */}
-        <div className="slider-section">
+      </form>
+      { !isProcessing && Object.keys(processOutput).length <= 0
+        ? (
+          <div className="slider-section">
           <SliderComponent setValue={setConfidenceThreshold} value={confidenceThreshold} title="Confidence Threshold" maxVal={1} minVal={0} step={0.01} />
           <SliderComponent setValue={setResizeImageMax} value={resizeImageMax} title="Resize Image Max" maxVal={5000} minVal={100} step={10} />
           <SliderComponent setValue={setNormalizeX} value={normalizeX} title="Normalize X (Resistor Width)" maxVal={200} minVal={10} step={1} />
@@ -192,8 +205,11 @@ const InputComponent = () => {
           <SliderComponent setValue={setGridSize} value={gridSize} title="LTSpice Grid Size" maxVal={512} minVal={8} step={8} />
           <SliderComponent setValue={setTextSearchSize} value={textSearchSize} title="Text Search Tries per Component" maxVal={10} minVal={1} step={1} />
           <SliderComponent setValue={setTextSearchRadius} value={textSearchRadius} title="Text Search Radius" maxVal={1000} minVal={50} step={10} />
-        </div>
-      </form>
+        
+          </div>
+        )
+        : null
+      }
 
       {processOutput && Object.keys(processOutput).length > 0 && (
         <div className="output-section">
