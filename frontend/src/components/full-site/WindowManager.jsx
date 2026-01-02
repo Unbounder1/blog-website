@@ -38,20 +38,20 @@ export default function MultiWindowManager() {
       return; 
     } else if (type === 'resume') {
 
-      fetch("resume.pdf").then((response) => {
-        response.blob().then((blob) => {
+      // fetch("resume.pdf").then((response) => {
+      //   response.blob().then((blob) => {
         
-            // Creating new object of PDF file
-            const fileURL =
-                window.URL.createObjectURL(blob);
+      //       // Creating new object of PDF file
+      //       const fileURL =
+      //           window.URL.createObjectURL(blob);
                 
-            // Setting various property values
-            let alink = document.createElement("a");
-            alink.href = fileURL;
-            alink.download = "ryan-dong-resume.pdf";
-            alink.click();
-        });
-    });
+      //       // Setting various property values
+      //       let alink = document.createElement("a");
+      //       alink.href = fileURL;
+      //       alink.download = "ryan-dong-resume.pdf";
+      //       alink.click();
+      //   });
+      // });
       return; 
     }
   
@@ -128,14 +128,14 @@ export default function MultiWindowManager() {
         defaultY="294"
       />
 
-      <IconComponent 
+      {/* <IconComponent 
         className="resume-icon" 
         onOpenPost={openNewWindow} 
         imageIcon="noteicon.webp" 
         displayTitle="resume"
         defaultX="122"
         defaultY="376"
-      />
+      /> */}
 
       <IconComponent 
         className="linkedin-icon" 
