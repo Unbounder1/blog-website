@@ -8,7 +8,6 @@ RUN npm install --production
 COPY . .
 
 ENV HMAC_API_KEY=
-
 RUN npm run build
 
 ENV HOST=0.0.0.0
