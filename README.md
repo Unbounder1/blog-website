@@ -1,6 +1,6 @@
 # INFO
 
-VISIT THE SITE HERE: [https://www.ryan-dong.com](https://www.ryan-dong.com)
+VISIT THE SITE HERE: [https://www.ryan-dong.com](https://ryan-dong.com)
 
 ## Technologies
 
